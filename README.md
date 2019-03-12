@@ -1,6 +1,6 @@
 # CCSO Nameserver Archive
 
-This repository contains a collection of old files for the CCSO nameserver server ("qi") and client ("ph"). CCSO is often abbreviated as "CSO" or "CSO/ph server". Their relative obscurity and short names make them difficult to find via search engines.
+This repository contains a collection of old files for the CCSO nameserver server ("qi") and client ("ph"). Their relative obscurity and short names make them difficult to find via search engines. CCSO is often abbreviated as "CSO" or "CSO/ph server".
 
 #### Sources
 
