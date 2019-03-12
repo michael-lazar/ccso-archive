@@ -1,0 +1,78 @@
+/* FRONT END for WHO PH client */
+parse arg args
+if args = "" then do
+   say "Must supply  a name"
+   exit 1
+end
+
+
+parse var args duh .
+if (duh = "?") then call help
+
+
+/* Local code to ensure the TCP/IP public and C runtime library disks
+   are linked */
+
+
+'EXEC REXXUTIL QDISK LABEL TCPMAI ( QUIET'
+if rc = 0 then
+   pull crud
+else
+      'GET TCPMAINT 592(QUIET'
+'EXEC REXXUTIL QDISK LABEL CLIB12 ( QUIET'
+if rc = 0 then
+      pull crud
+else
+      'GET SOFCOMP 226 (QUIET'
+
+
+"GLOBAL TXTLIB EDCBASE RPCLIB COMMTXT IBMLIB CMSLIB"
+"GLOBAL LOADLIB EDCLINK"
+
+
+/* End of local code */
+
+
+address command "WHO" args
+exit 0
+
+
+help:
+   say
+   say "    The WHO command will permit you to retrieve certain"
+   say "    information from the University of Guelph Telephone"
+   say "    Directory. The information returned includes the"
+   say "    person's name, email address, office location,
+department"
+   say "    and telephone. If there is no entry in the Directory for"
+   say "    any of these fields, that field will not be displayed."
+   say
+   say "    The command is specified as  WHO <args>"
+   say
+   say "    where <args> is the person's first or last names, or a"
+   say "    combination of the two. You can also use the wildcard"
+   say "    character '*' to permit broader searches. You can type "
+   say "    the name in upper or lower case"
+   say
+   say "    Examples:"
+   say
+   say "    1) WHO Fred"
+   say
+   say "           Will retrieve all people with 'fred' as their
+first"
+   say "           or last name"
+   say
+   say "    2) WHO JO*    "
+   say
+   say "           Will retrieve all people whose first or last
+names"
+   say "           begin with 'JO'   e.g. John Smith or Bill Jones"
+   say
+   say "    3) WHO SM* B*"
+   say
+   say "           Retrieves all those whose first or last names
+begin"
+   say "           with SM and the other name starts with a B"
+   say "           e.g. Bill Smith or Smiley BLOGGS"
+   say
+exit 0

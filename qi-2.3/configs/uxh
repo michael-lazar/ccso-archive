@@ -1,0 +1,14 @@
+# uxh - a Convex C240 running ConvexOS v9.1
+$DefineStrings{"DATABASE"} = "/tmp/db/prod";
+$DefineStrings{"HELPDIR"} = "/tmp/db/help";
+$QiExecDir = "/tmp/db/bin";
+$QiUtilDir = "/tmp/db/bin";
+$KrbIncDir = "/usr/local/include";
+$KrbLibDir = "/usr/local/lib";
+@Features = ("KERBEROS","EMAIL_AUTH","NO_READ_LOCK");
+$CC = "gcc -fpcc-struct-return";
+$Cflags .= " -DKRBNSREALM=\\\"UIUC.EDU\\\" -O";
+$Owner = "paul";
+$Group = "staff";
+@WantDirs=("include","lib","api","qi","util");
+1;

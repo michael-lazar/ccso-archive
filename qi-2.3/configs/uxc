@@ -1,0 +1,19 @@
+# uxc - a DEC VAX-3500 running 4.3 BSD-reno
+$DefineStrings{"DATABASE"} = "/usr/local/build/db/prod";
+$DefineStrings{"HELPDIR"} = "/usr/local/build/db/help";
+$DefineStrings{"RUNDIR"} = "/usr/local/build/db";
+$DefineStrings{"KRBSRVTAB"} = "/usr/local/build/db/srvtab";
+$OtherDefines{"Max_Alias"} = 8;
+$OtherDefines{"Cpu_Limit"} = 200;
+$QiExecDir = "/usr/local/libexec";
+$QiUtilDir = "/var/apps/nameserv/bin";
+$KrbIncDir = "/usr/include/kerberosIV";
+@Features = ("KERBEROS","EMAIL_AUTH","NO_READ_LOCK");
+@LocalAddrs = (".uiuc.edu",".cecer.army.mil");
+$CC = "gcc";
+$Cflags .= " -I/usr/local/include -DMALLOC_DEBUG -DMALLOC_FUNC_CHECK -Dstrdup=STRDUP -DKRBNSREALM=\\\"UIUC.EDU\\\" -g";
+$MoreLib .= " -L/usr/local/lib -lmalloc_dbg";
+@WantDirs=("include","lib","api","qi","ph","util");
+$Owner = "nameserv";
+$Group = "nameserv";
+1;

@@ -1,0 +1,45 @@
+This software is largely based on software provided by the University
+of Illinois, Urbana-Champaign, as part of the CCSO Ph package.  All
+copyrights and conditions of use of the original software apply to
+this software in all its parts.  In addition, the following copyright
+notice applies to those portions that were substantially modified,
+completely rewritten, or originally produced by Purdue University
+Staff:
+
++-----------------------------------------------------------------------+
+| Copyright 1993 Purdue Research Foundation, West Lafayette, Indiana    |
+| 47907.  All rights reserved.                                          |
+|                                                                       |
+| Written/modified by:                                                  |
+|    Vic Abell, Purdue University Computing Center                      |
+|    Bill Bormann, Purdue University Computing Center                   |
+|    Rick Westerman, Purdue University Department of Biochemistry       |
+|    Dwight McKay, Purdue University Department of Biology              |
+|                                                                       |
+| Permission is granted to anyone to use this software for any purpose  |
+| on any computer system, and to alter it and redistribute it freely,   |
+| subject to the following restrictions:                                |
+|                                                                       |
+| 1. Neither the authors nor Purdue University are responsible for any  |
+|    consequences of the use of this software.                          |
+|                                                                       |
+| 2. The origin of this software must not be misrepresented, either by  |
+|    explicit claim or by omission.  Credit to all authors (including   |
+|    the original authors) and Purdue University must appear in         |
+|    documentation and sources.                                         |
+|                                                                       |
+| 3. Altered versions must be plainly marked as such, and must not be   |
+|    misrepresented as being the original software.                     |
+|                                                                       |
+| 4. This notice may not be removed or altered.                         |
++-----------------------------------------------------------------------+
+
+*************************************************************************
+* Disclaimer of Warranty and Support:                                   *
+*                                                                       *
+* Purdue University releases this software strictly on an "as is" basis.*
+* We have no intention of supporting it outside the Purdue University   *
+* community.  Use at your own risk!  We will, however, share our bug    *
+* fixes with the larger Ph user community as we see fit.                *
+*************************************************************************
+

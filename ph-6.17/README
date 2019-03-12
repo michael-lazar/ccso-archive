@@ -1,0 +1,14 @@
+These are the most recent versions of the UIUC Nameserver client,
+Ph.  There are several directories:
+
+doc:	Some interesting documentation.
+dos:	A client for PC's with FTP Software's PC/TCP kernel.
+mac:	The Macintosh client, binary and source.
+next:	A Next-specific client.
+pcnfs:	The DOS client written in C++ 3.1 and uses PC/NFS for sockets.
+phquery: A backend mailer for sendmail that makes ph queries.
+unix:	The generic unix client.
+vm:	An old, query-only VM/CMS client.
+vms:	A client for VAX/VMS with WIN/TCP.
+windows: DOS client in C++ 3.1 for Windows 3.X.
+xph:	An X11R4 client.

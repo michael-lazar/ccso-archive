@@ -1,0 +1,25 @@
+# Garcon - a VAX-3500 running Ultrix v3.0
+$DefineStrings{"DATABASE"} = "/nameserv/db/prod";
+$DefineStrings{"HELPDIR"} = "/nameserv/db/help";
+$DefineStrings{"RUNDIR"} = "/nameserv/db";
+$DefineStrings{"KRBSRVTAB"} = "/nameserv/db/srvtab";
+# $OtherDefines{"Use_Uid"} = 10;
+# $OtherDefines{"Use_Gid"} = 15;
+$OtherDefines{"Max_Alias"} = 8;
+$OtherDefines{"Cpu_Limit"} = 20;
+# $OtherDefines{"CrackLib"} = "\"/usr/local/libdata/pw_dict\"";
+$QiExecDir = "/nameserv/bin";
+$QiUtilDir = "/nameserv/bin";
+$KrbIncDir = "/usr/local/include";
+$KrbLibDir = "/usr/local/lib";
+@Features = ("KERBEROS","EMAIL_AUTH","NO_READ_LOCK");
+@LocalAddrs = (".uiuc.edu",".cecer.army.mil");
+$CC = "gcc -fpcc-struct-return";
+$Cflags .= " -DKRBNSREALM=\\\"UIUC.EDU\\\" -I/usr/local/include -g -O";	# For new syslog.h
+#$Cflags .= " -I/usr/local/include -DMALLOC_DEBUG -DMALLOC_FUNC_CHECK -Dstrdup=STRDUP -DKRBNSREALM=\\\"UIUC.EDU\\\" -g -O";	# For new syslog.h
+$MoreLib .= " -L/usr/local/lib -lresolv -lsyslog";	# See vixen.cso.uiuc.edu:pub/nsyslog.tar.Z
+#$MoreLib .= " -L/usr/local/lib -lmalloc_dbg -lresolv -lsyslog";	# See vixen.cso.uiuc.edu:pub/nsyslog.tar.Z
+$Depend = "";
+# @WantDirs=("include","lib","api","cracklib","qi","ph","util");
+@WantDirs=("include","lib","api","qi","ph","util");
+1;

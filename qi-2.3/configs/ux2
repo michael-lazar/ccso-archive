@@ -1,0 +1,14 @@
+# ux2 - a IBM RS-6000/540 running AIX v3.2
+$DefineStrings{"DATABASE"} = "/scratch/db/prod";
+$DefineStrings{"HELPDIR"} = "/scratch/db/help";
+$QiExecDir = "/scratch/db/bin";
+$QiUtilDir = "/scratch/db/bin";
+$KrbIncDir = "/usr/local/include";
+$KrbLibDir = "/usr/local/lib";
+@Features = ("KERBEROS","EMAIL_AUTH","NO_READ_LOCK");
+$CC = "cc";
+$Cflags .= " -DKRBNSREALM=\\\"UIUC.EDU\\\" -g";
+$Owner = "paul";
+$Group = "staff";
+@WantDirs=("include","lib","api","ph","qi","util");
+1;

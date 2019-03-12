@@ -1,0 +1,7 @@
+#  Most defaults are suitable for AIX 3.2+
+$OtherDefines{"Mem_Type"} = "void";
+$Cflags .= " -qlanglvl=ansi -U__STR__ -DFCNTL_LOCK -DWAIT_INT";
+$Install = "/usr/ucb/install -c";
+$DbmLib = "-ldbm";
+$Depend = "";
+1

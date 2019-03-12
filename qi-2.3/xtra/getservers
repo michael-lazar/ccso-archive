@@ -1,0 +1,83 @@
+#! /bin/sh
+#
+# Shell script to update list of ph servers from master list on ns.nwu.edu.
+# Written by George Pavel, Lawrence Livermore National Laboratory (gp@llnl.gov)
+# Revised by Paul Pomes, Computing and Communications Services Office,
+#  University of Illinois at Urbana-Champaign (p-pomes@uiuc.edu)
+
+# This script assumes an entry already exists with the following values:
+#
+#             alias: ns-servers
+#              name: Ph Servers
+#             email: paul@uxc.cso.uiuc.edu
+#          nickname: ns-servers ns servers
+#              type: serverlist
+#
+# Replace the email field value with that of the local Nameserver person.
+
+# Replace the following variables with the information for your site as
+# it appears in the server record
+MYSITE="site:University of Illinois at Urbana-Champaign"
+MYSERVER="server:ns.uiuc.edu"
+
+# Comment out the next line if you do not use alias-based mail
+MYDOMAIN="domain:uiuc.edu"
+
+# Change MYLASTLINE to $MYSERVER if you do not use alias-based mail;
+# change it to $MYDOMAIN if you do
+MYLASTLINE=$MYDOMAIN
+
+# Path to your qi temp directory and path to you qi executable
+QITMP=/nameserv/tmp
+QI=/nameserv/bin/qi
+
+# Goto working directory
+cd $QITMP
+
+# Create a server list with your site at the beginning
+mv -f servers servers.old
+echo "$QI << EOF" > servers
+echo -n "change alias=ns-servers make text=\"" >> servers
+echo $MYSITE >> servers
+echo $MYSERVER >> servers
+
+# Comment out the next line if you do not use alias-based mail
+echo $MYDOMAIN >> servers
+
+# Fill in the rest from Northwestern
+# Get server list from Northwestern
+ph -l -s ns.nwu.edu ns-servers return text |
+
+# Delete lines for your site and the lines of dashes
+sed -e "/^------/d" -e "/$MYSITE/,/$MYLASTLINE/d" |
+
+# Create single lines from the site/server/domain triad
+# (or site/server couplet) using the at sign as a separator
+awk '
+BEGIN { started = 0 ; ORS = "" }
+/^site:/ { if (started != 0) printf("\n")
+           print $0
+           started = 1
+         }
+/^server:/  { print "@" $0 }
+/^domain:/  { print "@" $0 }
+END { printf("\n") }
+' |
+
+# Sort the list
+sort |
+
+# Recreate the multiline entries
+awk '
+BEGIN { FS = "@" }
+{ for (i = 1; i <= NF; i++)
+        print $i
+}
+' | perl -e 'chop(@a = <STDIN>); print join("\n",@a);' >> servers
+echo "\"" >> servers
+echo "quit" >> servers
+echo "EOF" >> servers
+
+# now run the script
+chmod 755 servers
+exec ./servers > servers.out

@@ -1,0 +1,16 @@
+# ux3 - a Sequent Symmetry running Dynix/ptx v2.0
+$DefineStrings{"DATABASE"} = "/usr/local/nameserv/db/prod";
+$DefineStrings{"HELPDIR"} = "/usr/local/nameserv/help";
+$DefineStrings{"RUNDIR"} = "/usr/local/nameserv/db";
+$QiExecDir = "/usr/local/libexec";	# Where to install the qi server.
+$QiUtilDir = "/usr/local/nameserv/bin";
+$KrbIncDir = "/usr/local/include";
+$KrbLibDir = "/usr/local/lib";
+@Features = ("KERBEROS","EMAIL_AUTH","NO_READ_LOCK");
+@LocalAddrs = (".uiuc.edu",".cecer.army.mil");
+$Cflags .= " -DKRBNSREALM=\\\"UIUC.EDU\\\" -O";
+$Depend = "";
+@WantDirs=("include","lib","api","qi","ph","util");
+$Owner = "nameserv";
+$Group = "nameserv";
+1;

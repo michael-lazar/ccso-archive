@@ -1,0 +1,22 @@
+# max - a MIPS 3000 running CDC's EP/IX os
+$DefineStrings{"DATABASE"} = "/cerl/local/qid/db/prod";
+$DefineStrings{"HELPDIR"} = "/cerl/local/qid/db/help";
+$DefineStrings{"MAILDOMAIN"} = "cecer.army.mil";
+$DefineStrings{"ADMIN"} = "nameserv@cecer.army.mil";
+$DefineStrings{"PASSW"} = "nameserv@cecer.army.mil";
+$OtherDefines{"PersonLimit"} = 5;
+$OtherDefines{"Max_Alias"} = 8;
+$QiExecDir = "/cerl/local/qid/bin";
+$QiUtilDir = "/cerl/local/qid/bin";
+$PhFlags{"Host"} = "ns.cecer.army.mil.";
+$PhFlags{"FallBackAddr"} = "129.229.20.254";
+$PhFlags{"MailDomain"} = "cecer.army.mil";
+@PhLinks = ("phone", "unit", "areacode", "person");
+@Features = ("EMAIL_AUTH","NO_READ_LOCK");
+$Owner = "qiserv";
+$Group = "qi";
+$CC = "cc";
+$Cflags .= " -g";
+$Depend = "";
+@WantDirs=("include","lib","api","ph","qi","util");
+1;

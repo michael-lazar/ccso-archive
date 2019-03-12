@@ -1,0 +1,737 @@
+%!PS-Adobe-3.0
+%%Creator: groff version 1.04
+%%DocumentNeededResources: font Times-Bold
+%%+ font Times-Roman
+%%+ font Courier
+%%+ font Courier-Bold
+%%+ font Symbol
+%%+ font Times-Italic
+%%DocumentSuppliedResources: procset grops 1.04 0
+%%Pages: 7
+%%PageOrder: Ascend
+%%Orientation: Portrait
+%%EndComments
+%%BeginProlog
+%%BeginResource: procset grops 1.04 0
+%!PS-Adobe-3.0 Resource-ProcSet
+
+/setpacking where {
+	pop
+	currentpacking
+	true setpacking
+} if
+
+/grops 120 dict dup begin 
+
+% The ASCII code of the space character.
+/SC 32 def
+
+/A /show load def
+/B { 0 SC 3 -1 roll widthshow } bind def
+/C { 0 exch ashow } bind def
+/D { 0 exch 0 SC 5 2 roll awidthshow } bind def
+/E { 0 rmoveto show } bind def
+/F { 0 rmoveto 0 SC 3 -1 roll widthshow } bind def
+/G { 0 rmoveto 0 exch ashow } bind def
+/H { 0 rmoveto 0 exch 0 SC 5 2 roll awidthshow } bind def
+/I { 0 exch rmoveto show } bind def
+/J { 0 exch rmoveto 0 SC 3 -1 roll widthshow } bind def
+/K { 0 exch rmoveto 0 exch ashow } bind def
+/L { 0 exch rmoveto 0 exch 0 SC 5 2 roll awidthshow } bind def
+/M { rmoveto show } bind def
+/N { rmoveto 0 SC 3 -1 roll widthshow } bind def
+/O { rmoveto 0 exch ashow } bind def
+/P { rmoveto 0 exch 0 SC 5 2 roll awidthshow } bind def
+/Q { moveto show } bind def 
+/R { moveto 0 SC 3 -1 roll widthshow } bind def
+/S { moveto 0 exch ashow } bind def
+/T { moveto 0 exch 0 SC 5 2 roll awidthshow } bind def
+
+% name size font SF -
+
+/SF {
+	findfont exch
+	[ exch dup 0 exch 0 exch neg 0 0 ] makefont
+	dup setfont
+	[ exch /setfont cvx ] cvx bind def
+} bind def
+
+% name a c d font MF -
+
+/MF {
+	findfont
+	[ 5 2 roll
+	0 3 1 roll % b
+	neg 0 0 ] makefont
+	dup setfont
+	[ exch /setfont cvx ] cvx bind def
+} bind def
+
+/level0 0 def
+/RES 0 def
+/PL 0 def
+/LS 0 def
+
+% BP -
+
+/BP {
+	/level0 save def
+	1 setlinecap
+	1 setlinejoin
+	72 RES div dup scale
+	LS {
+		90 rotate
+	} {
+		0 PL translate
+	} ifelse
+	1 -1 scale
+} bind def
+
+/EP {
+	level0 restore
+	showpage
+} bind def
+
+
+% centerx centery radius startangle endangle DA -
+
+/DA {
+	newpath arcn stroke
+} bind def
+
+% x y SN - x' y'
+% round a position to nearest (pixel + (.25,.25))
+
+/SN {
+	transform 
+	.25 sub exch .25 sub exch
+	round .25 add exch round .25 add exch
+	itransform
+} bind def
+	
+% endx endy startx starty DL -
+% we round the endpoints of the line, so that parallel horizontal
+% and vertical lines will appear even
+
+/DL {
+	SN
+	moveto
+	SN
+	lineto stroke
+} bind def
+
+% centerx centery radius DC -
+
+/DC {
+	newpath 0 360 arc closepath
+} bind def
+
+
+/TM matrix def
+
+%  width height centerx centery DE -
+
+/DE {
+	TM currentmatrix pop
+	translate scale newpath 0 0 .5 0 360 arc closepath
+	TM setmatrix
+} bind def
+
+% these are for splines
+
+/RC /rcurveto load def
+/RL /rlineto load def
+/ST /stroke load def
+/MT /moveto load def
+/CL /closepath load def
+
+% fill the last path
+
+% amount FL -
+
+/FL {
+	currentgray exch setgray fill setgray
+} bind def
+
+% fill with the ``current color''
+
+/BL /fill load def
+
+/LW /setlinewidth load def
+% new_font_name encoding_vector old_font_name RE -
+
+/RE {
+	findfont
+	dup maxlength dict begin
+	{
+		1 index /FID ne { def } { pop pop } ifelse
+	} forall
+	/Encoding exch def
+	dup /FontName exch def
+	currentdict end definefont pop
+} bind def
+
+/DEFS 0 def
+
+% hpos vpos EBEGIN -
+
+/EBEGIN {
+	moveto
+	DEFS begin
+} bind def
+
+/EEND /end load def
+
+/CNT 0 def
+/level1 0 def
+
+% llx lly newwid wid newht ht newllx newlly PBEGIN -
+
+/PBEGIN {
+	/level1 save def
+	translate
+	div 3 1 roll div exch scale
+	neg exch neg exch translate
+	% set the graphics state to default values
+	0 setgray
+	0 setlinecap
+	1 setlinewidth
+	0 setlinejoin
+	10 setmiterlimit
+	[] 0 setdash
+	/setstrokeadjust where {
+		pop
+		false setstrokeadjust
+	} if
+	/setoverprint where {
+		pop
+		false setoverprint
+	} if
+	newpath
+	/CNT countdictstack def
+	userdict begin
+	/showpage {} def
+} bind def
+
+/PEND {
+	clear
+	countdictstack CNT sub { end } repeat
+	level1 restore
+} bind def
+
+end def
+
+/setpacking where {
+	pop
+	setpacking
+} if
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Times-Bold
+%%IncludeResource: font Times-Roman
+%%IncludeResource: font Courier
+%%IncludeResource: font Courier-Bold
+%%IncludeResource: font Symbol
+%%IncludeResource: font Times-Italic
+grops begin/DEFS 1 dict def DEFS begin/u{.001 mul}bind def end/RES 72 def/PL
+792 def/LS false def/ENC0[/asciicircum/asciitilde/Scaron/Zcaron/scaron/zcaron
+/Ydieresis/trademark/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/space/exclam
+/quotedbl/numbersign/dollar/percent/ampersand/quoteright/parenleft/parenright
+/asterisk/plus/comma/hyphen/period/slash/zero/one/two/three/four/five/six/seven
+/eight/nine/colon/semicolon/less/equal/greater/question/at/A/B/C/D/E/F/G/H/I/J
+/K/L/M/N/O/P/Q/R/S/T/U/V/W/X/Y/Z/bracketleft/backslash/bracketright/circumflex
+/underscore/quoteleft/a/b/c/d/e/f/g/h/i/j/k/l/m/n/o/p/q/r/s/t/u/v/w/x/y/z
+/braceleft/bar/braceright/tilde/.notdef/quotesinglbase/guillemotleft
+/guillemotright/bullet/florin/fraction/perthousand/dagger/daggerdbl/endash
+/emdash/ff/fi/fl/ffi/ffl/dotlessi/dotlessj/grave/hungarumlaut/dotaccent/breve
+/caron/ring/ogonek/quotedblleft/quotedblright/oe/lslash/quotedblbase/OE/Lslash
+/.notdef/exclamdown/cent/sterling/currency/yen/brokenbar/section/dieresis
+/copyright/ordfeminine/guilsinglleft/logicalnot/minus/registered/macron/degree
+/plusminus/twosuperior/threesuperior/acute/mu/paragraph/periodcentered/cedilla
+/onesuperior/ordmasculine/guilsinglright/onequarter/onehalf/threequarters
+/questiondown/Agrave/Aacute/Acircumflex/Atilde/Adieresis/Aring/AE/Ccedilla
+/Egrave/Eacute/Ecircumflex/Edieresis/Igrave/Iacute/Icircumflex/Idieresis/Eth
+/Ntilde/Ograve/Oacute/Ocircumflex/Otilde/Odieresis/multiply/Oslash/Ugrave
+/Uacute/Ucircumflex/Udieresis/Yacute/Thorn/germandbls/agrave/aacute/acircumflex
+/atilde/adieresis/aring/ae/ccedilla/egrave/eacute/ecircumflex/edieresis/igrave
+/iacute/icircumflex/idieresis/eth/ntilde/ograve/oacute/ocircumflex/otilde
+/odieresis/divide/oslash/ugrave/uacute/ucircumflex/udieresis/yacute/thorn
+/ydieresis]def/Times-Italic@0 ENC0/Times-Italic RE/Courier-Bold@0 ENC0
+/Courier-Bold RE/Courier@0 ENC0/Courier RE/Times-Roman@0 ENC0/Times-Roman RE
+/Times-Bold@0 ENC0/Times-Bold RE
+%%EndSetup
+%%Page: 1 1
+%%BeginPageSetup
+BP
+%%EndPageSetup
+/F0 18/Times-Bold@0 SF(The CCSO Nameserver \255 An Intr)124.794 105.6 Q
+(oduction)-.324 E/F1 10/Times-Roman@0 SF(by)283 139.2 Q(Steven Dorner)215.73
+151.2 Q(s\255dorner@uiuc.edu)7.5 E(Computer and Communications Services Of)
+192.265 163.2 Q(\214ce)-.18 E(University of Illinois at Urbana)225.23 175.2 Q
+(March 29, 1990)256.2 199.2 Q(updated by)265.92 235.2 Q(Paul Pomes)214.605
+247.2 Q(paul\255pomes@uiuc.edu)7.5 E(Computer and Communications Services Of)
+192.265 259.2 Q(\214ce)-.18 E(University of Illinois at Urbana)225.23 271.2 Q
+(August 2, 1992)257.305 295.2 Q/F2 10/Courier@0 SF(%)72 351.6 Q/F3 10
+/Courier-Bold@0 SF(ph steven dorner)2.5 E F2
+(----------------------------------------)72 363.6 Q(name: dorner steven c)108
+375.6 Q(phone: 244-1765)102 387.6 Q(address: 181 dcl)90 399.6 Q 6(:C)132 411.6
+S(AMPUS MC 256)150 411.6 Q(department: computing services office)72 423.6 Q
+(title: res programmer)102 435.6 Q(hours: 7-5, four days per week.)102 447.6 Q
+(email to: s)84 459.6 Q/F4 10/Symbol SF(-)A F2
+(dorner@uiuc.edu \(dorner@pequod.cso.uiuc.edu\))A
+(----------------------------------------)72 471.6 Q/F5 10/Times-Bold@0 SF
+(What is it?)72 499.8 Q F1 .624(The CCSO Nameserver could be considered a data\
+base containing information about people and things at)72 516 R .652
+(the University of Illinois.)72 528 R .653(It is designed to be extremely \215\
+exible in what information it keeps, and also to)5.652 F .394
+(provide fast access to that information.)72 540 R(Currently)5.394 E 2.894(,m)
+-.65 G .394(ost of the information in it comes from the University)285.748 540
+R/F6 10/Times-Italic@0 SF(Student/Staff Dir)72 552 Q(ectory)-.37 E F1
+(\(the phone book\).)2.5 E .147(The CCSO Nameserver could also be considered t\
+o be a pair of programs; one that manages the actual data)72 568.2 R .895
+(\(this program is called)72 580.2 R F6(qi)3.395 E F1 3.395(,f)C(or)184.795
+580.2 Q F6(q)3.395 E F1(uery)A F6(i)3.395 E F1 .895
+(nterpreter\), and another one that handles user requests \(the program)B 1.451
+(CCSO provides for this is called)72 592.2 R F6(ph)3.952 E F1 3.952(,f)C(or)
+232.71 592.2 Q F6(ph)3.952 E F1 1.452(one book\).)B 2.852 -.7(To m)6.452 H
+1.452(ost people, the CCSO Nameserver will be).7 F
+(exactly this second program,)72 604.2 Q F6(ph)2.5 E F1 2.5(,w)C
+(hich gives them access to the University)211.7 604.2 Q F6(Dir)2.5 E(ectory)
+-.37 E F1(.)A F5(Wher)72 628.2 Q 2.5(ei)-.18 G 2.5(si)105.98 628.2 S(t?)115.15
+628.2 Q F1 1.725
+(The database for the Nameserver resides on a CCSO minicomputer \(a V)72 644.4
+R 1.725(AXServer 3500\) that runs the)-1.29 F .446
+(UNIX operating system; the name of this computer is garcon.cso.uiuc.edu.)72
+656.4 R .446(The program that manages the)5.446 F .339(database \()72 668.4 R
+F6(qi)A F1 2.839(\)r)C .338(uns on this machine.)129.878 668.4 R F6(Qi)5.338 E
+F1 .338(allows programs running on other computers to access the database)2.838
+F .342(by serving as an intermediary between them and the actual database.)72
+680.4 R .343(It communicates with such programs)5.343 F .32 LW 76 690 72 690 DL
+80 690 76 690 DL 84 690 80 690 DL 88 690 84 690 DL 92 690 88 690 DL 96 690 92
+690 DL 100 690 96 690 DL 104 690 100 690 DL 108 690 104 690 DL 112 690 108 690
+DL 116 690 112 690 DL 120 690 116 690 DL 124 690 120 690 DL 128 690 124 690 DL
+132 690 128 690 DL 136 690 132 690 DL 140 690 136 690 DL 144 690 140 690 DL 148
+690 144 690 DL 152 690 148 690 DL 156 690 152 690 DL 160 690 156 690 DL 164 690
+160 690 DL 168 690 164 690 DL 172 690 168 690 DL 176 690 172 690 DL 180 690 176
+690 DL 184 690 180 690 DL 188 690 184 690 DL 192 690 188 690 DL 196 690 192 690
+DL 200 690 196 690 DL 204 690 200 690 DL 208 690 204 690 DL 212 690 208 690 DL
+216 690 212 690 DL/F7 8/Times-Roman@0 SF(Converted to portable n/trof)93.6 702
+Q 2(ff)-.144 G(ormat using the -me macros from funky Next W)190.328 702 Q
+(riteNow format \(icch\).)-.32 E EP
+%%Page: 2 2
+%%BeginPageSetup
+BP
+%%EndPageSetup
+/F0 10/Times-Bold@0 SF 245.66(2T)72 60 S(he CCSO Nameserver \255 An Intr)329.33
+60 Q(oduction)-.18 E/F1 10/Times-Roman@0 SF(using the campus network, UIUCnet.)
+72 98 Q/F2 7/Times-Roman@0 SF(1)220.87 94 Q/F3 10/Times-Italic@0 SF(Ph)72 114.2
+Q F1 .39(\(the program that is usually used to communicate with)2.89 F F3(qi)
+2.89 E F1 2.89(\)i)C 2.89(si)326.55 114.2 S .39(nstalled on all of CCSO')336.11
+114.2 R 2.89(sU)-.55 G .39(NIX comput-)450.01 114.2 R 2.598(ers. A)72 126.2 R
+.098(simple version of)2.598 F F3(ph)2.598 E F1 .098(is available on CCSO')
+2.598 F 2.598(sm)-.55 G .098(ain IBM computer)289.64 126.2 R 2.599(,a)-.4 G(nd)
+372.856 126.2 Q F3(ph)2.599 E F1 .099(is installed on hundreds of)2.599 F 1.193
+(non-CCSO computers across the campus.)72 138.2 R 3.693(Af)6.193 G 1.193
+(ull-featured version of)263.578 138.2 R F3(ph)3.693 E F1 1.193
+(is available for V)3.693 F 1.192(AX computers)-1.29 F 1.848
+(running VMS, if they have W)72 150.2 R 1.848(ollongong TCP/IP software.)-.8 F
+-1.11(Ve)6.849 G 1.849(rsions also exist for Macintosh, PC, and)1.11 F 2.5
+(VM/CMS. Later)72 162.2 R 2.5(,I)-.4 G('ll discuss how you can get)148.54 162.2
+Q F3(ph)2.5 E F1(installed on your system.)2.5 E F0(What is it good for?)72
+186.2 Q F1 1.255(The Nameserver is good for looking up phone numbers and addre\
+sses of University faculty)72 202.4 R 3.755(,s)-.65 G 1.255(tudents or)463.025
+202.4 R(staf)72 214.4 Q 2.554(fm)-.18 G .054(embers, just like the)99.924 214.4
+R F3 .054(Student/Staff Dir)2.554 F(ectory)-.37 E F1 2.554(;b)C .054
+(ut the Nameserver is good for more than just that.)285.708 214.4 R(For)5.055 E
+.916(one thing, the Nameserver knows the electronic mail address for thousands\
+ of faculty)72 226.4 R 3.416(,s)-.65 G .916(tudents and staf)433.468 226.4 R
+(f;)-.18 E .353(this information is more up to date that the)72 238.4 R F3 .353
+(Student/Staff Dir)2.853 F(ectory)-.37 E F1 5.353(.I)C 2.853(tk)351.892 238.4 S
+.353(nows other things about some peo-)362.525 238.4 R .532(ple, such as of)72
+250.4 R .532(\214ce hours or vacation plans.)-.18 F .532
+(Ph also has some other things in it not found in the)5.532 F F3(Dir)3.032 E
+(ectory)-.37 E F1(;)A .134(up-to-the-hour weather information \(e.g., \231ph t\
+ype=weather champaign\232\), the current UIUC timetable \(e.g.,)72 262.4 R(\
+\231ph cs101\232\), and an extensive listing of local restaurants \(e.g., \231\
+ph restaurant other=italian\232\).)72 274.4 Q 2.594(Ak)72 290.6 S .093
+(ey thing to know about the Nameserver is that, if you use a computer that has)
+86.814 290.6 R F3(ph)2.593 E F1 .093(installed on it, you can)2.593 F .297
+(change the information the Nameserver keeps about you.)72 302.6 R .298
+(For example, if you change of)5.297 F .298(\214ces in the middle)-.18 F 1.084
+(of the year)72 314.6 R 3.584(,y)-.4 G 1.084(ou can put your correct address a\
+nd phone number in the Nameserver immediately)127.612 314.6 R 3.583(,s)-.65 G
+3.583(ot)480.417 314.6 S(hat)491.78 314.6 Q(people can use)72 326.6 Q F3(ph)2.5
+E F1(to \214nd up-to-date information about you.)2.5 E 1.046(Another very impo\
+rtant function of the Nameserver is electronic mail forwarding.)72 342.8 R
+1.047(If you tell the Name-)6.047 F .577(server where you read your electronic\
+ mail, then anyone wishing to send mail to you can send the mail to)72 354.8 R
+F3(alias@uiuc.edu)72 366.8 Q F1 3.817(,w)C(here)148.347 366.8 Q F3(alias)3.817
+E F1 1.317
+(is your Nameserver alias \(a unique name by which the Nameserver knows)3.817 F
+5.618(you; see below\).)72 378.8 R 5.617(If someone doesn')159.673 378.8 R
+8.117(tk)-.18 G 5.617(now your Nameserver alias, s/he can send mail to)260.494
+378.8 R F3(your\255name@uiuc.edu)72 390.8 Q F1 3.279(,a)C .779
+(nd the Nameserver will try to \214nd you.)172.319 390.8 R .78
+(In either case, the Nameserver will send)5.779 F 1.716
+(your mail to the address you have told it.)72 402.8 R 1.716
+(For example, you can send me mail with the addresses: s-)6.716 F 1.086(dorner\
+@uiuc.edu \(\231s\255dorner\232 is my alias\), or steven\255dorner@uiuc.edu \(\
+my name\).)72 414.8 R 1.087(Either way)6.087 F 3.587(,t)-.65 G 1.087(he mail)
+473.193 414.8 R .008(will be sent by the Nameserver to \231dorner@pequod.cso.u\
+iuc.edu\232, which is where I'm currently reading my)72 426.8 R(mail.)72 438.8
+Q F0(What isn't it good for?)72 462.8 Q F1 .454
+(There are some things the Nameserver is not meant to do.)72 479 R .454
+(One thing that should be mentioned right away)5.454 F .406
+(is that the Nameserver can')72 491 R 2.906(tb)-.18 G 2.905(eu)193.54 491 S
+.405(sed to generate mailing lists for junk mail; you don')205.885 491 R 2.905
+(th)-.18 G .405(ave to worry about)427.525 491 R
+(getting junk mail because you appear in the Nameserver)72 503 Q 1.1 -.55('s d)
+.37 H(atabase.).55 E(Another thing it isn')72 519.2 Q 2.5(tg)-.18 G
+(ood for is notifying the University of changes of address.)163.49 519.2 Q
+(Changes you make to your)5 E .52(information in the Nameserver are)72 531.2 R
+F0(not)3.02 E F1 .52(automatically sent to your department, or the Of)3.02 F
+.52(\214ce of Admissions)-.18 F .76(and Records, or Payroll, or anywhere else;\
+ you must notify these places of changes in your address sepa-)72 543.2 R
+(rately)72 555.2 Q(.)-.65 E F0(How can I have ph installed on my computer?)72
+579.2 Q F1 .461(If one of the computers you use runs UNIX or VMS and is connec\
+ted to UIUCnet, you can probably have)72 595.4 R F3(ph)72 607.4 Q F1 .444
+(installed on it.)2.944 F -.7(Te)5.444 G .444(ll the person who manages your c\
+omputer that s/he can get the source code for ph by).7 F .226(anonymous ftp to\
+ uxc.cso.uiuc.edu, in the net/ph subdirectory or the compressed tar archive in\
+ pub/ph.tar)72 619.4 R(.Z)-.55 E(\(don')72 631.4 Q 2.5(tw)-.18 G
+(orry s/he'll know what that means\).)105.98 631.4 Q .32 LW 76 678.8 72 678.8
+DL 80 678.8 76 678.8 DL 84 678.8 80 678.8 DL 88 678.8 84 678.8 DL 92 678.8 88
+678.8 DL 96 678.8 92 678.8 DL 100 678.8 96 678.8 DL 104 678.8 100 678.8 DL 108
+678.8 104 678.8 DL 112 678.8 108 678.8 DL 116 678.8 112 678.8 DL 120 678.8 116
+678.8 DL 124 678.8 120 678.8 DL 128 678.8 124 678.8 DL 132 678.8 128 678.8 DL
+136 678.8 132 678.8 DL 140 678.8 136 678.8 DL 144 678.8 140 678.8 DL 148 678.8
+144 678.8 DL 152 678.8 148 678.8 DL 156 678.8 152 678.8 DL 160 678.8 156 678.8
+DL 164 678.8 160 678.8 DL 168 678.8 164 678.8 DL 172 678.8 168 678.8 DL 176
+678.8 172 678.8 DL 180 678.8 176 678.8 DL 184 678.8 180 678.8 DL 188 678.8 184
+678.8 DL 192 678.8 188 678.8 DL 196 678.8 192 678.8 DL 200 678.8 196 678.8 DL
+204 678.8 200 678.8 DL 208 678.8 204 678.8 DL 212 678.8 208 678.8 DL 216 678.8
+212 678.8 DL/F4 5/Times-Roman@0 SF(1)93.6 689.2 Q/F5 8/Times-Roman@0 SF
+(UIUCnet is a multi-protocol, multi-media network.)2 3.2 M
+(Access to the Nameserver is via TCP/IP only)4 E(.)-.52 E EP
+%%Page: 3 3
+%%BeginPageSetup
+BP
+%%EndPageSetup
+/F0 10/Times-Bold@0 SF(The CCSO Nameserver \255 An Intr)72 60 Q 243.16
+(oduction 3)-.18 F(How do I use ph?)72 96 Q/F1 10/Times-Roman@0 SF 1.128
+(There are two dif)72 112.2 R 1.128(ferent ways to use)-.18 F/F2 10
+/Times-Italic@0 SF(ph)3.628 E F1 6.128(.O)C 1.129
+(ne way is good for \214nding information about people, and the)249.684 112.2 R
+.241
+(other is good for changing the information the Nameserver keeps about you.)72
+124.2 R 2.741(Iw)5.241 G .241(ill give you a brief idea of)398.684 124.2 R .018
+(how both these ways work; for more detailed information, you should read the \
+"manual page" for)72 136.2 R F2(ph)2.518 E F1 2.518(,w)C(hich)486.78 136.2 Q(y\
+ou can read \(if your computer runs UNIX\) by typing the command, \231man ph\
+\232.)72 148.2 Q 2.634 -.7(To u)72 164.4 T(se).7 E F2(ph)3.734 E F1 1.234(to \
+\214nd out information, you should type \231ph\232 and the name of the person \
+you want to know)3.734 F(about;)72 176.4 Q F2(ph)2.5 E F1
+(will respond with information about that person:)2.5 E/F3 10/Courier@0 SF(%)
+112 192.6 Q/F4 10/Courier-Bold@0 SF(ph steven dorner)2.5 E F3
+(----------------------------------------)112 204.6 Q(name: dorner steven c)148
+216.6 Q(phone: 244-1765)142 228.6 Q(address: 181 dcl)130 240.6 Q 6(:C)172 252.6
+S(AMPUS MC 256)190 252.6 Q(department: computing services office)112 264.6 Q
+(title: res programmer)142 276.6 Q(hours: 7-5, four days per week.)142 288.6 Q
+(email to: s)124 300.6 Q/F5 10/Symbol SF(-)A F3
+(dorner@uiuc.edu \(dorner@pequod.cso.uiuc.edu\))A
+(----------------------------------------)112 312.6 Q F1 .601
+(If there are a lot of people who have the name you asked for)72 333 R(,)-.4 E
+F2(ph)3.102 E F1 .602(will let you view the list a screenful at a)3.102 F
+(time; just hit the spacebar to move to the next screen.)72 345 Q -1(Yo)72
+361.2 S 2.522(ud)1 G(on')95.742 361.2 Q 2.522(th)-.18 G .022(ave to know the e\
+xact spelling of a name to \214nd information; you can put special symbols in \
+the)119.194 361.2 R .534(name for which you are searching that tell the Namese\
+rver to \214nd names that you only know a few letters)72 373.2 R 2.5(of. I)72
+385.2 R(won')2.5 E 2.5(ts)-.18 G(ay anything more about that here; look in the\
+ manual page if you are interested in the details.)123.2 385.2 Q .02
+(Sometimes, you will ask)72 401.4 R F2(ph)2.52 E F1 .02(for a name, and it wil\
+l refuse to give you information, because too many people)2.52 F
+(have that name:)72 413.4 Q F3(%)112 429.6 Q F4(ph steven)2.5 E F3
+(502:Too many entries to print.)112 441.6 Q F2(Ph)72 462 Q F1 .446(does this s\
+o that no one can use it to get mailing lists for junk mail or other nefarious\
+ purposes.)2.945 F .446(If you)5.446 F .047(really want to \214nd the person, \
+you will have to know something else about them, like part of their last name)
+72 474 R
+(\(or \214rst name, if you know their last name\), or their phone number:)72
+488 Q/F6 7/Times-Roman@0 SF(2)340.85 484 Q F3(%)112 504.2 Q F4
+(ph steven office_phone=244-1765)2.5 E F3
+(----------------------------------------)112 516.2 Q(name: dorner steven c)148
+528.2 Q(phone: 244-1765)142 540.2 Q(address: 181 dcl)130 552.2 Q 6(:C)172 564.2
+S(AMPUS MC 256)190 564.2 Q(department: computing services office)112 576.2 Q
+(title: res programmer)142 588.2 Q(hours: 7-5, four days per week.)142 600.2 Q
+(email to: s)124 612.2 Q F5(-)A F3
+(dorner@uiuc.edu \(dorner@pequod.cso.uiuc.edu\))A
+(----------------------------------------)112 624.2 Q F1 1.265(If you want to \
+change the information the Nameserver keeps about you, you should just type \
+\231ph\232.)72 644.6 R F2(Ph)6.266 E F1(won')72 656.6 Q 3.473(tl)-.18 G .973
+(ook up a name, but will instead give you a prompt.)101.403 656.6 R .972
+(There are many possible commands you can)5.973 F .486(type to)72 668.6 R F2
+(ph)2.986 E F1 2.986(;t)C .486(hey are described in full in the)121.518 668.6 R
+F2(ph)2.986 E F1 .486(manual page.)2.986 F -1(Yo)5.486 G 2.986(uw)1 G .486
+(ill only need to know three commands)347.764 668.6 R .314
+(to change your information:)72 680.6 R F0(login)2.814 E F1(,)A F0(edit)2.814 E
+F1 2.814(,a)C(nd)239.984 680.6 Q F0(quit)2.813 E F1 5.313(.B)C .313
+(efore actually using)284.51 680.6 R F2(ph)2.813 E F1 .313
+(for this, you will have to make)2.813 F .32 LW 76 690.2 72 690.2 DL 80 690.2
+76 690.2 DL 84 690.2 80 690.2 DL 88 690.2 84 690.2 DL 92 690.2 88 690.2 DL 96
+690.2 92 690.2 DL 100 690.2 96 690.2 DL 104 690.2 100 690.2 DL 108 690.2 104
+690.2 DL 112 690.2 108 690.2 DL 116 690.2 112 690.2 DL 120 690.2 116 690.2 DL
+124 690.2 120 690.2 DL 128 690.2 124 690.2 DL 132 690.2 128 690.2 DL 136 690.2
+132 690.2 DL 140 690.2 136 690.2 DL 144 690.2 140 690.2 DL 148 690.2 144 690.2
+DL 152 690.2 148 690.2 DL 156 690.2 152 690.2 DL 160 690.2 156 690.2 DL 164
+690.2 160 690.2 DL 168 690.2 164 690.2 DL 172 690.2 168 690.2 DL 176 690.2 172
+690.2 DL 180 690.2 176 690.2 DL 184 690.2 180 690.2 DL 188 690.2 184 690.2 DL
+192 690.2 188 690.2 DL 196 690.2 192 690.2 DL 200 690.2 196 690.2 DL 204 690.2
+200 690.2 DL 208 690.2 204 690.2 DL 212 690.2 208 690.2 DL 216 690.2 212 690.2
+DL/F7 5/Times-Roman@0 SF(2)93.6 700.6 Q/F8 8/Times-Roman@0 SF(See the)2 3.2 M
+/F9 8/Times-Italic@0 SF(ph)2 E F8(manual page for information on how to search\
+ for people with a certain phone number or address.)2 E EP
+%%Page: 4 4
+%%BeginPageSetup
+BP
+%%EndPageSetup
+/F0 10/Times-Bold@0 SF 245.66(4T)72 60 S(he CCSO Nameserver \255 An Intr)329.33
+60 Q(oduction)-.18 E/F1 10/Times-Roman@0 SF(some preparations.)72 96 Q .268
+(The \214rst thing you have to do is \214nd your Nameserver)72 112.2 R/F2 10
+/Times-Italic@0 SF(alias)2.769 E F1 5.269(.T)C .269
+(his is a unique name assigned to you by the)327.979 112.2 R(Nameserver)72
+124.2 Q 5.065(.I)-.55 G 2.565(ti)130.655 124.2 S 2.565(su)138.78 124.2 S .064
+(sually your \214rst initial, followed by a dash, followed by your last name.)
+150.235 124.2 R .064(If there is more)5.064 F .172(than one person with the sa\
+me \214rst initial and last name as yours, there may be number tacked onto the\
+ end)72 136.2 R(of your alias.)72 148.2 Q
+(The easiest way to \214nd your alias is to look up your name with)5 E F2(ph)
+2.5 E F1(.)A 1.542
+(Once your know your alias, you need to \214nd out your Nameserver password.)72
+164.4 R 2.942 -.7(To d)6.542 H 4.042(ot).7 G 1.542(his, come to the)436.044
+164.4 R .119(CCSO Resource Center in Room 1420 DCL and present a valid Univers\
+ity ID at the Accounting Desk.)72 176.4 R -.8(We)5.119 G 1.712(cannot give out\
+ passwords via email or phone to prevent disclosure to unauthorized persons.)72
+188.4 R 1.712(In cases)6.712 F .09(where a\))72 200.4 R F2(ph)2.59 E F1 .09
+(is being used by the same user)2.59 F .09(-id on the same machine that')-.2 F
+2.59(sl)-.55 G .09(isted in the email \214eld, and b\))371.71 200.4 R F2(ph)
+2.59 E F1 .124(has been installed \231setuid root\232, and c\) the)72 212.4 R
+F2(ph)2.624 E F1 .123(version is 5.2 or greater)2.624 F 2.623(,t)-.4 G .123
+(hen no password is needed to login.)360.222 212.4 R(Now)72 228.6 Q 4.27(,i)
+-.65 G(t')100.34 228.6 Q 4.27(st)-.55 G 1.77(ime to use)116.84 228.6 R F2(ph)
+4.27 E F1 1.77(to change your information.)4.27 F -.7(Ty)6.77 G 1.77
+(pe \231ph\232 and a return.).7 F -1(Yo)6.77 G 4.27(uw)1 G 1.77(ill get a \231)
+439.31 228.6 R/F3 10/Courier@0 SF(ph>)A F1<9a>A 2.627(prompt. Now)72 240.6 R
+2.627(,t)-.65 G .127(ype \231)135.214 240.6 R/F4 10/Courier-Bold@0 SF .127
+(login alias)B F1 2.627<9a28>C .127
+(but use your real alias, not the word \231alias\232!\))233.245 240.6 R .126
+(and a return.)5.126 F F2(Ph)5.126 E F1(will)2.626 E .597
+(ask for your password; type your password and a return.)72 252.6 R -1(Yo)5.598
+G 3.098(us)1 G .598(hould get a greeting from the Nameserver)331.132 252.6 R(,)
+-.4 E(and another prompt.)72 264.6 Q F3(%)112 280.8 Q F4(ph)2.5 E F3
+($Date: 1992/08/06 22:06:56 $$Revision: 1.1 $)112 292.8 Q(100:)112 304.8 Q
+(100:Ph passwords may be obtained at CCSO Accounting, 1420 DCL.)112 316.8 Q
+(100:Be sure to bring your University Id Card. You may not need)112 328.8 Q
+(100:a password if you are using the login in your email field.)112 340.8 Q
+(200:Database ready.)112 352.8 Q(ph>)112 373.2 Q F4(login s)2.5 E/F5 10/Symbol
+SF(-)A F4(dorner)A F3(Enter nameserver password:)112 385.2 Q(200:s)112 397.2 Q
+F5(-)A F3(dorner:Hi how are you?)A(ph>)112 409.2 Q F1 -1(Yo)72 429.6 S 2.854
+(ua)1 G .354(re now ready to change your information.)95.514 429.6 R -1(Yo)
+5.354 G .354(ur information is or)1 F .353
+(ganized into \231\214elds\232, each one con-)-.18 F .264(taining a dif)72
+441.6 R .264(ferent piece of information.)-.18 F .264
+(There is a \214eld for your name, your address, your phone numbers,)5.264 F
+(etc.)72 455.6 Q/F6 7/Times-Roman@0 SF(3)86.16 451.6 Q F1 1.668 -.7(To c)92.428
+455.6 T .268(hange a particular \214eld, type \231).7 F F4 .268(edit field)B F1
+2.768<9a61>C .268(nd a return, substituting the name of the \214eld you)304.382
+455.6 R 2.587(wish to change for \231\214eld\232.)72 467.6 R 2.588
+(For example, if you want to change your phone numbers, type \231)7.587 F F4
+(edit)A(phone)72 481.6 Q F1 2.879(\232. Y)B .379
+(ou will be placed in your favorite UNIX editor)-1 F(,)-.4 E F6(4)312.3 477.6 Q
+F1 .378(with the contents of the \214eld you asked for as)318.678 481.6 R .971
+(the text.)72 493.6 R .971(Make whatever changes you wish, and exit the editor)
+5.971 F(.)-.55 E F2(Ph)5.971 E F1 .972(will then change the information for)
+3.471 F(you.)72 505.6 Q .345(If you aren')72 521.8 R 2.845(tf)-.18 G .345
+(amiliar with a UNIX text editor)128.665 521.8 R 2.845(,y)-.4 G .345
+(ou may prefer to use the)266.705 521.8 R F0(make)2.844 E F1 2.844
+(command. After)2.844 F .344(you login)2.844 F(to)72 533.8 Q F2(ph)2.5 E F1 2.5
+(,j)C(ust type,)100.06 533.8 Q F4(make name-of-field="value-of-field")2.5 E F3
+(ph>)112 550 Q F4(make email="dorner@pequod.cso.uiuc.edu")2.5 E F3
+(200:1 entry changed.)112 562 Q(ph>)112 574 Q F1 .825
+(Some information cannot be changed; the \231name\232 \214eld, for example.)72
+594.4 R .826(If you need to change such a \214eld,)5.825 F
+(you should send mail to nameserv@uiuc.edu; arrangements can be made.)72 606.4
+Q(Once you are done changing your information, type)72 622.6 Q F0(quit)2.5 E F1
+(and a return.)2.5 E .32 LW 76 665.2 72 665.2 DL 80 665.2 76 665.2 DL 84 665.2
+80 665.2 DL 88 665.2 84 665.2 DL 92 665.2 88 665.2 DL 96 665.2 92 665.2 DL 100
+665.2 96 665.2 DL 104 665.2 100 665.2 DL 108 665.2 104 665.2 DL 112 665.2 108
+665.2 DL 116 665.2 112 665.2 DL 120 665.2 116 665.2 DL 124 665.2 120 665.2 DL
+128 665.2 124 665.2 DL 132 665.2 128 665.2 DL 136 665.2 132 665.2 DL 140 665.2
+136 665.2 DL 144 665.2 140 665.2 DL 148 665.2 144 665.2 DL 152 665.2 148 665.2
+DL 156 665.2 152 665.2 DL 160 665.2 156 665.2 DL 164 665.2 160 665.2 DL 168
+665.2 164 665.2 DL 172 665.2 168 665.2 DL 176 665.2 172 665.2 DL 180 665.2 176
+665.2 DL 184 665.2 180 665.2 DL 188 665.2 184 665.2 DL 192 665.2 188 665.2 DL
+196 665.2 192 665.2 DL 200 665.2 196 665.2 DL 204 665.2 200 665.2 DL 208 665.2
+204 665.2 DL 212 665.2 208 665.2 DL 216 665.2 212 665.2 DL/F7 5/Times-Roman@0
+SF(3)93.6 675.6 Q/F8 8/Times-Roman@0 SF(The)2 3.2 M/F9 8/Times-Italic@0 SF(ph)2
+E F8(command)2 E/F10 8/Times-Bold@0 SF(\214elds)2 E F8
+(will give a complete list of Nameserver \214elds.)2 E F7(4)93.6 689.2 Q F8
+(Unless you take pains to change it, that editor will be)2 3.2 M F9(vi)2 E F8 2
+(;s)C(ee Appendix A if you've never used)283.196 692.4 Q F9(vi)2 E F8(before.)2
+E EP
+%%Page: 5 5
+%%BeginPageSetup
+BP
+%%EndPageSetup
+/F0 10/Times-Bold@0 SF(The CCSO Nameserver \255 An Intr)72 60 Q 243.16
+(oduction 5)-.18 F(Suppose I can't use ph fr)72 96 Q(om my computer?)-.18 E/F1
+10/Times-Roman@0 SF 1.403(If your computer doesn')72 112.2 R 3.903(th)-.18 G
+(ave)184.632 112.2 Q/F2 10/Times-Italic@0 SF(ph)3.903 E F1 1.403
+(installed on it, but you would like to use)3.903 F F2(ph)3.902 E F1 1.402
+(to look up addresses or)3.902 F .592
+(change your information, you can still do so.)72 124.2 R .592
+(Connect to the CCSO')5.592 F 3.093(sS)-.55 G .593
+(equent ux1, by using telnet \(telnet)364.935 124.2 R .101
+(ux1.cso.uiuc.edu\), sytek \(call 1600\), or by dialup \(333-4000, ux1\).)72
+136.2 R .1(When you are prompted for login:, type)5.101 F .41
+(\231phones\232 and a return.)72 148.2 R -1(Yo)5.41 G 2.91(uw)1 G .41
+(ill then be prompted for your terminal type.)194.96 148.2 R .411
+(If you have a vt100 terminal or)5.411 F 1.155(terminal emulator)72 162.2 R
+3.655(,y)-.4 G 1.154
+(ou can just type a return; if you have some other terminal, type its name.)
+155.29 162.2 R/F3 7/Times-Roman@0 SF(5)461.412 158.2 Q F1 -1(Yo)468.566 162.2 S
+3.654(uw)1 G(ill)495.66 162.2 Q(receive a \231)72 174.2 Q/F4 10/Courier@0 SF
+(ph>)A F1 2.5<9a70>C(rompt, and can use)144.69 174.2 Q F2(ph)2.5 E F1(.)A F0
+(Wher)72 198.2 Q 2.5(ec)-.18 G(an I \214nd mor)107.64 198.2 Q 2.5(ei)-.18 G
+(nformation?)173.58 198.2 Q F2(Ph)72 214.4 Q F1 .481
+(has an extensive on-line help system.)2.981 F .482
+(UNIX users can access it by entering)5.482 F F2(ph)2.982 E F1 1.582 -.55('s i)
+D .482(nteractive mode, and).55 F(typing,)72 226.4 Q F0(help)2.5 E F1(.)A F4(%)
+112 242.6 Q/F5 10/Courier-Bold@0 SF(ph)2.5 E F4
+($Date: 1992/08/06 22:06:56 $$Revision: 1.1 $)112 254.6 Q(100:)112 266.6 Q
+(100:Ph passwords may be obtained at CCSO Accounting, 1420 DCL.)112 278.6 Q
+(100:Be sure to bring your University Id Card. You may not need)112 290.6 Q
+(100:a password if you are using the login in your email field.)112 302.6 Q
+(200:Database ready.)112 314.6 Q(ph>)112 335 Q F5(help)2.5 E F4
+(----------------------------------------)112 347 Q
+(These "ph" help topics are available:)118 359 Q 54(511 edit)118 371 R 42
+(login passwd)274 371 R(type)430 371 Q 54(add email)118 383 R 48(make password)
+274 383 R(uiuc.general)430 383 Q 42(alias fields)118 395 R 30(manpage query)274
+395 R(vi)430 395 Q 24(commands help)118 407 R 24(nickname register)274 407 R 36
+(delete introduction)118 419 R 42(paper switch)6 F
+(To view one of these topics, type "help name-of-topic-you-want".)118 431 Q
+(----------------------------------------)112 443 Q
+(These ``native'' help topics are also available:)118 455 Q 54
+(100 403 508 518 policy)118 467 R 54(101 475 509 519 protocol)118 479 R 54
+(102 500 510 520 proxy)118 491 R 54(200 501 511 521 restaurant)118 503 R 54
+(201 502 512 522 site)118 515 R 54(300 503 513 523 type)118 527 R 54
+(301 504 514 598 update)118 539 R 54(400 505 515 599)118 551 R 54
+(401 506 516 forwarding)118 563 R 54(402 507 517 password)118 575 R
+(To view one of these topics, type "help native name-of-topic-you-want".)118
+587 Q(----------------------------------------)112 599 Q F1 1.855(CMS users of)
+72 619.4 R F2(ph)4.355 E F1 1.855(should give the command, \231)4.355 F F5
+1.855(ph help)B F1 1.855(\232, and subsequently \231)B F5 1.855
+(ph help name-of-)B(topic)72 631.4 Q F1 2.5<9a28>C(e.g., \231)112.27 631.4 Q F5
+(ph help email)A F1<9a292e>A F0(What if I have tr)72 647.6 Q(ouble?)-.18 E F1
+1.534(If you have problems or questions that are not resolved by reading this \
+document, the)72 663.8 R F2(ph)4.034 E F1 1.534(help, or)4.034 F F2(The)4.034 E
+(CCSO Nameserver)72 675.8 Q 2.5(,S)-1.11 G(erver\255Client Pr)157.27 675.8 Q
+(otocol)-.37 E F1 2.5(,f)C
+(eel free to ask me by sending mail to s\255dorner@uiuc.edu.)255.03 675.8 Q .32
+LW 76 685.4 72 685.4 DL 80 685.4 76 685.4 DL 84 685.4 80 685.4 DL 88 685.4 84
+685.4 DL 92 685.4 88 685.4 DL 96 685.4 92 685.4 DL 100 685.4 96 685.4 DL 104
+685.4 100 685.4 DL 108 685.4 104 685.4 DL 112 685.4 108 685.4 DL 116 685.4 112
+685.4 DL 120 685.4 116 685.4 DL 124 685.4 120 685.4 DL 128 685.4 124 685.4 DL
+132 685.4 128 685.4 DL 136 685.4 132 685.4 DL 140 685.4 136 685.4 DL 144 685.4
+140 685.4 DL 148 685.4 144 685.4 DL 152 685.4 148 685.4 DL 156 685.4 152 685.4
+DL 160 685.4 156 685.4 DL 164 685.4 160 685.4 DL 168 685.4 164 685.4 DL 172
+685.4 168 685.4 DL 176 685.4 172 685.4 DL 180 685.4 176 685.4 DL 184 685.4 180
+685.4 DL 188 685.4 184 685.4 DL 192 685.4 188 685.4 DL 196 685.4 192 685.4 DL
+200 685.4 196 685.4 DL 204 685.4 200 685.4 DL 208 685.4 204 685.4 DL 212 685.4
+208 685.4 DL 216 685.4 212 685.4 DL/F6 5/Times-Roman@0 SF(5)93.6 695.8 Q/F7 8
+/Times-Roman@0 SF(If you have trouble \214nding the right name to use for your\
+ terminal, call the CCSO Consultants at 333-6133.)2 3.2 M EP
+%%Page: 6 6
+%%BeginPageSetup
+BP
+%%EndPageSetup
+/F0 12/Times-Bold@0 SF 3(APPENDIX A)249.672 98.4 R 3(AR)207.276 141.6 S
+(ank Beginner)227.604 141.6 Q .888 -.444('s G).216 H(uide to VI).444 E/F1 10
+/Times-Roman@0 SF .441(This page describes a few)72 201 R/F2 10/Times-Italic@0
+SF(vi)2.941 E F1 .441(commands to accomplish simple editing tasks.)2.941 F .44
+(Full documentation for)5.44 F F2(vi)2.94 E F1(can)2.94 E .234(be found in)72
+213 R F2 .234(The UNIX User)2.734 F 2.814 -1.29('s M).37 H .234
+(anual Supplementary Documents)1.29 F F1 2.734(,c)C .235
+(hapter 15 \(really advanced users should)344.256 213 R .278
+(read chapter 16 as well\).)72 225 R -.7(Tw)5.278 G 2.778(ot).7 G .278
+(hing to keep in mind:)199.598 225 R .277
+(First, the editor is pronounced \231vee eye\232; if you pro-)5.277 F .18
+(nounce it, \231vie\232, UNIX gurus will laugh at you, though not out loud.)72
+237 R(Secondly)5.181 E(,)-.65 E F2(vi)2.681 E F1 .181
+(is case-sensitive; be sure)2.681 F
+(to use upper or lower case commands as appropriate.)72 249 Q/F3 10
+/Times-Bold@0 SF(Modes)72 273 Q F2 -.74(Vi)72 289.2 S F1 .582
+(is a modal editor; what you can do depends on what mode you are in.)3.822 F
+.581(The two modes of interest to us)5.581 F(are)72 301.2 Q F2(command)3.577 E
+F1 1.077(mode and)3.577 F F2(insert)3.577 E F1 3.577(mode. Y)3.577 F 1.077
+(ou type most commands in command mode; all you do in insert)-1 F .494
+(mode is type your text.)72 313.2 R -1(Yo)5.494 G 2.994(ug)1 G .494
+(et out of insert mode by typing)195.624 313.2 R F2(escape)2.994 E F1 2.994(,u)
+C .494(sually marked \231esc\232 on keyboards;)362.616 313.2 R .337(on some ke\
+yboards, you may have to hold down the control or alt key and press \231[\232.)
+72 325.2 R .338(If you type escape in)5.337 F .519(command mode,)72 337.2 R F2
+(vi)3.019 E F1 .519
+(will beep at you; so if you get confused, just type escape until)3.019 F F2
+(vi)3.019 E F1 .519(beeps; then you'll be)3.019 F(back in command mode.)72
+349.2 Q F3(Moving Ar)72 377.4 Q(ound)-.18 E F1 .902
+(Here are some motion commands in)72 393.6 R F2(vi)3.402 E F1 5.902(.T)C .902
+(hey are typed in command mode, and leave the editor in com-)246.344 393.6 R
+(mand mode.)72 405.6 Q F3 129.555(Command What)114 426 R(it does)2.5 E .4 LW
+462 430.5 114 430.5 DL F1 20.84(control-h Moves)114 440 R(the cursor)2.5 E F3
+(left)2.5 E F1(one character)2.5 E(.)-.55 E 55(hM)114 452 S(oves the cursor)
+182.89 452 Q F3(left)2.5 E F1(one character)2.5 E(.)-.55 E 57.22(jM)114 464 S
+(oves the cursor)182.89 464 Q F3(down)2.5 E F1(one line.)2.5 E 55(kM)114 476 S
+(oves the cursor)182.89 476 Q F3(up)2.5 E F1(one line.)2.5 E 57.22(lM)114 488 S
+(oves the cursor)182.89 488 Q F3(right)2.5 E F1(one character)2.5 E(.)-.55 E(w)
+114 500 Q(Moves the cursor)174 500 Q F3(forward)2.5 E F1
+(to the beginning of the next word.)2.5 E(b)114 512 Q(Moves the cursor)174 512
+Q F3(backward)2.5 E F1(to the beginning of the previous word.)2.5 E F3
+(Deleting T)72 548.6 Q(ext)-.92 E F1 .871
+(Here are some commands to get rid of stuf)72 564.8 R 3.371(f. T)-.18 F .871
+(ype them in command mode; they will leave the editor in)-.7 F(command mode.)72
+576.8 Q F3 129.555(Command What)114 597.2 R(it does)2.5 E 462 601.7 114 601.7
+DL F1 47.5(dd Deletes)114 611.2 R(the current line.)2.5 E(x)114 623.2 Q .425
+(Deletes the character at the cursor)174 623.2 R 2.926(,a)-.4 G .426
+(nd moves the rest of the line to \214ll)321.372 623.2 R(the hole.)174 635.2 Q
+F3 245.66(6T)72 756 S(he CCSO Nameserver \255 An Intr)329.33 756 Q(oduction)
+-.18 E EP
+%%Page: 7 7
+%%BeginPageSetup
+BP
+%%EndPageSetup
+/F0 10/Times-Bold@0 SF(The CCSO Nameserver \255 An Intr)72 60 Q 243.16
+(oduction 7)-.18 F(Adding T)72 108 Q(ext)-.92 E/F1 10/Times-Roman@0 SF .16
+(The following commands all put you into insert mode and let you type text.)72
+124.2 R -.7(Ty)5.159 G .159(pe escape when you are \214n-).7 F
+(ished adding text, and you will be returned to command mode.)72 136.2 Q F0
+129.555(Command What)114 156.6 R(it does)2.5 E .4 LW 462 161.1 114 161.1 DL F1
+(i)114 170.6 Q(Start inserting characters)174 170.6 Q F0(befor)2.5 E(e)-.18 E
+F1(the character the cursor is on.)2.5 E(a)114 182.6 Q
+(Start inserting characters)174 182.6 Q F0(after)2.5 E F1
+(the character the cursor is on.)2.5 E(O)114 194.6 Q .542
+(Create a new line above the cursor)174 194.6 R 3.043(,a)-.4 G .543
+(nd start inserting at the beginning)325.125 194.6 R(of that line.)174 206.6 Q
+(Note that this command is a capital "O", not zero.)5 E F0(Getting Out)72 243.2
+Q F1(The following commands exit)72 259.4 Q/F2 10/Times-Italic@0 SF(vi)2.5 E F1
+5(.T)C(hey work in command mode.)215.6 259.4 Q F0 129.555(Command What)114
+279.8 R(it does)2.5 E 462 284.3 114 284.3 DL F1(ZZ)114 293.8 Q(Exit)174 293.8 Q
+F2(vi)2.5 E F1 2.5(,a)C(nd save the changes you have made.)209.83 293.8 Q
+(Those are capital Z')5 E(s!)-.55 E(:q!<cr>)114 305.8 Q(Exit)174 305.8 Q F2(vi)
+2.5 E F1 2.5(,b)C(ut don')210.39 305.8 Q 2.5(ts)-.18 G
+(ave changes \(the "<cr>" means to type return\).)247.99 305.8 Q EP
+%%Trailer
+end
+%%EOF

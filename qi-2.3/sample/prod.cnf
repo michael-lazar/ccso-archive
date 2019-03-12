@@ -1,0 +1,66 @@
+######################################################################
+# this file contains descriptions of the fields supported in the UI
+# nameserver database.  Numeric fields MUST be specified in decimal.
+#
+# Some nameserver source depends on the identities of some fields.
+# Care should be taken in redefining them.
+######################################################################
+6:alias:32:Unique name for user, chosen by user.:SO:Indexed:Lookup:Public:Default:Change:ForcePub:
+3:name:256:Full name.:FS:Indexed:Lookup:Public:Default:
+2:email:128:Account to receive electronic mail.:O:Indexed:Lookup:Public:Default:Change:ForcePub:
+11:curriculum:64:University curriculum:SO:Lookup:Public:Default:
+#
+# phone numbers
+#
+1:phone:64:Preferred telephone number.:C:Lookup:Public:Default:Change:
+32:office_phone:60:Office telephone number.:CFO:Lookup:Public:Change:Indexed:
+33:home_phone:60:Home telephone number.:CFS:Lookup:LocalPub:Change:
+36:fax:60:FAX telephone number.:O:Lookup:Public:Change:
+37:permanent_phone:60:Permanent phone (students).:CS:Lookup:LocalPub:Change:
+#
+# addresses
+#
+0:address:128:Preferred paper mail address.:C:Lookup:Public:Default:Change:
+22:office_address:128:Paper mail address of office.:CF:Lookup:Public:Change:
+19:office_location:128:Physical location of office.:O:Lookup:Public:Default:Change:
+20:home_address:128:Home paper mail address.:CFS:Lookup:LocalPub:Change:
+21:permanent_address:128:Permanent home address (students).:CS:Lookup:LocalPub:Change:
+
+8:proxy:64:Alias of other users who may change this entry.:O:LocalPub:Change:Indexed:Lookup:
+23:nickname:120:Nicknames:O:Lookup:Public:Change:Indexed:
+38:paper:10:Instructions about the paper directory.:O:Change:LocalPub:
+31:no_update:10:Don't update this entry from directory tape.:O:Public:Change:
+9:department:64:University department.:CF:Lookup:Public:Default:Change:
+10:title:64:University job title.:CFO:Lookup:Public:Change:Default:
+14:hours:256:Office hours.:O:Public:Default:Change:Lookup:
+15:project:256:Current project(s).:O:Public:Change:Lookup:
+16:other:256:Other info the user finds important.:CFO:Public:Default:Change:Lookup:
+17:revisions:2048:Revision history.:O:Public:Change:Lookup:
+26:callsign:16:HAM radio callsign.:O:Lookup:Public:Change:Indexed:
+27:pager:64:The infamous 'beeper'.:O:Lookup:Public:Default:Change:
+28:family:256:Family members.:O:Lookup:LocalPub:Change:
+29:birthday:24:Birthday.:O:Lookup:LocalPub:Change:
+35:high_school:30:High School attended:SO:Public:Indexed:Lookup:Change:
+39:colleges:120:Other colleges attended:O:Public:Lookup:Change:
+
+#
+# for internal use
+#
+53:CHANGE_NOTHING:1:A message to CCSO Accounting::
+4:type:80:Staff, Student, Organization, etc.:SFO:Lookup:Public:
+5:id:16:Nameserver id code.:SF:Indexed:
+7:password:16:User's nameserver password.:O:Change:Encrypt:
+25:all:1:reserved:
+30:hero:10:Is a ph hero.:O:
+50:file:1:For phify's benefit.:::
+42:left_uiuc:10:Month and year ph noticed the person left UIUC:O:Public:Default:Lookup:
+51:CCSO-accounts:4095:CCSO Accounts:SO:Indexed:
+52:CCSO-comments:4095:CCSO Comments:O::
+41:kerberos:32:Kerberos Id:O:Indexed:Lookup:Public:
+24:def_account:64:Default account for printing.:O:
+34:text:4095:Miscellaneous text:O:Public:Default:Lookup:NoPeople:
+40:slip:256:Permissible SLIP addresses:O:LocalPub:Lookup:Indexed:
+#
+# Suppress should be "O" for the summer update, empty otherwise
+#
+43:suppress:10:For the paranoid:

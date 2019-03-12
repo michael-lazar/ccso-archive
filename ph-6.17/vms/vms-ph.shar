@@ -1,0 +1,4379 @@
+$!...................... Cut on the dotted line and save ......................
+$! VAX/VMS archive file created by VMS_SHAR V-5.04 04-Feb-1988
+$! which was written by Michael Bednarek (U3369429@ucsvc.dn.mu.oz.au)
+$! To unpack, simply save and execute (@) this file.
+$!
+$! This archive was created by SANDROCK
+$! on Wednesday 13-FEB-1991 19:05:40.82
+$!
+$! It contains the following 11 files:
+$! AAAREADME.VMS COMPILE_PH.COM CRYPT.C CRYPTIT.C LINK_PH.COM PH-1.TXT
+$! PH-INTRO.TXT PH.C PROTOCOL.TXT REPLIES.H TERMDEFS.H
+$!=============================================================================
+$Set Symbol/Scope=(NoLocal,NoGlobal)
+$Version=F$GetSYI("VERSION")
+$If Version.ges."V4.4" then goto Version_OK
+$Write SYS$Output "Sorry, you are running VMS ",Version, -
+", but this procedure requires V4.4 or higher."
+$Exit 44
+$Version_OK:CR[0,8]=13
+$Pass_or_Failed="failed!,passed."
+$Goto Start
+$Convert_File:
+$Read/Time_Out=0/Error=No_Error1/Prompt="creating ''File_is'" SYS$Command ddd
+$No_Error1:Define/User_Mode SYS$Output NL:
+$Edit/TPU/NoSection/NoDisplay/Command=SYS$Input/Output='File_is' -
+VMS_SHAR_DUMMY.DUMMY
+f:=Get_Info(Command_Line,"File_Name");b:=Create_Buffer("",f);
+o:=Get_Info(Command_Line,"Output_File");Set(Output_File,b,o);
+Position(Beginning_of(b));Loop x:=Erase_Character(1);Loop ExitIf x<>"V";
+Move_Vertical(1);x:=Erase_Character(1);Append_Line;
+Move_Horizontal(-Current_Offset);EndLoop;Move_Vertical(1);
+ExitIf Mark(None)=End_of(b) EndLoop;Position(Beginning_of(b));Loop
+x:=Search("`",Forward,Exact);ExitIf x=0;Position(x);Erase_Character(1);
+If Current_Character='`' then Move_Horizontal(1);else
+Copy_Text(ASCII(INT(Erase_Character(3))));EndIf;EndLoop;Exit;
+$Delete VMS_SHAR_DUMMY.DUMMY;*
+$Checksum 'File_is
+$Success=F$Element(Check_Sum_is.eq.CHECKSUM$CHECKSUM,",",Pass_or_Failed)+CR
+$Read/Time_Out=0/Error=No_Error2/Prompt=" CHECKSUM ''Success'" SYS$Command ddd
+$No_Error2:Return
+$Start:
+$File_is="AAAREADME.VMS"
+$Check_Sum_is=2050374050
+$Copy SYS$Input VMS_SHAR_DUMMY.DUMMY
+XThis is the VAX/VMS distribution of ph v4.10. This version was sucessfully
+Xcompiled, linked, and run under VMS 5.3 with Wollongong WIN/TCP 5.1 header
+Xfiles and runtime libraries. Your mileage may obviously vary! The VMS port
+Ximplementation notes at the front of ph.c may be helpful with other system
+Xconfigurations as well.
+X
+XThe following files should exist in this directory:
+X
+XAAAREADME.VMS;410        This very file you are now reading!
+XCOMPILE_PH.COM;410       Procedure to compile: crypt.c, cryptit.c, and ph.c.
+XCRYPT.C;410              Encryption routines (from 4.3 BSD)
+XCRYPTIT.C;410            Encryption routines for ph.
+XLINK_PH.COM;410          Procedure to link ph.
+XPH-1.TXT;410             Man page for ph.
+XPH-INTRO.TXT;410         Introduction to ph.
+XPH.C;410                 Main program for ph.
+XPROTOCOL.TXT;410         Ph protocol documentation.
+XREPLIES.H;410            Include file for ph.
+XTERMDEFS.H;410           Include file for VMS version of ph.
+X
+XIf you have questions or problems installing the VMS version of ph, you may
+Xdirect them to me (Mark Sandrock) at sandrock@aries.scs.uiuc.edu.
+X
+XGeneral ph questions and comments are best directed to the author of ph:
+XSteve Dorner, at s-dorner@uiuc.edu.
+X
+XGood luck,
+X
+XMark Sandrock
+X
+X---
+XBITNET:   sandrock@uiucscs`009        Univ. of Illinois at Urbana-Champaign
+XInternet: sandrock@aries.scs.uiuc.edu   Chemical Sciences Computing Services
+XVoice:    217-244-0561`009`009        505 S. Mathews Ave., Urbana, IL  61801
+X"He who knows doesn't say. He who says doesn't know." -Lao Tse
+$GoSub Convert_File
+$File_is="COMPILE_PH.COM"
+$Check_Sum_is=1618545021
+$Copy SYS$Input VMS_SHAR_DUMMY.DUMMY
+X$ cc crypt
+X$ cc cryptit
+X$ cc /define=("HOST="".uiuc.edu""",FALLBACKADDR=0x80ae053a,`009-
+X`009`009"NSSERVICE=""ns""",FALLBACKPORT=105,`009`009-
+X`009`009"ADMIN=""s-dorner@uiuc.edu""",`009`009`009-
+X`009`009"PASSW=""nameserv@uiuc.edu""",`009`009`009-
+X`009`009"MAILDOMAIN=""uiuc.edu""","CLIENT=""ph""")`009-
+X`009ph 'p1'
+$GoSub Convert_File
+$File_is="CRYPT.C"
+$Check_Sum_is=1862694844
+$Copy SYS$Input VMS_SHAR_DUMMY.DUMMY
+X/*#if defined(LIBC_SCCS) && !defined(lint)*/
+X#ifdef LIBC_SCCS
+X#ifndef lint
+Xstatic char sccsid[] = "@(#)crypt.c`0095.2 (Berkeley) 3/9/86";
+X#endif
+X#endif LIBC_SCCS and not lint
+X
+X/*
+X * This program implements the
+X * Proposed Federal Information Processing
+X *  Data Encryption Standard.
+X * See Federal Register, March 17, 1975 (40FR12134)
+X */
+X
+X/*
+X * Initial permutation,
+X */
+Xstatic`009char`009IP[] = {
+X`00958,50,42,34,26,18,10, 2,
+X`00960,52,44,36,28,20,12, 4,
+X`00962,54,46,38,30,22,14, 6,
+X`00964,56,48,40,32,24,16, 8,
+X`00957,49,41,33,25,17, 9, 1,
+X`00959,51,43,35,27,19,11, 3,
+X`00961,53,45,37,29,21,13, 5,
+X`00963,55,47,39,31,23,15, 7,
+X};
+X
+X/*
+X * Final permutation, FP = IP^(-1)
+X */
+Xstatic`009char`009FP[] = {
+X`00940, 8,48,16,56,24,64,32,
+X`00939, 7,47,15,55,23,63,31,
+X`00938, 6,46,14,54,22,62,30,
+X`00937, 5,45,13,53,21,61,29,
+X`00936, 4,44,12,52,20,60,28,
+X`00935, 3,43,11,51,19,59,27,
+X`00934, 2,42,10,50,18,58,26,
+X`00933, 1,41, 9,49,17,57,25,
+X};
+X
+X/*
+X * Permuted-choice 1 from the key bits
+X * to yield C and D.
+X * Note that bits 8,16... are left out:
+X * They are intended for a parity check.
+X */
+Xstatic`009char`009PC1_C[] = {
+X`00957,49,41,33,25,17, 9,
+X`009 1,58,50,42,34,26,18,
+X`00910, 2,59,51,43,35,27,
+X`00919,11, 3,60,52,44,36,
+X};
+X
+Xstatic`009char`009PC1_D[] = {
+X`00963,55,47,39,31,23,15,
+X`009 7,62,54,46,38,30,22,
+X`00914, 6,61,53,45,37,29,
+X`00921,13, 5,28,20,12, 4,
+X};
+X
+X/*
+X * Sequence of shifts used for the key schedule.
+X*/
+Xstatic`009char`009shifts[] = {
+X`0091,1,2,2,2,2,2,2,1,2,2,2,2,2,2,1,
+X};
+X
+X/*
+X * Permuted-choice 2, to pick out the bits from
+X * the CD array that generate the key schedule.
+X */
+Xstatic`009char`009PC2_C[] = {
+X`00914,17,11,24, 1, 5,
+X`009 3,28,15, 6,21,10,
+X`00923,19,12, 4,26, 8,
+X`00916, 7,27,20,13, 2,
+X};
+X
+Xstatic`009char`009PC2_D[] = {
+X`00941,52,31,37,47,55,
+X`00930,40,51,45,33,48,
+X`00944,49,39,56,34,53,
+X`00946,42,50,36,29,32,
+X};
+X
+X/*
+X * The C and D arrays used to calculate the key schedule.
+X */
+X
+Xstatic`009char`009C[28];
+Xstatic`009char`009D[28];
+X/*
+X * The key schedule.
+X * Generated from the key.
+X */
+Xstatic`009char`009KS[16][48];
+X
+X/*
+X * The E bit-selection table.
+X */
+Xstatic`009char`009E[48];
+Xstatic`009char`009e[] = {
+X`00932, 1, 2, 3, 4, 5,
+X`009 4, 5, 6, 7, 8, 9,
+X`009 8, 9,10,11,12,13,
+X`00912,13,14,15,16,17,
+X`00916,17,18,19,20,21,
+X`00920,21,22,23,24,25,
+X`00924,25,26,27,28,29,
+X`00928,29,30,31,32, 1,
+X};
+X
+X/*
+X * Set up the key schedule from the key.
+X */
+X
+Xsetkey(key)
+Xchar *key;
+X{
+X`009register i, j, k;
+X`009int t;
+X
+X`009/*
+X`009 * First, generate C and D by permuting
+X`009 * the key.  The low order bit of each
+X`009 * 8-bit char is not used, so C and D are only 28
+X`009 * bits apiece.
+X`009 */
+X`009for (i=0; i<28; i++) {
+X`009`009C[i] = key[PC1_C[i]-1];
+X`009`009D[i] = key[PC1_D[i]-1];
+X`009}
+X`009/*
+X`009 * To generate Ki, rotate C and D according
+X`009 * to schedule and pick up a permutation
+X`009 * using PC2.
+X`009 */
+X`009for (i=0; i<16; i++) {
+X`009`009/*
+X`009`009 * rotate.
+X`009`009 */
+X`009`009for (k=0; k<shifts[i]; k++) {
+X`009`009`009t = C[0];
+X`009`009`009for (j=0; j<28-1; j++)
+X`009`009`009`009C[j] = C[j+1];
+X`009`009`009C[27] = t;
+X`009`009`009t = D[0];
+X`009`009`009for (j=0; j<28-1; j++)
+X`009`009`009`009D[j] = D[j+1];
+X`009`009`009D[27] = t;
+X`009`009}
+X`009`009/*
+X`009`009 * get Ki. Note C and D are concatenated.
+X`009`009 */
+X`009`009for (j=0; j<24; j++) {
+X`009`009`009KS[i][j] = C[PC2_C[j]-1];
+X`009`009`009KS[i][j+24] = D[PC2_D[j]-28-1];
+X`009`009}
+X`009}
+X
+X`009for(i=0;i<48;i++)
+X`009`009E[i] = e[i];
+X}
+X
+X/*
+X * The 8 selection functions.
+X * For some reason, they give a 0-origin
+X * index, unlike everything else.
+X */
+Xstatic`009char`009S[8][64] = {
+X`00914, 4,13, 1, 2,15,11, 8, 3,10, 6,12, 5, 9, 0, 7,
+X`009 0,15, 7, 4,14, 2,13, 1,10, 6,12,11, 9, 5, 3, 8,
+X`009 4, 1,14, 8,13, 6, 2,11,15,12, 9, 7, 3,10, 5, 0,
+X`00915,12, 8, 2, 4, 9, 1, 7, 5,11, 3,14,10, 0, 6,13,
+X
+X`00915, 1, 8,14, 6,11, 3, 4, 9, 7, 2,13,12, 0, 5,10,
+X`009 3,13, 4, 7,15, 2, 8,14,12, 0, 1,10, 6, 9,11, 5,
+X`009 0,14, 7,11,10, 4,13, 1, 5, 8,12, 6, 9, 3, 2,15,
+X`00913, 8,10, 1, 3,15, 4, 2,11, 6, 7,12, 0, 5,14, 9,
+X
+X`00910, 0, 9,14, 6, 3,15, 5, 1,13,12, 7,11, 4, 2, 8,
+X`00913, 7, 0, 9, 3, 4, 6,10, 2, 8, 5,14,12,11,15, 1,
+X`00913, 6, 4, 9, 8,15, 3, 0,11, 1, 2,12, 5,10,14, 7,
+X`009 1,10,13, 0, 6, 9, 8, 7, 4,15,14, 3,11, 5, 2,12,
+X
+X`009 7,13,14, 3, 0, 6, 9,10, 1, 2, 8, 5,11,12, 4,15,
+X`00913, 8,11, 5, 6,15, 0, 3, 4, 7, 2,12, 1,10,14, 9,
+X`00910, 6, 9, 0,12,11, 7,13,15, 1, 3,14, 5, 2, 8, 4,
+X`009 3,15, 0, 6,10, 1,13, 8, 9, 4, 5,11,12, 7, 2,14,
+X
+X`009 2,12, 4, 1, 7,10,11, 6, 8, 5, 3,15,13, 0,14, 9,
+X`00914,11, 2,12, 4, 7,13, 1, 5, 0,15,10, 3, 9, 8, 6,
+X`009 4, 2, 1,11,10,13, 7, 8,15, 9,12, 5, 6, 3, 0,14,
+X`00911, 8,12, 7, 1,14, 2,13, 6,15, 0, 9,10, 4, 5, 3,
+X
+X`00912, 1,10,15, 9, 2, 6, 8, 0,13, 3, 4,14, 7, 5,11,
+X`00910,15, 4, 2, 7,12, 9, 5, 6, 1,13,14, 0,11, 3, 8,
+X`009 9,14,15, 5, 2, 8,12, 3, 7, 0, 4,10, 1,13,11, 6,
+X`009 4, 3, 2,12, 9, 5,15,10,11,14, 1, 7, 6, 0, 8,13,
+X
+X`009 4,11, 2,14,15, 0, 8,13, 3,12, 9, 7, 5,10, 6, 1,
+X`00913, 0,11, 7, 4, 9, 1,10,14, 3, 5,12, 2,15, 8, 6,
+X`009 1, 4,11,13,12, 3, 7,14,10,15, 6, 8, 0, 5, 9, 2,
+X`009 6,11,13, 8, 1, 4,10, 7, 9, 5, 0,15,14, 2, 3,12,
+X
+X`00913, 2, 8, 4, 6,15,11, 1,10, 9, 3,14, 5, 0,12, 7,
+X`009 1,15,13, 8,10, 3, 7, 4,12, 5, 6,11, 0,14, 9, 2,
+X`009 7,11, 4, 1, 9,12,14, 2, 0, 6,10,13,15, 3, 5, 8,
+X`009 2, 1,14, 7, 4,10, 8,13,15,12, 9, 0, 3, 5, 6,11,
+X};
+X
+X/*
+X * P is a permutation on the selected combination
+X * of the current L and key.
+X */
+Xstatic`009char`009P[] = {
+X`00916, 7,20,21,
+X`00929,12,28,17,
+X`009 1,15,23,26,
+X`009 5,18,31,10,
+X`009 2, 8,24,14,
+X`00932,27, 3, 9,
+X`00919,13,30, 6,
+X`00922,11, 4,25,
+X};
+X
+X/*
+X * The current block, divided into 2 halves.
+X */
+Xstatic`009char`009L[32], R[32];
+Xstatic`009char`009tempL[32];
+Xstatic`009char`009f[32];
+X
+X/*
+X * The combination of the key and the input, before selection.
+X */
+Xstatic`009char`009preS[48];
+X
+X/*
+X * The payoff: encrypt a block.
+X */
+X
+Xencrypt(block, edflag)
+Xchar *block;
+X{
+X`009int i, ii;
+X`009register t, j, k;
+X
+X`009/*
+X`009 * First, permute the bits in the input
+X`009 */
+X`009for (j=0; j<64; j++)
+X`009`009L[j] = block[IP[j]-1];
+X`009/*
+X`009 * Perform an encryption operation 16 times.
+X`009 */
+X`009for (ii=0; ii<16; ii++) {
+X`009`009/*
+X`009`009 * Set direction
+X`009`009 */
+X`009`009if (edflag)
+X`009`009`009i = 15-ii;
+X`009`009else
+X`009`009`009i = ii;
+X`009`009/*
+X`009`009 * Save the R array,
+X`009`009 * which will be the new L.
+X`009`009 */
+X`009`009for (j=0; j<32; j++)
+X`009`009`009tempL[j] = R[j];
+X`009`009/*
+X`009`009 * Expand R to 48 bits using the E selector;
+X`009`009 * exclusive-or with the current key bits.
+X`009`009 */
+X`009`009for (j=0; j<48; j++)
+X`009`009`009preS[j] = R[E[j]-1] ^ KS[i][j];
+X`009`009/*
+X`009`009 * The pre-select bits are now considered
+X`009`009 * in 8 groups of 6 bits each.
+X`009`009 * The 8 selection functions map these
+X`009`009 * 6-bit quantities into 4-bit quantities
+X`009`009 * and the results permuted
+X`009`009 * to make an f(R, K).
+X`009`009 * The indexing into the selection functions
+X`009`009 * is peculiar; it could be simplified by
+X`009`009 * rewriting the tables.
+X`009`009 */
+X`009`009for (j=0; j<8; j++) {
+X`009`009`009t = 6*j;
+X`009`009`009k = S[j][(preS[t+0]<<5)+
+X`009`009`009`009(preS[t+1]<<3)+
+X`009`009`009`009(preS[t+2]<<2)+
+X`009`009`009`009(preS[t+3]<<1)+
+X`009`009`009`009(preS[t+4]<<0)+
+X`009`009`009`009(preS[t+5]<<4)];
+X`009`009`009t = 4*j;
+X`009`009`009f[t+0] = (k>>3)&01;
+X`009`009`009f[t+1] = (k>>2)&01;
+X`009`009`009f[t+2] = (k>>1)&01;
+X`009`009`009f[t+3] = (k>>0)&01;
+X`009`009}
+X`009`009/*
+X`009`009 * The new R is L ^ f(R, K).
+X`009`009 * The f here has to be permuted first, though.
+X`009`009 */
+X`009`009for (j=0; j<32; j++)
+X`009`009`009R[j] = L[j] ^ f[P[j]-1];
+X`009`009/*
+X`009`009 * Finally, the new L (the original R)
+X`009`009 * is copied back.
+X`009`009 */
+X`009`009for (j=0; j<32; j++)
+X`009`009`009L[j] = tempL[j];
+X`009}
+X`009/*
+X`009 * The output L and R are reversed.
+X`009 */
+X`009for (j=0; j<32; j++) {
+X`009`009t = L[j];
+X`009`009L[j] = R[j];
+X`009`009R[j] = t;
+X`009}
+X`009/*
+X`009 * The final output
+X`009 * gets the inverse permutation of the very original.
+X`009 */
+X`009for (j=0; j<64; j++)
+X`009`009block[j] = L[FP[j]-1];
+X}
+X
+Xchar *
+Xcrypt(pw,salt)
+Xchar *pw;
+Xchar *salt;
+X{
+X`009register i, j, c;
+X`009int temp;
+X`009static char block[66], iobuf[16];
+X
+X`009for(i=0; i<66; i++)
+X`009`009block[i] = 0;
+X`009for(i=0; (c= *pw) && i<64; pw++){
+X`009`009for(j=0; j<7; j++, i++)
+X`009`009`009block[i] = (c>>(6-j)) & 01;
+X`009`009i++;
+X`009}
+X`009
+X`009setkey(block);
+X`009
+X`009for(i=0; i<66; i++)
+X`009`009block[i] = 0;
+X
+X`009for(i=0;i<2;i++){
+X`009`009c = *salt++;
+X`009`009iobuf[i] = c;
+X`009`009if(c>'Z') c -= 6;
+X`009`009if(c>'9') c -= 7;
+X`009`009c -= '.';
+X`009`009for(j=0;j<6;j++){
+X`009`009`009if((c>>j) & 01){
+X`009`009`009`009temp = E[6*i+j];
+X`009`009`009`009E[6*i+j] = E[6*i+j+24];
+X`009`009`009`009E[6*i+j+24] = temp;
+X`009`009`009`009}
+X`009`009`009}
+X`009`009}
+X`009
+X`009for(i=0; i<25; i++)
+X`009`009encrypt(block,0);
+X`009
+X`009for(i=0; i<11; i++){
+X`009`009c = 0;
+X`009`009for(j=0; j<6; j++){
+X`009`009`009c <<= 1;
+X`009`009`009c |= block[6*i+j];
+X`009`009`009}
+X`009`009c += '.';
+X`009`009if(c>'9') c += 7;
+X`009`009if(c>'Z') c += 6;
+X`009`009iobuf[i+2] = c;
+X`009}
+X`009iobuf[i+2] = 0;
+X`009if(iobuf[1]==0)
+X`009`009iobuf[1] = iobuf[0];
+X`009return(iobuf);
+X}
+$GoSub Convert_File
+$File_is="CRYPTIT.C"
+$Check_Sum_is=1413234303
+$Copy SYS$Input VMS_SHAR_DUMMY.DUMMY
+X/***********************************************************************/
+X/*********************************************************************
+X* This software is Copyright (C) 1988 by Steven Dorner and the
+X* University of Illinois Board of Trustees, and by CSNET.  No warranties of
+X* any kind are expressed or implied.  No support will be provided.
+X* This software may not be redistributed without prior consent of CSNET.
+X* You may direct questions to dorner@garcon.cso.uiuc.edu.
+X**********************************************************************/
+X
+X#define ROTORSZ 256
+X#define MASK 0377
+X
+X#ifdef VMS
+X#include <types.h>
+X#else
+X#include <sys/types.h>
+X#include <sys/stat.h>
+X#endif
+X
+X#include <signal.h>
+X#include <stdio.h>
+X#include <ctype.h>
+X#include <sgtty.h>
+X#include <strings.h>
+X
+Xchar  t1[ROTORSZ];
+Xchar  t2[ROTORSZ];
+Xchar  t3[ROTORSZ];
+X
+Xint   Encrypting = 0;
+Xstatic int ccnt, nchars, n1, n2;
+Xchar   *Visible();
+X
+Xcrypt_start(pass)
+Xchar   *pass;
+X{
+X
+X  n1 = 0;
+X  n2 = 0;
+X  ccnt = 0;
+X  nchars = 0;
+X  Encrypting = 1;
+X  crypt_init(pass);
+X}
+X
+X
+Xchar   *
+Xdecrypt(to, from)
+Xchar   *to;
+Xchar   *from;
+X{
+X  char  scratch[4096];
+X  char   *sp;
+X  int   count;
+X
+X  count = decode((unsigned char *)scratch, (unsigned char *)from);
+X  for (sp = scratch; count--; sp++)
+X  {
+X    *to++ = t2[(t3[(t1[(*sp + n1) & MASK] + n2) & MASK] - n2) & MASK] - n1;
+X
+X    n1++;
+X    if (n1 == ROTORSZ)
+X    {
+X      n1 = 0;
+X      n2++;
+X      if (n2 == ROTORSZ)
+X`009n2 = 0;
+X    }
+X  }
+X  *to = '\0';         /* null-terminate */
+X  return (0);
+X}
+X
+Xdecrypt_end()
+X{
+X  Encrypting = 0;
+X}
+X
+X/* single character decode */
+X#define DEC(c)  (((unsigned char)(c) - '#') & 077)
+X
+Xdecode(to, from)
+Xunsigned char *to;
+Xunsigned char *from;
+X{
+X  int   n;
+X  int   chars;
+X
+X  chars = n = DEC(*from++);
+X
+X  while (n > 0)
+X  {
+X    /*
+X     * convert groups of 3 bytes (4 Input characters). 
+X     */
+X    *to++ = DEC(*from) << 2 | DEC(from[1]) >> 4;
+X    *to++ = DEC(from[1]) << 4 | DEC(from[2]) >> 2;
+X    *to++ = DEC(from[2]) << 6 | DEC(from[3]);
+X    from += 4;
+X    n -= 3;
+X  }
+X  return (chars);
+X}
+X
+Xcrypt_init(pw)
+Xchar   *pw;
+X{
+X  int   ic, i, k, temp;
+X  unsigned random;
+X  char  buf[13];
+X  int  seed;
+X  char   *crypt();
+X
+X  /* must reinitialize the arrays */
+X  for (i = 0; i < ROTORSZ; i++)
+X    t1[i] = t2[i] = t3[i] = 0;
+X
+X  strncpy(buf, crypt(pw, pw), 13);
+X
+X  seed = 123;
+X  for (i = 0; i < 13; i++)
+X    seed = seed * buf[i] + i;
+X  for (i = 0; i < ROTORSZ; i++)
+X    t1[i] = i;
+X  for (i = 0; i < ROTORSZ; i++)
+X  {
+X    seed = 5 * seed + buf[i % 13];
+X    random = seed % 65521;
+X    k = ROTORSZ - 1 - i;
+X    ic = (random & MASK) % (k + 1);
+X    random >>= 8;
+X    temp = t1[k];
+X    t1[k] = t1[ic];
+X    t1[ic] = temp;
+X    if (t3[k] != 0)
+X      continue;
+X    ic = (random & MASK) % k;
+X    while (t3[ic] != 0)
+X      ic = (ic + 1) % k;
+X    t3[k] = ic;
+X    t3[ic] = k;
+X  }
+X  for (i = 0; i < ROTORSZ; i++)
+X    t2[t1[i] & MASK] = i;
+X}
+X
+X/***********************************************************************
+X* encrypts a string
+X* first byte of string is encoded length of string
+X* returns length of encoded string
+X***********************************************************************/
+Xencryptit(to, from)
+Xchar   *to;
+Xchar   *from;
+X{
+X  char  scratch[4096];
+X  char   *sp;
+X
+X  sp = scratch;
+X  for (; *from; from++)
+X  {
+X    *sp++ = t2[(t3[(t1[(*from + n1) & MASK] + n2) & MASK] - n2) & MASK] - n1;
+X    n1++;
+X    if (n1 == ROTORSZ)
+X    {
+X      n1 = 0;
+X      n2++;
+X      if (n2 == ROTORSZ)
+X`009n2 = 0;
+X    }
+X  }
+X  return (encode(to, scratch, sp - scratch));
+X}
+X
+X/*
+X * * Basic 1 character encoding function to make a char printing. 
+X */
+X#define ENC(c) (((unsigned char)(c) & 077) + '#')
+X
+Xencode(out, buf, n)       /* output a line of binary (up to 45 chars)
+X`009`009 * in */
+Xint   n;            /* a readable format, converting 3 chars to 4  */
+Xchar   *buf;
+Xchar   *out;
+X{
+X  int   i;
+X  char   *outStart;
+X
+X  outStart = out;
+X  *out++ = ENC(n);
+X
+X  for (i = 0; i < n; buf += 3, i += 3, out += 4)
+X    threecpy((unsigned char *)out, (unsigned char *)buf);
+X
+X  /* null terminate */
+X  *out = '\0';
+X  return (out - outStart);
+X}
+X
+Xthreecpy(to, from)
+Xunsigned char *to;
+Xunsigned char *from;
+X{
+X  int   c1, c2, c3, c4;
+X
+X  c1 = *from >> 2;
+X  c2 = (*from << 4) & 060 | (from[1] >> 4) & 017;
+X  c3 = (from[1] << 2) & 074 | (from[2] >> 6) & 03;
+X  c4 = from[2] & 077;
+X  *to++ = ENC(c1);
+X  *to++ = ENC(c2);
+X  *to++ = ENC(c3);
+X  *to = ENC(c4);
+X}
+$GoSub Convert_File
+$File_is="LINK_PH.COM"
+$Check_Sum_is=1887270010
+$Copy SYS$Input VMS_SHAR_DUMMY.DUMMY
+X$ link 'p1' ph,cryptit,crypt, -
+Xtwg$tcp:[netdist.lib]libnet/l,libnetacc/l,libnet/l
+$GoSub Convert_File
+$File_is="PH-1.TXT"
+$Check_Sum_is=727382504
+$Copy SYS$Input VMS_SHAR_DUMMY.DUMMY
+X
+X
+X
+XPH(1L)              UNIX 4.3 BSD (27 Aug 89)               PH(1L)
+X
+X
+X
+XN`008NA`008AM`008ME`008E
+X    ph -- access to the CSO Nameserver (on-line phone book)
+X
+XS`008SY`008YN`008NO`008OP`008PS`008SI`008IS`008S
+X
+X    p`008ph`008h [-`008-s`008s server] [-`008-p`008p port] query
+X    p`008ph`008h [-`008-s`008s server] [-`008-p`008p port] [-`008-n`008n]
+X
+XD`008DE`008ES`008SC`008CR`008RI`008IP`008PT`008TI`008IO`008ON`008N
+X    _`008P_`008h queries the CSO Nameserver, a database of University
+X    faculty, students and staff.  The database contains nearly
+V    all the information in the _`008S_`008t_`008u_`008d_`008e_`008n_`008t/_`00
+V8S_`008t_`008a_`008f_`008f _`008D_`008i_`008r_`008e_`008c_`008t_`008o_`008r_`0
+X08y (the
+X    University phone book), as well as other information,
+X    including electronic mail addresses.
+X
+X    _`008P_`008h may be used in two ways; interactively, or with
+X    command-line arguments.
+X
+X    If given arguments, it will treat the arguments as a query,
+X    and return the results of the query.  For example,
+X
+X          ph steven dorner
+X
+X    would return the entry for the author of _`008p_`008h, Steven Dorner.
+X    For more information on what types of queries you may make,
+X    see the _`008Q_`008u_`008e_`008r_`008i_`008e_`008s section below.
+X
+X    If given no arguments, _`008p_`008h will enter interactive mode, print
+X    a prompt, and wait for commands.  Interactive mode will be
+X    discussed in detail below.
+X
+X    _`008P_`008h is not intended for the generation of mailing lists.
+X    Therefore, it will refuse any requests resulting in more than
+X    a small number of matches.  This is not negotiable.
+X
+XO`008OP`008PT`008TI`008IO`008ON`008NS`008S
+X    _`008P_`008h recognizes the following options:
+X
+V        -n    Do not read the .`008.n`008ne`008et`008tr`008rc`008c file.  This
+X option has
+X              meaning only when using _`008p_`008h in interactive mode (see
+X              below for descriptions of the .netrc file and
+X              interactive mode.)
+X
+X        -s _`008s_`008e_`008r_`008v_`008e_`008r
+X
+V              Use _`008s_`008e_`008r_`008v_`008e_`008r as a Nameserver host, i
+Xnstead of the
+X              default host.
+X
+X        -p _`008p_`008o_`008r_`008t
+X
+V              Use _`008p_`008o_`008r_`008t as the tcp port to connect to, inst
+Xead of
+X              the default port.
+X
+X
+X
+XPage 1                                         (printed 10/11/89)
+X
+X
+X
+X
+X
+X
+XPH(1L)              UNIX 4.3 BSD (27 Aug 89)               PH(1L)
+X
+X
+X
+XQ`008QU`008UE`008ER`008RI`008IE`008ES`008S
+X    The Nameserver's database containes over 60,000 entries.
+V    Each entry is comprised of multiple _`008f_`008i_`008e_`008l_`008d_`008s, 
+Xeach containing
+X    information about the entry.  Each field has a name that is
+X    descriptive of what the field contains; for example, the
+V    field named _`008m_`008a_`008i_`008l__`008a_`008d_`008d_`008r_`008e_`008s_
+X`008s contains the office mail address of
+X    the person in question (for more information on fields, see
+V    the description of the f`008fi`008ie`008el`008ld`008ds`008s command in the
+X _`008I_`008n_`008t_`008e_`008r_`008a_`008c_`008t_`008i_`008v_`008e
+X    section below).
+X
+V    By default, queries are assumed to refer to the _`008n_`008a_`008m_`008e f
+Xield of
+V    the entry.  Therefore, saying ''p`008ph`008h j`008jo`008oh`008hn`008n d`00
+X8do`008oe`008e'' looks for
+X    entries whose name field contains ''john'' and ''doe.''
+V    Fields other than the _`008n_`008a_`008m_`008e field must be specified; fo
+Xr
+X    example,
+X
+X          ph dorner address=DCL
+X
+X    would return entries with name ''dorner'' whose address
+X    contained ''DCL.''
+X
+X    Matching in _`008p_`008h is done on a word-by-word basis.  That is,
+X    both the query and the entry are broken up into words, and
+X    the individual words are compared.  Although _`008p_`008h is
+X    insensitive to case, it otherwise requires words to match
+X    exactly, with no characters left over; ''john'' does n`008no`008ot`008t
+X    match ''johnson,'' for example.  This behavior may be
+X    overriden by the use of normal shell metacharacters (''?'' to
+X    match any single character, ''*'' to match zero or more
+X    characters, and ''[]'' to match a single character from a set
+X    of characters).
+X
+V    _`008P_`008h will display only entries that match a`008al`008ll`008l of th
+Xe
+X    specifications in the query.  For example,
+X
+X          ph steven dorner
+X
+V    will return all entries with b`008bo`008ot`008th`008h ''steven'' and ''dor
+Xner''
+X    in the _`008n_`008a_`008m_`008e field.
+X
+X    _`008P_`008h returns a certain set of fields by default.  It is
+X    possible to ask for different fields in a query.  This is
+V    done by specifying the ''_`008r_`008e_`008t_`008u_`008r_`008n'' keyword, a
+Xnd listing the
+X    fields of interest.  For example,
+X
+X          ph steven dorner return email
+X
+X    would print only the electronic mail address of the author of
+X    _`008p_`008h.  You may also ask for all fields in the entry, by using
+X    ````all'' as a field name.  This will show you every field you
+X    are allowed to see in the user's entry.
+X
+X
+X
+X
+XPage 2                                         (printed 10/11/89)
+X
+X
+X
+X
+X
+X
+XPH(1L)              UNIX 4.3 BSD (27 Aug 89)               PH(1L)
+X
+X
+X
+V    All output from _`008p_`008h is sent through _`008m_`008o_`008r_`008e (or 
+Xwhatever program
+X    specified in the _`008P_`008A_`008G_`008E_`008R environment variable).
+X
+VI`008IN`008NT`008TE`008ER`008RA`008AC`008CT`008TI`008IV`008VE`008E M`008MO`008
+XOD`008DE`008E
+X    If _`008p_`008h is given no arguments, it enters interactive mode,
+X    where it prompts for, executes, and displays the results of
+X    Nameserver commands.  Interactive mode provides access to
+X    more Nameserver features than mere queries.  Some of these
+X    features require the user to identify him/her self to _`008p_`008h by
+V    use of the _`008l_`008o_`008g_`008i_`008n command; others do not.  Command
+Xs may be
+X    abbreviated, provided enough characters are given to
+X    distinguish them from other commands.
+X
+V    T`008Th`008he`008e .`008.n`008ne`008et`008tr`008rc`008c f`008fi`008il`008l
+Xe`008e
+X    _`008P_`008h reads the same .netrc file as does ftp (see ftp(1)).  If
+V    it finds a _`008m_`008a_`008c_`008h_`008i_`008n_`008e named ````ph'' that 
+Xhas a login and a
+V    password specified for it, _`008p_`008hwill automatically do a _`008l_`008
+Xo_`008g_`008i_`008n
+X    command, using the values from the .netrc file.  _`008P_`008h will
+X    silently refuse to use a .netrc file that has any permissions
+X    for group or other (see chmod(1)).
+X
+V    P`008Pu`008ub`008bl`008li`008ic`008c C`008Co`008om`008mm`008ma`008an`008nd
+X`008ds`008s
+X    The following commands do not require the user to be logged
+X    in to the Nameserver:
+X
+X    h`008he`008el`008lp`008p
+V    _`008H_`008e_`008l_`008p provides explanations of Nameserver commands.  Gi
+Xven no
+V    arguments, _`008h_`008e_`008l_`008p lists the available help topics.  Give
+Xn one
+V    of these topics as an argument, _`008h_`008e_`008l_`008p will print help f
+Xor that
+X    topic.  A list of commands and a one-line description of each
+V    command may be obtained by requesting the topic _`008c_`008o_`008m_`008m_`
+X008a_`008n_`008d_`008s.
+X
+X    q`008qu`008ue`008er`008ry`008y
+V    _`008Q_`008u_`008e_`008r_`008y performs Nameserver queries, and works exac
+Xtly like
+X    non-interactive _`008p_`008h, except that metacharacters do not have to
+X    be quoted.
+X
+X    f`008fi`008ie`008el`008ld`008ds`008s
+V    _`008F_`008i_`008e_`008l_`008d_`008s lists the fields currently in use in 
+Xthe Nameserver.
+X    For each field a display like the following (admittedly ugly)
+X    is produced:
+X
+X    -200:2:email:max 64 Lookup Public Default Change Turn
+X    -200:2:email:Preferred electronic mail address.
+X
+X    The leading number is a reply code form the Nameserver.  The
+X    next number is the field number.  Following the field number
+X    is the name of the field, the maximum length of the field,
+X    and the flags for the field.  The second line has, in
+X    addition to repeated reply code, number, and name, a one-line
+X    description of the field.
+X
+X
+X
+X
+XPage 3                                         (printed 10/11/89)
+X
+X
+X
+X
+X
+X
+XPH(1L)              UNIX 4.3 BSD (27 Aug 89)               PH(1L)
+X
+X
+X
+V    The flags determine how a field may be used.  _`008L_`008o_`008o_`008k_`00
+X8u_`008p means
+V    the field may be searched in a query.  _`008I_`008n_`008d_`008e_`008x_`008
+Xe_`008d means the
+V    field is indexed (at least one _`008I_`008n_`008d_`008e_`008x_`008e_`008d 
+Xfield must be included
+V    in every query).  _`008D_`008e_`008f_`008a_`008u_`008l_`008t means the fie
+Xld is displayed by
+V    default.  _`008C_`008h_`008a_`008n_`008g_`008e means that users may change
+X the field.  _`008T_`008u_`008r_`008n
+X    means that display of the field may be inhibited by beginning
+X    the field with a ''*''.
+X
+X    s`008se`008et`008t option[=`008=value]
+X    _`008S_`008e_`008t allows Nameserver options to be set.  These options are
+X    for future use.
+X
+X    q`008qu`008ui`008it`008t
+X    Exits _`008p_`008h.
+X
+X    l`008lo`008og`008gi`008in`008n alias
+V    This command identifies the user to the Nameserver.  _`008A_`008l_`008i_`0
+X08a_`008s is
+X    your Nameserver alias, a unique name for you in the
+X    Nameserver; it is the first field printed in _`008p_`008h queries.  You
+X    will be prompted for your Nameserver password.  This is n`008no`008ot`008t
+X    the same as your system password.  The only way to discover
+X    your Nameserver password is to send mail to
+X    nameserv@uxg.cso.uiuc.edu.
+X
+X    You are allowed to change your Nameserver alias; there are,
+X    however, restrictions on Nameserver alia; they must be unique
+X    within the Nameserver, they cannot be common names (''david''
+X    is right out), and they can only contain letters, digits,
+X    dashes (-) and periods (.).
+X
+V    C`008Co`008om`008mm`008ma`008an`008nd`008ds`008s R`008Re`008eq`008qu`008ui
+X`008ir`008ri`008in`008ng`008g L`008Lo`008og`008gi`008in`008n
+X    The following commands require that the user executing them
+X    be logged in to the Nameserver.
+X
+X    p`008pa`008as`008ss`008sw`008wo`008or`008rd`008d [alias]
+X    This command changes your Nameserver password.  You will be
+X    asked to type your new password twice.  _`008P_`008h will complain if
+X    your password is too short, or contains only numbers
+X    (although it does allow such passwords).  Privileged users
+X    may change the passwords of certain other users by specifying
+V    the alias of the other user when giving the _`008p_`008a_`008s_`008s_`008w
+X_`008o_`008r_`008d command.
+X
+X    m`008me`008e
+X    This command lists the nameserver entry of the currently
+X    logged-in user.
+X
+X    e`008ed`008di`008it`008t field [alias]
+X    This command allows _`008p_`008h users to change those fields in their
+V    entry that have the _`008C_`008h_`008a_`008n_`008g_`008e flag set.  _`008E
+X_`008d_`008i_`008t will retrieve the
+X    value of the named field (if a value exists), and will allow
+V    the user to edit the value with /_`008u_`008s_`008r/_`008u_`008c_`008b/_`0
+X08v_`008i (the _`008E_`008D_`008I_`008T_`008O_`008R
+X    environment variable may be used to override the use of _`008v_`008i).
+X
+X
+X
+XPage 4                                         (printed 10/11/89)
+X
+X
+X
+X
+X
+X
+XPH(1L)              UNIX 4.3 BSD (27 Aug 89)               PH(1L)
+X
+X
+X
+X    The changed value will then be reinserted in the Nameserver.
+X
+X    a`008ad`008dd`008d
+X    Adds entries to the Nameserver.  This is a privileged
+X    command.
+X
+X    d`008de`008el`008le`008et`008te`008e
+X    Deletes entries from the Nameserver.  This is a privileged
+X    command.
+X
+X    l`008lo`008og`008go`008ou`008ut`008t
+X    Undoes the effects of a _`008l_`008o_`008g_`008i_`008n command.
+X
+VQ`008QU`008UE`008ER`008RY`008Y E`008EX`008XA`008AM`008MP`008PL`008LE`008ES`008
+XS
+X    Here are some examples to clarify _`008p_`008h queries.  Each example
+X    is preceded by the effect desired.  It is assumed that the
+X    queries are being done with _`008p_`008h from the command line, rather
+X    than by using the interactive mode of _`008p_`008h.  The only
+X    difference for interactive mode is that metacharacters would
+X    not have to be quoted or escaped.
+X
+X    Find the _`008p_`008h entry for Steven Dorner:
+X
+X          ph steven dorner
+X
+X    Find the ph entry for S. Dorner, where the rest of the first
+X    name is not known:
+X
+X          ph s\* dorner
+X
+X    Find Alonzo Johnson (or is that JohnsEn?):
+X
+X          ph alonzo johns\?n
+X    or
+X          ph alonzo johns\[eo\]n
+X
+X    Find Steven D., where the rest of the last name is unknown:
+X
+X          ph steven d\*
+X
+X    The last query fails because it matches too many entries.  It
+X    is therefore necessary to narrow the search.  Suppose is is
+X    known that Steven D. has an office in DCL:
+X
+X          ph steven d\* address=DCL
+X
+X    Alternately, suppose Steven D. works for CSO.  You might try:
+X
+X          ph steven d\* department=CSO
+X
+X    When that failed, a good next guess would be:
+X
+X
+X
+X
+XPage 5                                         (printed 10/11/89)
+X
+X
+X
+X
+X
+X
+XPH(1L)              UNIX 4.3 BSD (27 Aug 89)               PH(1L)
+X
+X
+X
+X          ph steven d\* department=computing
+X
+X    The moral of the story is that fields in _`008p_`008h generally contain
+X    whatever the user wishes them to contain, and hence there may
+X    be many different spellings and abbreviations of any
+X    particular field (some fields are exceptions, including the
+V    _`008n_`008a_`008m_`008e field, which is always the full name, as known to
+X the
+X    University, of the person involved).  It pays to make liberal
+X    use of metacharacters and creativity when searching fields
+X    other than _`008n_`008a_`008m_`008e.
+X
+X    Suppose all that is wanted is full name and electronic mail
+X    address of S. Dorner:
+X
+X          ph s\* dorner return name email
+X
+XB`008BU`008UG`008GS`008S
+X    Separate words in a query are allowed to match the same word
+X    in the entry; ''ph s\* smith'' is functionally equivalent to
+X    ''ph smith,'' because the ''s*'' is allowed to match
+X    ''smith.''
+X
+X    There is no way to turn off the reading of the .netrc file.
+X
+XD`008DI`008IS`008ST`008TR`008RI`008IB`008BU`008UT`008TI`008IO`008ON`008N
+X    Source code for _`008p_`008h is available by anonymous ftp to
+X    uxc.cso.uiuc.edu, in the net/ph subdirectory.  This source
+X    works on 4.[23]bsd Unix systems.  Any troubles encountered
+X    porting _`008p_`008h to a particular system are of interest to the
+X    author of _`008p_`008h, as are ports done to other operating systems.
+X
+XS`008SE`008EE`008E A`008AL`008LS`008SO`008O
+V    _`008T_`008h_`008e _`008C_`008S_`008O _`008N_`008a_`008m_`008e_`008s_`008e
+V_`008r_`008v_`008e_`008r, _`008A_`008n _`008I_`008n_`008t_`008r_`008o_`008d_`0
+X08u_`008c_`008t_`008i_`008o_`008n, by Steven Dorner
+V    _`008T_`008h_`008e _`008C_`008S_`008O _`008N_`008a_`008m_`008e_`008s_`008e
+V_`008r_`008v_`008e_`008r, _`008S_`008e_`008r_`008v_`008e_`008r-_`008C_`008l_`0
+V08i_`008e_`008n_`008t _`008P_`008r_`008o_`008t_`008o_`008c_`008o_`008l, by Ste
+Xven Dorner
+X    qi(8)
+X
+XA`008AU`008UT`008TH`008HO`008OR`008R
+X    Steve Dorner
+X    University of Illinois Computing Services Office
+X    s-dorner@uiuc.edu
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+XPage 6                                         (printed 10/11/89)
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+XPage 7                                         (printed 10/11/89)
+X
+X
+X
+$GoSub Convert_File
+$File_is="PH-INTRO.TXT"
+$Check_Sum_is=1160587100
+$Copy SYS$Input VMS_SHAR_DUMMY.DUMMY
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+V                          T`008Th`008he`008e C`008CS`008SO`008O N`008Na`008am`
+X008me`008es`008se`008er`008rv`008ve`008er`008r
+V                           A`008An`008n I`008In`008nt`008tr`008ro`008od`008du`
+X008uc`008ct`008ti`008io`008on`008n
+X
+X             by Steven Dorner, Computing Services Office
+X
+X     % ph steven dorner
+X     -201 1:Database ready.
+X     ----------------------------------------
+X              alias: sdorner
+X               name: dorner steven c
+X              email: dorner@uxg.cso.uiuc.edu
+X              phone: (W) 333-3339 (H) 356-8892
+X            address: 189 DCL, 1304 W Springfield, U
+X            address: 1201 W. Washington, C
+X         department: computing services office
+X              title: research programmer
+X           mailcode: 256
+X              hours: weekdays
+X            project: CSO Nameserver (Ph)
+X     ----------------------------------------
+X
+V     W`008Wh`008ha`008at`008t i`008is`008s i`008it`008t?`008?  The CSO Nameser
+Xver could be considered a data-
+X     base containing information about people and things at the
+X     University of Illinois.  It is designed to be extremely
+X     flexible in what information it keeps, and also to provide
+X     fast access to that information.  Currently, most of the in-
+V     formation in it comes from the University _`008S_`008t_`008u_`008d_`008e_
+X`008n_`008t_`008/_`008S_`008t_`008a_`008f_`008f_
+X     _`008D_`008i_`008r_`008e_`008c_`008t_`008o_`008r_`008y (the phone book).
+X
+X     The CSO Nameserver could also be considered to be a pair of
+X     programs; one that manages the actual data (this program is
+V     called _`008q_`008i, for _`008_`008q_`008u_`008e_`008r_`008y _`008_`008i_
+V`008n_`008t_`008e_`008r_`008p_`008r_`008e_`008t_`008e_`008r), and another one 
+Xthat han-
+X     dles user requests (the program CSO provides for this is
+V     called _`008p_`008h, for _`008_`008p_`008_`008h_`008o_`008n_`008e _`008b_
+X`008o_`008o_`008k).  To most people, the CSO
+X     Nameserver will be exactly this second program, _`008p_`008h, the pro-
+V     gram that gives them access to the University _`008D_`008i_`008r_`008e_`0
+X08c_`008t_`008o_`008r_`008y.
+X
+V     W`008Wh`008he`008er`008re`008e i`008is`008s i`008it`008t?`008?  The datab
+Xase for the Nameserver resides on a
+X     CSO minicomputer (a VAXServer 3500) that runs the UnixTM
+X     operating system; the name of this computer is
+X     garcon.cso.uiuc.edu.  The program that manages the database
+V     (_`008q_`008i) runs on this machine.  _`008Q_`008i allows programs runnin
+Xg on
+X     other computers to access the database by serving as an in-
+X     termediary between them and the actual database.  It commun-
+V     icates with such programs using the campus network, _`008U_`008I_`008U_`0
+X08C_`008n_`008e_`008t.
+X
+V     _`008P_`008h (the program that is usually used to communicate with _`008q
+X_`008i)
+X     is installed on all of CSO's UNIXTM computers.  A simple
+X     version
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X     of _`008p_`008h is also available on CSO's main IBM computer, a 3081
+X     which uses a proprietary IBM operating system.  _`008P_`008h is also
+X     installed on many non-CSO computers across the campus;
+X     later, I'll discuss how you can get _`008p_`008h installed on your
+X     system.
+X
+V     W`008Wh`008ha`008at`008t i`008is`008s i`008it`008t g`008go`008oo`008od`00
+X8d f`008fo`008or`008r?`008?  The Nameserver is good for looking up
+X     phone numbers and addresses of University faculty, students
+V     or staff members, just like the _`008S_`008t_`008u_`008d_`008e_`008n_`008
+Vt_`008/_`008S_`008t_`008a_`008f_`008f__`008D_`008i_`008r_`008e_`008c_`008t_`00
+X8o_`008r_`008y; but
+X     the Nameserver is good for more than just that.  For one
+X     thing, the Nameserver knows the electronic mail address for
+X     thousands of faculty, students and staff; this information
+V     is not present in the _`008S_`008t_`008u_`008d_`008e_`008n_`008t_`008/_`0
+V08S_`008t_`008a_`008f_`008f__`008D_`008i_`008r_`008e_`008c_`008t_`008o_`008r_`
+X008y.  For some
+X     people, it knows other things, such as office hours or vaca-
+X     tion plans.
+X
+X     A key thing to know about the Nameserver is that, if you use
+X     a computer that has _`008p_`008h installed on it, you can change the
+X     information the Nameserver keeps about you.  That means
+X     that, if you change offices in the middle of the year, you
+X     can put your correct address and phone number in the
+X     Nameserver immediately, so that people can use _`008p_`008h to find
+X     up-to-date information about you.
+X
+V     W`008Wh`008ha`008at`008t i`008is`008sn`008n'`008't`008t i`008it`008t g`00
+X8go`008oo`008od`008d f`008fo`008or`008r?`008?  There are some things the
+X     Nameserver is not meant to do.  One thing that should be
+X     mentioned right away is that the Namesever can't be used to
+X     generate mailing lists for junk mail; you don't have to wor-
+X     ry about getting junk mail because you appear in the
+X     Nameserver's database.
+X
+X     Another thing it isn't good for is notifying the University
+X     of changes of address.  Changes you make to your information
+X     in the Nameserver are not automatically sent to your depart-
+X     ment, or the Office of Admissions and Records, or Payroll,
+X     or anywhere else; you must still notify these places of
+X     changes in your address.
+X
+V     H`008Ho`008ow`008w c`008ca`008an`008n I`008I h`008ha`008av`008ve`008e p`0
+V08ph`008h i`008in`008ns`008st`008ta`008al`008ll`008le`008ed`008d o`008on`008n 
+Vm`008my`008y c`008co`008om`008mp`008pu`008ut`008te`008er`008r?`008?  If one of
+X the
+X     computers you use runs UNIXTM or VMS and is connected to
+V     _`008U_`008I_`008U_`008C_`008n_`008e_`008t, you can probably have _`008p_
+X`008h installed on it.  Tell the
+X     person who manages your computer that he can get the source
+X     code for _`008p_`008h by anonymous ftp to uxc.cso.uiuc.edu, in the
+X     net/ph subdirectory (don't worry-he'll know what that
+X     means).
+X
+V     H`008Ho`008ow`008w d`008do`008o I`008I u`008us`008se`008e p`008ph`008h?`0
+X08?  There are two different ways to use _`008p_`008h.
+X     One way is good for finding information about people, and
+X     the
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X     other is good for changing the information the Nameserver
+X     keeps about you.  I will give you a brief idea of how both
+X     these ways work; for more detailed information, you should
+X     read the ````manual page'' for _`008p_`008h, which you can read (if your
+X     computer runs UnixTM) by typing the command, ````man ph''.
+X
+X     To use _`008p_`008h to find out information, you should type ````ph''
+X     and the name of the person you want to know about; _`008p_`008h will
+X     respond with information about that person:
+X
+X     % ph steven dorner
+X     -201 1:Database ready.
+X     ----------------------------------------
+X              alias: sdorner
+X               name: dorner steven c
+X              email: dorner@uxg.cso.uiuc.edu
+X              phone: (W) 333-3339 (H) 356-8892
+X            address: 189 DCL, 1304 W Springfield, U
+X            address: 1201 W. Washington, C
+X         department: computing services office
+X              title: research programmer
+X           mailcode: 712
+X              hours: weekdays
+X            project: CSO Nameserver (Ph)
+X     ----------------------------------------
+X
+X     If there are a lot of people who have the name you asked
+X     for, _`008p_`008h will let you view the list a screenful at a time;
+X     just hit the spacebar to move to the next screen.
+X
+X     You don't have to know the exact spelling of a name to find
+X     information; you can put special symbols in the name for
+X     which you are searching that tell the Nameserver to find
+X     names that you only know a few letters of.  I won't say any-
+X     thing more about that here; look in the manual page if you
+X     are interested in the details.
+X
+X     Sometimes, you will ask ph for a name, and it will refuse to
+X     give you information, because too many people have that
+X     name:
+X
+X     % ph smith
+X     -201 1:Database ready.
+X     502:Too many entries to print (373).
+X
+X     _`008P_`008h does this so that no one can use it to get mailing lists
+X     for junk mail or other nefarious purposes.  If you really
+X     want to find the person, you will have to know something
+X     else
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X     about them, like part of their first name, or their phone
+X     number
+X
+X     If you want to change the information the Nameserver keeps
+X     about you, you should just type ````ph''.  _`008P_`008h won't look up a
+X     name, but will instead give you a prompt.  There are many
+X     possible commands you can type to _`008p_`008h; they are described in
+X     full in the _`008p_`008h manual page.  You will only need to know
+V     three commands to change your information, however; _`008l_`008o_`008g_`0
+X08i_`008n,
+V     _`008e_`008d_`008i_`008t, and _`008q_`008u_`008i_`008t.  Before actually 
+Xusing _`008p_`008h for this, you will
+X     have to make some preparations.
+X
+X     The first thing you have to do is find your Nameserver
+V     _`008a_`008l_`008i_`008a_`008s.  This is a unique name assigned to you by
+X the
+X     NameServer.  It will be your first initial, followed by a
+X     dash, followed by your last name.  If there is more than one
+X     person with the same first initial and last name as yours,
+X     there may be number tacked onto the end of your alias.  The
+X     easiest way to find your alias is simply to look up your
+X     name with ph; it will be obvious to you which entry is
+X     yours.
+X
+X     Once your know your alias, you need to find out your
+X     Nameserver password.  To do this, send electronic mail to
+X     nameserv@uxg.cso.uiuc.edu.  You will receive (in a day or
+X     two) a reply that contains your password.
+X
+X     Now, it's time to use _`008p_`008h to change your information.  Type
+X     ````ph'' and a return.  You will get a ````ph>'' prompt.  Now,
+X     type ````login alias'' (but use your real alias, not the word
+X     ````alias''!) and a return.  _`008P_`008h will ask for your password;
+X     type your password and a return.  You should get a greeting
+X     from the Nameserver, and another prompt.
+X
+X     % ph
+X     $Header: ph.c,v 2.10 88/03/09 09:59:32 dorner Locked $
+X     Please mail questions or comments to
+X     dorner@uxg.cso.uiuc.edu.
+X
+X     ph> login sdorner
+X     -201 1:Database ready.
+V     Enter nameserver password: _`008t_`008y_`008p_`008e _`008y_`008o_`008u_`0
+X08r _`008p_`008a_`008s_`008s_`008w_`008o_`008r_`008d _`008h_`008e_`008r_`008e
+X     200:sdorner:Hi how are you?
+X     ph>
+X
+X     You are now ready to change your information.  Your informa-
+X     tion is organized into ````fields'', each one containing a
+X     different piece of information.  There is a field for your
+X     name,
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X     your address, your phone numbers, etc.  To change a particu-
+X     lar field, type ````edit field'' and a return, substituting
+X     the name of the field you wish to change for ````field''.  For
+X     example, if you want to change your phone numbers, type
+X     ````edit phone''.  You will be placed in your favorite UNIX
+X     editor, with the contents of the field you asked for as the
+X     text.  Make whatever changes you wish, and exit the editor.
+X     _`008P_`008h will then change the information for you.
+X
+X     Some information cannot be changed;  the ````name'' field, for
+X     example,  cannot be changed.  If you need to change one of
+X     these fields, you should send mail to
+X     nameserv@uxg.cso.uiuc.edu and arrangements can be made.
+X
+X     Once you are done changing your information, type ````quit''
+X     and a return.
+X
+V     S`008Su`008up`008pp`008po`008os`008se`008e I`008I c`008ca`008an`008n'`008
+V't`008t u`008us`008se`008e p`008ph`008h f`008fr`008ro`008om`008m m`008my`008y 
+Xc`008co`008om`008mp`008pu`008ut`008te`008er`008r?`008?  If your computer
+X     doesn't have ph installed on it, but you would like to use
+X     ph to look up addresses or change your information, you can
+X     still do so.  Connect to CSO's staff Pyramid, uxe, by using
+X     telnet (telnet uxe.cso.uiuc.edu), sytek (call 12ee) or by
+X     dialup (333-4008, class duxe).  When you are prompted for
+X     login:, type ````phones'' and a return.  When you are prompted
+X     for Password:, type another return.  You will then be
+X     prompted for your terminal type.  If you have a vt100 termi-
+X     nal or terminal emulator, you can just type a return; if you
+X     have some other terminal, type its name.  You will receive a
+X     ph> prompt, and can use ph.
+X
+V     W`008Wh`008he`008er`008re`008e c`008ca`008an`008n I`008I f`008fi`008in`00
+V8nd`008d m`008mo`008or`008re`008e i`008in`008nf`008fo`008or`008rm`008ma`008at`
+X008ti`008io`008on`008n?`008?  More information can be
+X     found by reading the manual page on _`008p_`008h.  Programmers who
+X     wish to access the Nameserver from their programs should ob-
+V     tain the document _`008N_`008a_`008m_`008e_`008s_`008e_`008r_`008v_`008e_
+V`008r__`008S_`008e_`008r_`008v_`008e_`008r_`008/_`008C_`008l_`008i_`008e_`008n
+X_`008t__`008L_`008a_`008n_`008g_`008u_`008a_`008g_`008e, avail-
+X     able in the file ````language.troff'' in the same directory on
+X     uxc.cso.uiuc.edu as the _`008p_`008h source code.
+X
+V     W`008Wh`008ha`008at`008t i`008if`008f I`008I h`008ha`008av`008ve`008e t`0
+V08tr`008ro`008ou`008ub`008bl`008le`008e?`008?  If you have problems or questio
+Xns
+X     that are not resolved by reading this document, the _`008p_`008h manu-
+V     al page, or _`008N_`008a_`008m_`008e_`008s_`008e_`008r_`008v_`008e_`008r_
+V_`008S_`008e_`008r_`008v_`008e_`008r_`008/_`008C_`008l_`008i_`008e_`008n_`008t
+X__`008L_`008a_`008n_`008g_`008u_`008a_`008g_`008e, feel free to
+X     ask me by sending mail to ````dorner@uxg.cso.uiuc.edu''.
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+V               A`008Ap`008pp`008pe`008en`008nd`008di`008ix`008x -`008- A`008A 
+VR`008Ra`008an`008nk`008k B`008Be`008eg`008gi`008in`008nn`008ne`008er`008r'`008
+X's`008s G`008Gu`008ui`008id`008de`008e t`008to`008o V`008VI`008I
+X
+X     This page describes a few vi commands to accomplish simple
+X     editing tasks.  Full documentation for vi can be found in
+V     _`008T_`008h_`008e _`008U_`008N_`008I_`008X _`008U_`008s_`008e_`008r'_`00
+V8s _`008M_`008a_`008n_`008u_`008a_`008l _`008S_`008u_`008p_`008p_`008l_`008e_`
+V008m_`008e_`008n_`008t_`008a_`008r_`008y _`008D_`008o_`008c_`008u_`008m_`008e_
+X`008n_`008t_`008s, chapter 15
+X     (really advanced users should read chapter 16 as well).  Two
+X     thing to keep in mind:  First, the editor is pronounced
+X     ````vee eye''; if you pronounce it, ````vie,'' UNIX gurus will
+X     laugh at you, though not out loud.  Secondly, vi is
+X     case-sensitive; be sure to use upper or lower case commands
+X     as appropriate.
+X
+V     M`008Mo`008od`008de`008es`008s.`008.  Vi is a modal editor; what you can 
+Xdo depends on
+X     what mode you are in.  The two modes of interest to us are
+V     _`008c_`008o_`008m_`008m_`008a_`008n_`008d mode and _`008i_`008n_`008s_`0
+X08e_`008r_`008t mode.  You type most commands in
+X     command mode; all you do in insert mode is type your text.
+V     You get out of insert mode by typing _`008e_`008s_`008c_`008a_`008p_`008e
+X, usually marked
+X     ````esc'' on keyboards; on some keyboards, you may have to
+X     hold down the control or alt key and press ````[''.  If you
+X     type escape in command mode, vi will beep at you; so if you
+X     get confused, just type escape until vi beeps; then you'll
+X     be back in command mode.
+X
+V     M`008Mo`008ov`008vi`008in`008ng`008g A`008Ar`008ro`008ou`008un`008nd`008d
+X.`008.  Here are some motion commands in vi.  They
+X     are typed in command mode, and leave the editor in command
+X     mode.
+X
+V          C`008Co`008om`008mm`008ma`008an`008nd`008d   W`008Wh`008ha`008at`008
+Xt i`008it`008t d`008do`008oe`008es`008s
+X
+V          control-h Moves the cursor l`008le`008ef`008ft`008t ([`008[]`008]) o
+Xne character.
+V          h         Moves the cursor l`008le`008ef`008ft`008t ([`008[]`008]) o
+Xne character.
+V          j         Moves the cursor d`008do`008ow`008wn`008n ([`008[]`008]) o
+Xne line.
+X          k         Moves the cursor u`008up`008p ([`008[]`008]) one line.
+V          l         Moves the cursor r`008ri`008ig`008gh`008ht`008t ([`008[]`0
+X08]) one character.
+V          w         Moves the cursor f`008fo`008or`008rw`008wa`008ar`008rd`008
+Xd to the beginning of
+X                    the next word.
+V          b         Moves the cursor b`008ba`008ac`008ck`008kw`008wa`008ar`008
+Xrd`008d to the beginning of
+X                    the previous word.
+X
+V     D`008De`008el`008le`008et`008te`008ei`008in`008ng`008g T`008Te`008ex`008x
+Xt`008t.`008.  Here are some commands to get rid of stuff.
+X     Type them in command mode; they will leave the editor in
+X     command mode.
+X
+V          C`008Co`008om`008mm`008ma`008an`008nd`008d   W`008Wh`008ha`008at`008
+Xt i`008it`008t d`008do`008oe`008es`008s
+X
+X          dd        Deletes the current line.
+X          x         Deletes the character at the cursor, and
+X                    moves the rest of the line to fill the hole.
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+V     A`008Ad`008dd`008di`008in`008ng`008g T`008Te`008ex`008xt`008t.`008.  The 
+Xfollowing commands all put you into insert
+X     mode and let you type text.  Type escape when you are fin-
+X     ished adding text, and you will be returned to command mode.
+X
+V          C`008Co`008om`008mm`008ma`008an`008nd`008d   W`008Wh`008ha`008at`008
+Xt i`008it`008t d`008do`008oe`008es`008s
+X
+X          i         Start inserting characters before the charac-
+X                    ter the cursor is on.
+X          O         Create a new line above the cursor, and start
+X                    inserting at the beginning of that line.
+V                    Note that this command is a _`008c_`008a_`008p_`008i_`008t
+X_`008a_`008l ````O''.
+X
+V     G`008Ge`008et`008tt`008ti`008in`008ng`008g O`008Ou`008ut`008t.`008.  The 
+Xfollowing commands exit vi.  They work in
+X     command mode.
+X
+V          C`008Co`008om`008mm`008ma`008an`008nd`008d   W`008Wh`008ha`008at`008
+Xt i`008it`008t d`008do`008oe`008es`008s
+X
+X          ZZ        Exit vi, and save the changes you have made.
+V                    Those are _`008c_`008a_`008p_`008i_`008t_`008a_`008l Z's, 
+Xby the way.
+X          :q!o`008/      Exit vi, but don't save changes (the ````o`008/''
+X                    means to type return).
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+$GoSub Convert_File
+$File_is="PH.C"
+$Check_Sum_is=207381107
+$Copy SYS$Input VMS_SHAR_DUMMY.DUMMY
+X/***********************************************************************/
+X/*********************************************************************
+X* This software is Copyright (C) 1988 by Steven Dorner and the
+X* University of Illinois Board of Trustees, and by CSNET.  No warranties of
+X* any kind are expressed or implied.  No support will be provided.
+X* This software may not be redistributed without prior consent of CSNET.
+X* You may direct questions to dorner@garcon.cso.uiuc.edu.
+X**********************************************************************/
+X
+X/***********************************************************************
+X* This is a client program for CSO's nameserver.  It attempts to contact
+X* the nameserver running on garcon.cso.uiuc.edu, and query it about
+X* entries.  The following entries in /etc/hosts (if you're using one) and
+X* /etc/services will help matters:
+X* 
+X* /etc/hosts:
+X* 128.174.5.58  garcon.cso.uiuc.edu garcon
+X* 
+X* /etc/services:
+X* ns      105/tcp     ns        # CSO nameserver
+X*************************************************************************/
+X#ifdef VMS
+X/*
+X`009`009    P H   for   V A X / V M S
+X
+X
+X  Ported to VAX/VMS Version 4.4 using VAXC 2.2 and Wollongong WIN/TCP 3.1
+X  by Mark Sandrock, UIUC School of Chemical Sciences Computing Services.
+X
+X  VMS 4.4 implementation notes:
+X
+X  1) VAXCRTL does not supply the following routines used by PH:
+X
+X    a) fork`009`009-- SYS$CREPRC or LIB$SPAWN should be used instead.
+X    b) execlp`009`009-- VAXCRTL does provide execl, but it is too limited.
+X    c) popen/pclose`009-- VAXCRTL does provide "pipe" instead.
+X    d) index/rindex`009-- VAXCRTL "strchr/strrchr" functions are equivalent.
+X    e) getpass`009`009-- implemented in this file.
+X    f) unlink`009`009-- VAXCRTL does provide "delete" function.
+X
+X  2) VAX/VMS does not provide the following utilities used by PH:
+X
+X    a) /usr/ucb/more`009-- VMS PH does not do paging yet.
+X    b) /usr/ucb/vi`009-- EDT or TPU should be used instead.
+X
+X  3) The VAXCRTL "getenv" function does not recognize the following
+X     environment names. SYS$TRNLNM could be used instead, if need be:
+X
+X    a) PAGER: specifies "pager" other than the default (TYPE/PAGE).
+X    b) EDITOR: specifies editor other than the default (EDT).
+X
+X  4) The SOCKET INTERFACE implemented by Wollongong WIN/TCP 3.1 returns
+X     a channel number rather than a standard file descriptor, and thus
+X     is not compatible with the UNIX-style i/o functions such as fdopen,
+X     read and write. Instead WIN/TCP provides special versions of read/
+X     write called netread/netwrite for network i/o.
+X
+X  5) The VMS VAXC include files are used wherever possible, with several
+X     exceptions as noted in the WIN/TCP Programmer's Guide. The following
+X     include files do not exist under VMS VAXC 2.2 nor under WIN/TCP 3.1,
+X     and were simply copied over from uxc (4.3 bsd):
+X
+X    a) #include <sgtty.h>
+X    b) #include <syslog.h>
+X
+X  Change log:
+X
+X  05-May-1988   12:09   MTS`009Initial port of ph.c,v 2.15 to vms_ph.c.
+X`009`009`009`009Initial port of cryptit.c to vms_cryptit.c.
+X
+X  13-Feb-1991`00916:08`009MTS`009Has it really been that long?  Re-ported
+X`009`009`009`009ph v4.10 under VMS 5.3 and WIN/TCP 5.1.
+X/*
+X***************************************************************************/
+X
+Xstatic char *rcsid = "VAX/VMS: ph.c,v 4.10 91/02/13 16:08:00 dorner Locked $";
+X
+X#include stdio
+X#include signal
+X#include <types.h>
+X#include <socket.h>
+X#include file
+X#include stat
+X#include <in.h>
+X#include <netdb.h>
+X#include ctype
+X#include <strings.h>
+X#include descrip    /* VMS descriptor structures defs */
+X#include iodef      /* VMS I/O function definitions */
+X#include ssdef      /* VMS System Status definitions */
+X#include ttdef      /* VMS terminal characteristics */
+X#include "termdefs.h"   /* VMS defs for setterm() function */
+X
+X#else
+Xstatic char *rcsid = "$Date: 91/02/06 07:24:53 $$Revision: 4.10 $";
+Xstatic char *srcid = "$Source: /nameserv/Src/Ph/RCS/ph.c,v $";
+X
+X#include <stdio.h>
+X#include <signal.h>
+X#include <sys/types.h>
+X#include <sys/wait.h>
+X#include <sys/socket.h>
+X#include <sys/file.h>
+X#include <sys/stat.h>
+X#include <netinet/in.h>
+X#include <netdb.h>
+X#include <ctype.h>
+X#include <strings.h>
+X#ifdef hpux
+X#include <memory.h>
+X#define bcopy(source,dest,count)`009memcpy(dest,source,count)
+X#define index(string,ch) strchr(string,ch)
+X#define rindex(string,ch) strrchr(string,ch)
+X#else
+X#ifndef NeXT
+Xvoid bcopy();
+X#endif
+X#endif
+X#endif
+X
+X#include "replies.h"
+X
+X/***********************************************************************
+X* vital defines
+X***********************************************************************/
+X#define MAXSTR      2048  /* max string length */
+X#define MAXVAL      14000   /* max value length */
+X#define DELIM       " \t\n"/* command delimiters */
+X#define MAXARGS`009    20    /* maximum # of arguments in PH environ var. */
+X/***********************************************************************
+X* declarations for a couple of useful functions
+X***********************************************************************/
+Xchar   *GetValue();
+Xchar   *strtok();
+Xchar   *getenv();
+X#ifdef VMS
+Xchar *strchr();             /* VMS equivalent of "index" */
+Xchar *strrchr();            /* VMS equivalent of "rindex" */
+X#define index(a,b) strchr(a,b)
+X#define rindex(a,b) strrchr(a,b)
+X
+X#define GetQValue(aLine)    \
+X      (strchr(strchr(aLine,':')+1,':')+1)
+X#else
+XFILE   *popen();
+X
+X#define GetQValue(aLine)    \
+X      (index(index(aLine,':')+1,':')+1)
+X#endif
+Xchar *malloc();
+Xchar *getpass();
+Xvoid exit(), free(), perror();
+Xchar *makestr();
+X
+X/************************************************************************
+X * declarations for the functions in this file
+X ************************************************************************/
+Xint main();
+Xchar *issub();
+Xint ContactQI();
+Xint DoId();
+Xint PrintResponse();
+Xint GetGood();
+Xvoid EnvOptions();
+Xvoid ComplainAboutService();
+Xvoid ComplainAboutHost();
+Xvoid Interactive();
+Xint DoCommand();
+Xint DoOtherWPage();
+Xint DoOther();
+X#ifdef MACC
+Xint DoFields();
+X#endif
+Xint DoHelp();
+Xint DoQuery();
+Xint DoLogin();
+Xint DoQuit();
+Xint DoEdit();
+Xint DoMake();
+Xint EditValue();
+Xint UpdateValue();
+Xint DoFields();
+Xint DoMe();
+Xint DoPassword();
+Xint DoLogout();
+Xvoid VetPassword();
+Xint AllDigits();
+Xint PrintQResponse();
+Xvoid DoAutoLogin();
+Xvoid SkipMacdef();
+Xint TryLogin();
+Xvoid EmailLine();
+Xvoid NotRegisteredLine();
+XFILE *OpenPager();
+Xint DoSwitch();
+X
+X/***********************************************************************
+X* These are external for convenience' sake
+X***********************************************************************/
+X#ifdef MACC_ECHO
+Xint maccecho =0;
+X#endif
+X#ifdef VMS
+Xint  ToQI;`009`009/* write to this to tell the nameserver stuff */
+Xint  FromQI;`009`009/* read nameserver responses from here */
+Xchar ToQIBuf[MAXSTR];
+Xint ToQILen;
+X#define qprintf`009`009\
+X  {`009`009`009\
+X    char *ToQI=ToQIBuf;`009\
+X    sprintf
+X#define qflush(foobar)`009`009\
+X    ToQILen = strlen(ToQIBuf);`009\
+X  }`009`009`009`009\
+X  netwrite(ToQI,ToQIBuf,ToQILen)
+X#else
+XFILE   *ToQI;`009`009/* write to this to tell the nameserver stuff */
+XFILE   *FromQI;`009`009/* read nameserver responses from here */
+X#define qprintf fprintf
+X#define qflush fflush
+X#endif
+Xchar  MyAlias[MAXSTR];  /* currently logged-in alias */
+Xchar   *Me;`009`009/* the name of this program */
+Xchar *MyPassword=NULL;  /* password read from .netrc (if any) */
+X/************************************************************************
+X * switches
+X ************************************************************************/
+Xint NoNetrc = 0;`009/* -n don't read .netrc */
+Xchar *UseHost = 0;`009/* -s use server on what machine */
+Xint UsePort = 0;`009/* -p use port # */
+Xint NoReformat=0;`009/* -i don't reformat email fields */
+Xint NoPager=0;`009`009/* -m don't use pager */
+Xint NoBeautify=0;`009/* -b don't beautify output */
+Xint NoLabels=0;`009`009/* -l don't use labels */
+Xint Confirm=0;`009`009/* -c confirm Edit */
+Xchar *DefType=0;`009/* -t prepend this type to queries */
+Xchar *ReturnFields=NULL;/* -f give list of fields */
+X/***********************************************************************
+X* and the fun begins...
+X***********************************************************************/
+Xint main(argc, argv)
+Xint   argc;
+Xchar  **argv;
+X{
+X  int theCode=LR_ERROR;
+X  int optionsCount;
+X  char buffer[4096];
+X#ifdef MACC_ECHO
+X`009int margc=0;
+X#endif
+X#ifdef VMS
+Xchar *temps;          /* temp strings */
+X#endif
+X  /*
+X   * figure out what this program is called
+X   */
+X#ifdef VMS
+X  Me = " ph";
+X#else
+X  Me = rindex(*argv,'/');
+X#endif
+X  if (Me)
+X    Me++;
+X  else
+X    Me = *argv;
+X  EnvOptions(CLIENT);
+X  if (strcmp(CLIENT,Me))
+X  {
+X    sprintf(buffer,"-t %s",Me);
+X    (void) OptionLine(buffer);
+X    EnvOptions(Me);
+X  }
+X  optionsCount = ProcessOptions(--argc,++argv);
+X  argc -= optionsCount;
+X  argv += optionsCount; 
+X
+X  if (!ContactQI())
+X  {
+X    fputs("Sorry--phone book not available now.\n", stderr);
+X#ifdef VMS
+X    exit(SS$_CONNECFAIL);
+X#else
+X    exit(1);
+X#endif
+X  }
+X
+X  /*
+X   * identify ourselves
+X   */
+X  if ((theCode=DoId())>=400) exit(theCode/100);
+X  if (argc==0)
+X    Interactive();      /* no arguments--interactive mode */
+X  else
+X  {
+X    /* make a query out of the arguments */
+X
+X    strcpy(buffer,"query ");
+X    for (; argc; argc--, argv++)
+X    {
+X      strcat(buffer,*argv);
+X      if (argc > 1)
+X`009strcat(buffer," ");
+X    }
+X    strcat(buffer,"\n");
+X    theCode = DoCommand(buffer);
+X    qprintf(ToQI,"\nquit\n");
+X    qflush(ToQI);
+X  }
+X#ifdef VMS
+X  exit(SS$_NORMAL);
+X#else
+X  exit(theCode > 299 ? theCode/100 : 0);
+X#endif
+X}
+X
+X/***********************************************************************
+X * contact the central nameserver
+X ***********************************************************************/
+Xint ContactQI()
+X{
+X  int   sock;         /* our socket */
+X  static struct sockaddr_in QI;    /* the address of the nameserver */
+X  struct servent *theNs;    `009   /* nameserver service entry */
+X  static struct hostent *theHost;  /* host entry for nameserver */
+X  char host[80];
+X  char *baseHost;
+X  int backupNum=0;
+X  int mightBackup;
+X
+X  /* create the socket */
+X  sock = socket(PF_INET, SOCK_STREAM, 0);
+X  if (sock < 0)
+X    return (0);
+X  QI.sin_family = AF_INET;
+X
+X  /* find the proper port */
+X  if (UsePort)
+X    QI.sin_port = UsePort;
+X  else if (theNs = getservbyname(NSSERVICE, "tcp"))
+X  {
+X    QI.sin_port = theNs->s_port;
+X  }
+X  else
+X  {
+X    ComplainAboutService();
+X    QI.sin_port = htons(FALLBACKPORT);
+X  }
+X
+X  /* find the proper host */
+X  baseHost = UseHost ? UseHost : HOST;
+X  if (mightBackup=(*baseHost=='.'))
+X    sprintf(host,"%s%s",NSSERVICE,baseHost);
+X  else
+X    strcpy(host,baseHost);
+X  
+X  for (;;)
+X  {
+X    /* create the socket */
+X    sock = socket(PF_INET, SOCK_STREAM, 0);
+X    if (sock < 0)
+X      return (0);
+X    QI.sin_family = AF_INET;
+X    if (theHost = gethostbyname(host))
+X    {
+X      bcopy(theHost->h_addr, (char *) &QI.sin_addr.s_addr, 4);
+X    }
+X    else if (!backupNum)
+X    {
+X      ComplainAboutHost(host);
+X      QI.sin_addr.s_addr = htonl(FALLBACKADDR);
+X    }
+X    else
+X    {
+X      fprintf(stderr,"No more backups to try.\n");
+X      return(0);
+X    }
+X  
+X    /* connect to the nameserver */
+X    if (connect(sock, (struct sockaddr *)&QI, sizeof(QI)) < 0)
+X    {
+X      perror(host);
+X      if (mightBackup)
+X      {
+X        backupNum++;
+X`009sprintf(host,"%s%d%s",NSSERVICE,backupNum,baseHost);
+X      }
+X      else
+X        return (0);
+X    }
+X    else break;
+X  }
+X
+X  if (backupNum)
+V    fprintf(stderr,"WARNING--backup host %s; information may be out of date.\n
+X",host);
+X  /* open path to nameserver */
+X#ifdef VMS
+X  ToQI = sock;        /* copy socket channel for netwrite calls */
+X  FromQI = sock;            /* ditto for netread calls */
+X#else
+X  if ((ToQI = fdopen(sock, "w")) == NULL)
+X  {
+X    perror("to qi");
+X    return (0);
+X  }
+X
+X  /* open path from nameserver */
+X  if ((FromQI = fdopen(sock, "r")) == NULL)
+X  {
+X    perror("from qi");
+X    return (0);
+X  }
+X#endif
+X  UseHost = theHost->h_name;
+X  UsePort = QI.sin_port;
+X  
+X  return (1);
+X}
+X
+X/***********************************************************************
+X* identify ourselves to the nameserver
+X***********************************************************************/
+Xint DoId()
+X{
+X  qprintf(ToQI,"id %d\n",getuid());
+X  qflush(ToQI);
+X  return (PrintResponse(-1));
+X}
+X
+X/***********************************************************************
+X * print what the QI (Query Interpreter; nameserver) says
+X * read replies from nameserver until code indicates a completed
+X * command.  This routine does not beautify the responses in any way.
+X * if doPaging is 1, the pager will be used.
+X * if doPaging is 0, no pager will be used.
+X * if doPaging is -1, the response will not be printed at all.
+X ***********************************************************************/
+Xint PrintResponse(doPaging)
+Xint doPaging;       /* use the pager? */
+X{
+X  char  scratch[MAXSTR];  /* some space */
+X  int   code=LR_ERROR;         /* the reply code */
+X  FILE   *theOutput;
+X
+X  theOutput = OpenPager(doPaging);
+X  while (GetGood(scratch, MAXSTR, FromQI))  /* read it */
+X  {
+X    code = atoi(scratch);
+X    if (doPaging!= -1 || code>=400) fputs(scratch, theOutput);   /* echo it */
+X    if (code >= LR_OK)
+X      break;
+X  }
+X#ifdef VMS
+X#else
+X  if (theOutput != stdout)
+X    pclose(theOutput);
+X#endif
+X
+X  return (code);        /* all done.  return final code */
+X}
+X
+X/***********************************************************************
+X* get a non-comment line from a stream
+X* a comment is a line beginning with a # sign
+X***********************************************************************/
+Xint GetGood(theString, maxChars, theFile)
+Xchar   *theString;        /* space to put the chars */
+Xint   maxChars;         /* max # of chars we want */
+X#ifdef VMS
+Xint   theFile;        /* stream to read them from */
+X{
+Xstatic char Qbuf [MAXSTR+4] = { '\0' } ;
+Xstatic int  pos = {0}, end = {0}, len = {0} ;
+Xchar *linp;
+X
+X  for (;;)
+X  {
+X    if (pos >= len)
+X    {
+X      len = netread(theFile,Qbuf,maxChars);
+X      if (len <= 0) return (0);
+X      Qbuf [len] = '\0';
+X      pos = 0;
+X    }
+X
+X    linp = index(Qbuf+pos, '\n');   /* find next newline char */
+X    if (linp == NULL)
+X      end = len;          /* no newline chars left */
+X    else
+X      end = linp - Qbuf;      /* convert pointer to index */
+X
+X    strncpy(theString, Qbuf+pos, end-pos+1);
+X    *(theString+end-pos+1) = '\0';
+X    pos = end + 1;          /* save new position for next time */
+X#else   
+XFILE  *theFile;             /* stream to read them from */
+X{
+X  for (;;)
+X  {
+X    (void) fgets(theString, maxChars, theFile);
+X#endif
+X    if (*theString != '#')
+X      return (1);     /* not a comment; success! */
+X    else
+X    if (!*theString)
+X      return (0);     /* empty string==end of stream */
+X  }
+X}
+X
+X/***********************************************************************
+X* complain that there isn't an entry for ns in /etc/services
+X***********************************************************************/
+Xvoid ComplainAboutService()
+X{
+V  fprintf(stderr, "Warning--there is no entry for ````%s'' in /etc/services;\n
+X",
+X      NSSERVICE);
+X  fputs("please have your systems administrator add one.\n", stderr);
+V  fprintf(stderr, "I'm going to use port %d in the meantime.\n", FALLBACKPORT)
+X;
+X}
+X
+X/***********************************************************************
+X* complain that there isn't an entry for garcon in /etc/hosts
+X***********************************************************************/
+Xvoid ComplainAboutHost(name)
+Xchar *name;
+X{
+X  fprintf(stderr, "Warning--unable to find address for ````%s''.\n",
+X    name);
+X  fprintf(stderr, "I'm going to use address 0x%x in the meantime.\n",
+X      FALLBACKADDR);
+X}
+X
+X/***********************************************************************
+X* the interactive portion of the client
+X***********************************************************************/
+Xtypedef struct command Command;
+Xstruct command
+X{
+X  char   *cName;        /* the name of the command */
+X  int   cLog;         /* must be logged in to use? */
+X  int   (*cFunc) ();    /* function to call for command */
+X};
+X
+XCommand CommandTable[] =
+X{
+X  "help", 0, DoHelp,
+X  "?", 0, DoHelp,
+X  "query", 0, DoQuery,
+X#ifndef MACC
+X  CLIENT, 0, DoQuery,
+X  "me", 1, DoMe,
+X  "edit", 1, DoEdit,
+X  "make", 1, DoMake,
+X  "password", 1, DoPassword,
+X  "passwd", 1, DoPassword,
+X  "login", 0, DoLogin,
+X  "logout", 1, DoLogout,
+X#endif
+X#ifdef MACC  
+X  "fields", 0, DoFields,
+X#else
+X  "fields", 0, DoOtherWPage,
+X  "switch", 0, DoSwitch,
+X#endif
+X#ifndef MACC
+X  "add", 1, DoOther,
+X  "delete", 1, DoOther,
+X  "set", 0, DoOther,
+X#endif
+X  "quit", 0, DoQuit,
+X  "bye", 0, DoQuit,
+X  "exit", 0, DoQuit,
+X  0, 0, 0
+X};
+X
+X/***********************************************************************
+X* the main loop
+X***********************************************************************/
+Xint LastCode = 0;`009/* the response from the previous command */
+Xvoid Interactive()
+X{
+X  char  inputLine[MAXSTR];  /* space for an input line */
+X  char *spot;
+X
+X  *MyAlias = 0;         /* nobody logged in yet... */
+X#ifndef MACC
+X  puts(rcsid);
+V  printf("Send mail to %s to get your password (see \"help password\").\n",PAS
+XSW);
+X  printf("Mail other questions or comments to %s.\n",ADMIN);
+X#else
+X  printf("Lookup - ELECTRONIC MAIL DIRECTORY SERVICE\n\n");
+X  printf("Please mail questions or comments to %s.\n",ADMIN);
+X#endif
+X
+X  /*
+X   * print database status
+X   */
+X  LastCode = DoOther("status\n",0);
+X
+X  /*
+X   * autologin if possible
+X   */
+X#ifndef MACC
+X  if (!NoNetrc) DoAutoLogin();
+X#endif
+X
+X  puts("");
+X  
+X  while (1)
+X  {
+X    (void) signal(SIGPIPE,SIG_IGN);
+X#ifdef MACC_ECHO
+X  if (!maccecho)
+X    printf("%s> ",Me);
+X#else
+X    printf("%s> ",Me);
+X#endif
+X    (void) fflush(stdout);  /* prompt */
+X    spot=inputLine;
+X    do {
+X      if (!fgets(spot, MAXSTR-(spot-inputLine), stdin))
+X`009return;        /* read line */
+X      spot = inputLine + strlen(inputLine)-2;
+X      if (*spot=='\\') *spot++ = ' ';
+X      else spot=inputLine-1;
+X    }
+X    while (spot>=inputLine);
+X#ifdef MACC_ECHO
+X`009if (maccecho)
+X    `009`009printf("%s> %s",Me,inputLine);
+X#endif
+X
+X    if (!(LastCode=DoCommand(inputLine)))   /* is it a command we know? */
+X      LastCode = DoOther(inputLine);    /* unrecognized command */
+X  }
+X}
+X
+X/***********************************************************************
+X* look at input line, and if we have a specific command for it, do it
+X***********************************************************************/
+Xint DoCommand(inputLine)
+Xchar   *inputLine;        /* the input line */
+X{
+X  char  scratch[MAXSTR];  /* some space */
+X  char   *theToken;       /* a token from the command line */
+X  Command *theCommand;    /* the command name */
+X  Command *doMe;
+X  int   len;
+X
+X  /* make a safe copy of the input line, so we can play with it */
+X  strcpy(scratch, inputLine);
+X
+X  if (!(theToken = strtok(scratch, DELIM)))
+X    return (LR_ERROR);       /* blank line */
+X
+X  /* search command table linearly */
+X  doMe = NULL;
+X  len = strlen(theToken);
+X  for (theCommand = CommandTable; theCommand->cName; theCommand++)
+X    if (!strncmp(theCommand->cName, theToken, len))
+X    {
+X      if (doMe)       /* we found 2 commands that match (bad) */
+X      {
+X`009printf("%s is ambiguous.\n", theToken);
+X`009return (LR_ERROR);
+X      }
+X      doMe = theCommand;  /* we found a command that matches */
+X    }
+X
+X  if (doMe)           /* found one and only one command */
+X  {
+X    /* expand command name */
+X    theToken = strtok((char *)0, "\n");
+X    sprintf(inputLine, "%s %s\n", doMe->cName, theToken ? theToken : "");
+X
+X    /* execute command */
+X    if (doMe->cLog && !*MyAlias)
+X      printf("You must be logged in to use %s.\n",doMe->cName);
+X    else
+X      return((*doMe->cFunc) (inputLine));
+X    return (LR_ERROR);
+X  }
+X
+X  return (0);         /* didn't find it */
+X}
+X
+X/***********************************************************************
+X* execute a command for which we do nothing special; use the pager
+X***********************************************************************/
+Xint DoOtherWPage(inputLine)
+Xchar   *inputLine;
+X{
+X  qprintf(ToQI,"%s",inputLine);   /* send command */
+X  qflush(ToQI);
+X  return (PrintResponse(1));  /* get response */
+X}
+X
+X/***********************************************************************
+X* execute a command for which we do nothing special; don't use pager
+X***********************************************************************/
+Xint DoOther(inputLine)
+Xchar   *inputLine;
+X{
+X  qprintf(ToQI,"%s",inputLine);   /* send command */
+X  qflush(ToQI);
+X  return (PrintResponse(0));  /* get response */
+X}
+X
+X#ifdef MACC
+Xint DoFields(inputLine)
+Xchar   *inputLine;
+X{
+X  printf("Field Name     Description\n"); 
+X  printf("------------------------------\n");
+X  printf("name          Person Name\n");
+X  printf("email         Electronic Mail Address if exists\n");
+X  printf("phone         Telephone Number One\n");
+X  printf("phone2        Telephone Number Two\n");
+X  printf("address       Street Address of the Building\n");
+X  printf("building      Building Name\n");
+X  printf("department    Department Number One of Person\n");
+X  printf("department2   Department number Two of Person\n");
+X  printf("appointment   Appointment Classification Code Number One \n");
+X  printf("appointment2  Appointment Classification Code Number Two\n");
+X  printf("title         Title One\n");
+X  printf("title2        Title Two\n");
+V  printf("alias         Unique Name built from First Letter of First Name, Las
+Xt\n");   
+X  printf("              Name and a Number\n\n"); 
+X  return(LR_OK);
+X}
+X#endif
+X
+X/***********************************************************************
+X* execute a query request
+X***********************************************************************/
+Xint DoQuery(inputLine)
+Xchar   *inputLine;
+X{
+X  char scratch[4096];
+X  char *args;
+X  int noReformatWas = NoReformat;
+X  int code;
+X
+X  if (ReturnFields && !issub(inputLine,"return"))
+X  {
+X    args=inputLine+strlen(inputLine)-1;
+X    sprintf(args," return %s\n",ReturnFields);
+X    for (;*args;args++) if (*args==',') *args=' ';
+X  }
+X  if (!NoBeautify && !NoReformat)
+X  {
+X    char *ret = issub(inputLine,"return");
+X    if (ret) NoReformat = !issub(ret,"email");
+X  }
+X  if (!DefType || issub(inputLine,"type="))
+X  {
+X     qprintf(ToQI,"%s",inputLine);   /* send command */
+X     qflush(ToQI);
+X  }
+X  else
+X  {
+X    strcpy(scratch,inputLine);
+X    args = strtok(scratch," \t");
+X    args = strtok(0,"\n");
+X    if (args)
+X    {
+V      qprintf(ToQI,"query type=\"%s\" %s\n",DefType,args);   /* send command *
+X/
+X      qflush(ToQI);
+X    }
+X    else
+X    {
+X      qprintf(ToQI,"%s",inputLine);
+X      qflush(ToQI);
+X    }
+X  }
+X  
+X  code = (NoBeautify ? PrintResponse(1) : PrintQResponse(1,0));
+X  NoReformat = noReformatWas;
+X  return (code);
+X}
+X
+X/***********************************************************************
+X* execute a login request
+X***********************************************************************/
+Xint DoLogin(inputLine)
+Xchar   *inputLine;
+X{
+X  char  encryptMe[MAXSTR];  /* string from nameserver */
+X  char  encrypted[MAXSTR];  /* string from ns, encrypted */
+X  char   *password;       /* user's nameserver password */
+X  int   code;
+X  char scratch[MAXSTR];
+X
+X  strcpy(scratch,inputLine);
+X  (void) strtok(scratch,DELIM);`009/* the login part of the command */
+X  if (!strtok(0,DELIM))`009`009/* check for an alias */
+X  {
+X    printf("Enter nameserver alias: ");`009/* ask for missing alias */
+X    fgets(scratch,sizeof(scratch),stdin);
+X    if (!*scratch) return(LR_ERROR);
+X    sprintf(inputLine,"login %s",scratch);
+X  }
+X
+X  qprintf(ToQI,"%s",inputLine);   /* send login request */
+X  qflush(ToQI);
+X
+X  for (;;)          /* read the response */
+X  {
+X    if (!GetGood(encryptMe, MAXSTR, FromQI))
+X    {
+X      fprintf(stderr, "Whoops--the nameserver died.\n");
+X      exit(1);
+X    }
+X    code = atoi(encryptMe);
+X    if (code != LR_LOGIN)   /* intermediate or strange response */
+X      fputs(encryptMe, stdout);
+X    if (code >= LR_OK)    /* final response */
+X      break;
+X  }
+X
+X  if (code == LR_LOGIN)
+X  {
+X    /* the nameserver has issued a challenge */
+X    password = MyPassword ? MyPassword :
+X`009`009  getpass("Enter nameserver password: ");
+X    crypt_start(password);
+X
+X    /* encrypt the challenge with the password */
+X    encryptMe[strlen(encryptMe) - 1] = '\0';    /* strip linefeed */
+X    encrypted[encryptit(encrypted, index(encryptMe, ':') + 1)] = '\0';
+X
+X    /* send the encrypted text to qi */
+X    qprintf(ToQI, "answer %s\n", encrypted);
+X    qflush(ToQI);
+X
+X    /* get the final response */
+X    for (;;)
+X    {
+X      if (!GetGood(encryptMe, MAXSTR, FromQI))
+X      {
+X`009fprintf(stderr, "Whoops--the nameserver died.\n");
+X`009exit(1);
+X      }
+X      code = atoi(encryptMe);
+X      fputs(encryptMe, stdout);
+X      if (code >= LR_OK)  /* final response */
+X`009break;
+X    }
+X  }
+X
+X  if (code == LR_OK)      /* logged in */
+X  {
+X    strcpy(MyAlias, index(encryptMe, ':') + 1);
+X    *index(MyAlias, ':') = '\0';
+X    VetPassword(password);  /* make sure password is reasonable */
+X  }
+X  else
+X    *MyAlias = '\0';
+X  return(code);
+X}
+X
+X/***********************************************************************
+X* execute a quit request
+X***********************************************************************/
+Xint DoQuit(inputLine)
+Xchar   *inputLine;
+X{
+X  DoOther("quit\n");
+X#ifdef VMS
+X  exit(SS$_NORMAL);
+X#else
+X  exit(LastCode<LR_OK || LastCode >=LR_MORE ? LastCode/100 : 0);
+X#endif
+X}
+X
+X/***********************************************************************
+X* edit a field
+X***********************************************************************/
+Xint DoEdit(inputLine)
+Xchar   *inputLine;
+X{
+X  char   *theField;
+X  char   *theAlias;
+X  char   *theValue;
+X  int theCode=LR_OK;
+X  char confirm[10];
+X
+X  (void) strtok(inputLine, DELIM);  /* skip ````edit'' */
+X  if (!(theField = strtok((char *) 0, DELIM)))
+X  {
+X    (void) DoCommand("help edit\n");
+X    return(LR_ERROR);
+X  }
+X
+X  if (!(theAlias = strtok((char *) 0, DELIM)))
+X    theAlias = MyAlias;
+X
+X  if ((theValue = GetValue(theAlias, theField)) && EditValue(theValue))
+X  {
+X    for (theCode=UpdateValue(theAlias,theField,theValue);
+X         400<=theCode && theCode<=499;
+X`009 theCode=UpdateValue(theAlias,theField,theValue))
+X    {
+X      if (!isatty(0)) break;
+X      printf("Shall I try again [y/n]? ");
+X      fgets(confirm,sizeof(confirm),stdin);
+X      if (*confirm!='y' && *confirm!='Y') break;
+X    }
+X    if (theCode<300 && !strcmp(theField,"alias"))
+X      strcpy(MyAlias,theValue);
+X  }
+X  return(theCode);
+X}
+X
+X/***********************************************************************
+X* get the value of a field from the nameserver
+X***********************************************************************/
+Xchar *GetValue(theAlias, theField)
+Xchar   *theAlias;
+Xchar   *theField;
+X{
+X  static char theValue[MAXVAL];     /* will hold the value */
+X  char   *vSpot;
+X  char  scratch[MAXSTR];
+X  int   code;
+X
+X  if (!strcmp(theField, "password"))
+X  {
+X    puts("Use the ````password'' command, not edit.");
+X    return (NULL);
+X  }
+X
+X  /* do the query */
+X  qprintf(ToQI, "query alias=%s return %s\n", theAlias, theField);
+X  qflush(ToQI);
+X
+X  *theValue = '\0';
+X
+X  /* read qi response lines, concatenating the responses into one value */
+X  for (vSpot = theValue;; vSpot += strlen(vSpot))
+X  {
+X    if (!GetGood(scratch, MAXSTR, FromQI))
+X    {
+X      fprintf(stderr, "Ding-dong the server's dead!\n");
+X      exit(0);
+X    }
+X    if ((code = atoi(scratch)) == -LR_OK)
+X      strcpy(vSpot, index(GetQValue(scratch), ':') + 2);  /* part of value */
+X    else
+X    if (code >= LR_OK)
+X      break;        /* final response */
+X    else
+X      fputs(scratch, stdout);   /* ??? */
+X  }
+X
+X  if (code != LR_OK)      /* error */
+X    fputs(scratch, stdout);
+X
+X  return (code == LR_OK ? theValue : NULL);
+X}
+X
+X/***********************************************************************
+X* Edit a value
+X***********************************************************************/
+Xint EditValue(theValue)
+Xchar   *theValue;         /* the value to edit */
+X{
+X  char   *theFileName;    /* name of temp file to use */
+X  char   *mktemp();
+X#ifdef VMS
+X  struct dsc$descriptor_s cli_input;
+X  char  template[28], f1[28], f2[28], edit_command[64];
+X  int   istat;
+X#else
+X  char  template[20];
+X#endif
+X  int   fd;         /* file descriptor for temp file */
+X  static char newValue[MAXVAL];     /* new value */
+X  char   *editor;           /* editor program to use */
+X  int   bytes;            /* numnber of bytes in file */
+X  register char *from, *to;
+X  int   badChar;          /* did we find a bad character? */
+X  int   junk;
+X  char scratch[80];
+X
+X  /* put the value into a temp file */
+X#ifdef VMS
+X  strcpy(template, "SYS$SCRATCH:PHXXXXXX.TMP");
+X  theFileName = mktemp(template);
+X  strcpy (f1, theFileName);
+X  strcpy (f2, theFileName);
+X  strcat (f1, ";1");      /* versions needed for delete function */
+X  strcat (f2, ";2");
+X  if ((fd = creat(theFileName, 0)) < 0)
+X#else
+X  strcpy(template, "/tmp/phXXXXXX");
+X  theFileName = mktemp(template);
+X  if ((fd = open(theFileName, O_RDWR | O_CREAT, 0777)) < 0)
+X#endif
+X  {
+X    perror(theFileName);
+X    return (0);
+X  }
+X
+X  if (write(fd, theValue, strlen(theValue)) < 0)
+X  {
+X    perror(theFileName);
+X    (void) close(fd);
+X    return (0);
+X  }
+X
+X  (void) close(fd);
+X
+X  /* run an editor on the temp file */
+X#ifdef VMS
+X  if (!(editor = getenv("EDITOR")))
+X    editor = "EDIT/EDT";
+X
+X  strcpy(edit_command, editor);
+X  strcat(edit_command, " ");
+X  strcat(edit_command, theFileName);
+X  cli_input.dsc$w_length = strlen(edit_command);  /* descriptor for spawn */
+X  cli_input.dsc$a_pointer = edit_command;
+X  cli_input.dsc$b_class = DSC$K_CLASS_S;
+X  cli_input.dsc$b_dtype = DSC$K_DTYPE_T;
+X
+X  if( (istat = LIB$SPAWN(&cli_input)) != SS$_NORMAL )
+X  {
+X    (void) delete (f1);
+X    exit(istat);
+X  }
+X#else
+X  if (!(editor = getenv("EDITOR")))
+X#ifdef hpux
+X    editor = "/usr/bin/vi";
+X#else
+X    editor = "/usr/ucb/vi";
+X#endif
+X
+X  if (fork())
+X    (void) wait((union wait *)&junk);
+X  else
+X  {
+X    (void) execlp(editor, editor, theFileName, NULL);
+X    fprintf(stderr,"Whoops!  Failed to exec %s\n",editor);
+X    exit(1);
+X  }
+X#endif
+X
+X  /* does the user want the value? */
+X  if (Confirm)
+X  { 
+X    do
+X    {
+X      printf("Change the value [y]? ");
+X      gets(scratch);
+X    }
+X    while (*scratch && !index("yYnN",*scratch));
+X  }
+X  
+X  /* read the value back out */
+X  if ((fd = open(theFileName, 0)) < 0)
+X  {
+X    perror(theFileName);
+X#ifdef VMS
+X#else
+X    (void) unlink(theFileName);
+X#endif
+X    return (0);
+X  }
+X
+X#ifdef VMS
+X#else
+X  (void) unlink(theFileName);
+X#endif
+X
+X  if ((bytes = read(fd, newValue, MAXSTR - 1)) < 0)
+X  {
+X    perror(theFileName);
+X    (void) close(fd);
+X#ifdef VMS
+X    (void) delete (f1);   /* delete 1st temp file */
+X    (void) delete (f2);   /* delete 2nd temp file */
+X#endif
+X    return (0);
+X  }
+X  (void) close(fd);
+X#ifdef VMS
+X  (void) delete (f1);     /* delete 1st temp file */
+X  (void) delete (f2);     /* delete 2nd temp file */
+X#endif
+X  newValue[bytes] = 0;
+X
+X  /* did the value change? */
+X  if (Confirm && *scratch && *scratch!='y' && *scratch!='Y' ||
+X      !strcmp(newValue, theValue))
+X    return (0);
+X
+X  /* copy new value into old, stripping bad characters */
+X  badChar = 0;
+X  for (to = theValue, from = newValue; *from; from++)
+X    if (*from == '"')
+X    {
+X      *to++ = '\\';
+X      *to++ = '"';
+X    }
+X    else
+X    if (*from >= ' ' && *from <= '~')
+X      *to++ = *from;
+X    else
+X    if (*from == '\t')
+X    {
+X      *to++ = '\\';
+X      *to++ = 't';
+X    }
+X    else
+X    if (*from == '\n')
+X    {
+X      if (*(from + 1))  /* skip terminating newline from vi */
+X      {
+X`009*to++ = '\\';
+X`009*to++ = 'n';
+X      }
+X    }
+X    else
+X      badChar = 1;
+X
+X  *to = 0;
+X
+X  if (badChar)        /* complain if we found bad characters */
+X  {
+X    fputs("Illegal characters were found in your value.\n", stderr);
+V    fputs("Please use only printable characters, newlines, and tabs.\n", stder
+Xr);
+X    fputs("The offending characters were removed.\n", stderr);
+X  }
+X
+X  return (1);
+X}
+X
+X/***********************************************************************
+X* update a nameserver field with a new value
+X***********************************************************************/
+Xint UpdateValue(theAlias, theField, theValue)
+Xchar   *theAlias;
+Xchar   *theField;
+Xchar   *theValue;
+X{
+V  qprintf(ToQI, "change alias=%s make %s=\"%s\"\n", theAlias, theField, theVal
+Xue);
+X  qflush(ToQI);
+X
+X  return(PrintResponse(0));
+X}
+X/***********************************************************************
+X* print info on current user
+X***********************************************************************/
+X/*ARGSUSED*/
+Xint DoMe(inputLine)
+Xchar   *inputLine;
+X{
+X  if (!*MyAlias)
+X  {
+X    return(DoHelp("help me"));
+X  }
+X
+X  qprintf(ToQI, "query alias=%s return all\n", MyAlias);
+X  qflush(ToQI);
+X
+X  return(NoBeautify ? PrintResponse(0) : PrintQResponse(0,0));
+X}
+X
+X/***********************************************************************
+X* set command-line switches
+X***********************************************************************/
+Xint DoSwitch(inputLine)
+Xchar   *inputLine;
+X{
+X  inputLine = strtok(inputLine,DELIM);
+X  if (!OptionLine(strtok(0,"\n")))
+X  {
+X    printf("The following things can be changed with \"switch\":\n\n");
+X    printf("  Paging is %s; use \"switch -%c\" to turn it %s.\n",
+X    `009NoPager ? "OFF" : "ON",
+X    `009NoPager ? 'M' : 'm',
+X    `009NoPager ? "on" : "off");
+X    printf("  Email reformatting is %s; use \"switch -%c\" to turn it %s.\n",
+X    `009NoReformat ? "OFF" : "ON",
+X    `009NoReformat ? 'R' : 'r',
+X    `009NoReformat ? "on" : "off");
+V    printf("  Query beautification is %s; use \"switch -%c\" to turn it %s.\n"
+X,
+X    `009NoBeautify ? "OFF" : "ON",
+X    `009NoBeautify ? 'B' : 'b',
+X    `009NoBeautify ? "on" : "off");
+X    printf("  Label printing is %s; use \"switch -%c\" to turn it %s.\n",
+X    `009NoLabels ? "OFF" : "ON",
+X    `009NoLabels ? 'L' : 'l',
+X    `009NoLabels ? "on" : "off");
+X    printf("  Edit confirmation is %s; use \"switch -%c\" to turn it %s.\n",
+X    `009Confirm ? "ON" : "OFF",
+X    `009Confirm ? 'c' : 'C',
+X    `009Confirm ? "off" : "on");
+X    printf("  Default entry type is %s; use \"switch -%c%s\" to %s %s.\n",
+X    `009DefType ? DefType : "OFF",
+X    `009DefType ? 'T' : 't',
+X    `009DefType ? "" : " name-of-type",
+X    `009DefType ? "turn it" : "set it to",
+X`009DefType ? "off" : "\"name-of-type\"");
+X    printf("  Default field list is %s; use \"switch -%c%s\" to %s to %s.\n",
+X        ReturnFields ? ReturnFields : "default",
+X`009ReturnFields ? 'F' : 'f',
+X`009ReturnFields ? "" : " field1,field2,... ",
+X`009ReturnFields ? "revert" : "set it",
+X`009ReturnFields ? "default" : "\"field1,field2,...\"");
+X    printf("\nThe following things cannot be changed with \"switch\":\n\n");
+X    printf("  Connected to server %s at port %d\n", UseHost,UsePort);
+X    printf("  The .netrc file was %sread.\n", NoNetrc ? "not " : "");
+X  }
+X  return(LR_OK);
+X}
+X
+X/***********************************************************************
+X* change a field value from the command line
+X***********************************************************************/
+Xint DoMake(inputLine)
+Xchar   *inputLine;
+X{
+X  int theCode=LR_ERROR;
+X
+X  if (!*MyAlias)
+X    DoHelp("help make");
+X  else
+X  {
+X    qprintf(ToQI,"change alias=%s %s",MyAlias,inputLine);
+X    qflush(ToQI);
+X    theCode = PrintResponse(0);
+X  }
+X  return(theCode);
+X}
+X  
+X/***********************************************************************
+X* change password
+X***********************************************************************/
+Xint DoPassword(inputLine)
+Xchar   *inputLine;
+X{
+X  char  password[80];
+X  char   *confirm;
+X  char   *theAlias;
+X  int theCode=LR_ERROR;
+X
+X  if (!*MyAlias)
+X  {
+X    return(DoHelp("help password"));
+X  }
+X
+X  /* which alias to use? */
+X  (void) strtok(inputLine, DELIM);
+X  if (!(theAlias = strtok((char *) 0, DELIM)))
+X    theAlias = MyAlias;
+X
+X  /* get the password */
+X  strcpy(password, getpass("Enter new password: "));
+X  if (!*password) return(LR_ERROR);
+X  confirm = getpass("Type it again: ");
+X  if (strcmp(confirm, password))
+X  {
+X    fprintf(stderr, "Sorry--passwords didn't match.\n");
+X    return(theCode);
+X  }
+X  VetPassword(confirm);     /* complain if we don't like the password */
+X
+X  /* encrypt and send the password */
+X  password[encryptit(password, confirm)] = '\0';
+X  qprintf(ToQI, "change alias=%s make password=%s\n", theAlias, password);
+X  qflush(ToQI);
+X
+X  /* see what the nameserver says */
+X  if ((theCode=PrintResponse(0)) == LR_OK && !strcmp(theAlias,MyAlias))
+X    crypt_start(confirm);
+X  return(theCode);
+X}
+X
+X/***********************************************************************
+X* log out the current user
+X***********************************************************************/
+Xint DoLogout(inputLine)
+Xchar   *inputLine;
+X{
+X  *MyAlias = '\0';
+X  return(DoOther(inputLine));
+X}
+X
+X/***********************************************************************
+X* complain about passwords we don't like
+X***********************************************************************/
+Xvoid VetPassword(thePassword)
+Xchar   *thePassword;
+X{
+X  if (strlen(thePassword) < 5 ||    /* too short */
+X    AllDigits(thePassword)) /* digits only */
+X    fputs("That is an insecure password; please change it.\n", stderr);
+X}
+X
+X/***********************************************************************
+X* is a string all digits
+X***********************************************************************/
+Xint AllDigits(theString)
+Xregister char *theString;
+X{
+X  for (; *theString; theString++)
+X    if (!isdigit(*theString))
+X      return (0);
+X  return (1);
+X}
+X
+X/***********************************************************************
+X* print the response to a query
+X* this strips out all the nameserver reply codes.
+X***********************************************************************/
+Xint PrintQResponse(reformatEmail,amHelping)
+Xint reformatEmail;
+Xint amHelping;
+X{
+X  char  theLine[MAXSTR];
+X  int   theCode=LR_ERROR;
+X  int   currentPerson = 0;
+X  int   thePerson;
+X  register char *cp;
+X  FILE   *theOutput;
+X  char  alias[MAXSTR];
+X  char  email[MAXSTR];
+X  int copiedEmail=0;
+X
+X  theOutput = OpenPager(1);
+X
+X  *alias = *email = 0;`009`009/* haven't found an alias yet */
+X  if (NoReformat) reformatEmail=0;
+X  /* get the response */
+X  while (GetGood(theLine, MAXSTR, FromQI))
+X  {
+X    theCode = atoi(theLine);
+X    if (theCode == LR_NUMRET)
+X    {
+X#ifdef MACC
+X`009cp = strchr(theLine,':');
+X`009if ( cp != 0)
+V`009fprintf(theOutput,"\n%s\n",cp+1); /* strchr returns pointer to : then add 
+Xone */
+X#endif MACC
+X    }
+X    else
+X    if (theCode == -LR_OK || theCode == -LR_AINFO || theCode == -LR_ABSENT
+X      || theCode == -LR_ISCRYPT)
+X    {
+X      thePerson = atoi(index(theLine, ':') + 1);
+X      /* output a delimiter */
+X      if (thePerson != currentPerson)
+X      {
+X`009if (*alias && !*email)
+X`009  NotRegisteredLine(alias,theOutput);
+X`009else if (*email)
+X`009{
+X`009  EmailLine(email,alias);
+X`009  fputs(GetQValue(email),theOutput);
+X`009  *email = 0;
+X`009}
+X`009fputs("----------------------------------------\n", theOutput);
+X`009currentPerson = thePerson;
+X`009copiedEmail=0;
+X      }
+X      if (reformatEmail)
+X      {
+X`009cp = GetQValue(theLine);
+X`009while (*cp && *cp==' ') cp++;
+X`009if (!strncmp("alias",cp,5))
+X`009{
+X`009  copiedEmail = 0;
+X`009  strcpy(alias,theLine);
+X`009  continue;
+X`009}
+X`009else if (!strncmp("email",cp,5))
+X`009{
+X`009  strcpy(email,theLine);
+X`009  copiedEmail = 1;
+X`009  continue;
+X`009}
+X`009else if (*cp==':' && copiedEmail)
+X`009  continue;
+X`009else
+X`009  copiedEmail = 0;
+X      }
+X      /* output the line */
+X      if (NoLabels && !amHelping)
+X        fputs(index(GetQValue(theLine),':')+2, theOutput);
+X      else
+X        fputs(GetQValue(theLine), theOutput);
+X    }
+X    else if (theCode != LR_OK)
+X      fputs(theLine, theOutput);  /* error */
+X
+X    if (theCode >= LR_OK)
+X    {
+X      if (*alias && !*email)
+X`009NotRegisteredLine(alias,theOutput);
+X      else if (*email)
+X      {
+X`009EmailLine(email,alias);
+X`009/* output the line */
+X`009if (NoLabels && !amHelping)
+X`009  fputs(index(GetQValue(email),':')+2, theOutput);
+X`009else
+X`009  fputs(GetQValue(email), theOutput);
+X      }
+X      break;
+X    }
+X  }
+X
+X  /* final "delimiter" */
+X  if (currentPerson)
+X    fputs("----------------------------------------\n", theOutput);
+X  
+X#ifdef VMS
+X#else
+X  if (theOutput != stdout)
+X    (void) pclose(theOutput);
+X#endif
+X
+X  return(theCode);
+X}
+X
+X#ifndef NeXT
+X/***********************************************************************
+X* break a string into tokens.  this code is NOT lifted from sysV, but
+X* was written from scratch.
+X***********************************************************************/
+X/*
+X * function:   strtok purpose:  to break a string into tokens parameters:
+X * s1 string to be tokenized or 0 (which will use last string) s2 delimiters
+X * returns:  pointer to first token.  Puts a null after the token. returns
+X * NULL if no tokens remain. 
+X */
+Xchar   *
+Xstrtok(s1, s2)
+Xchar   *s1, *s2;
+X{
+X  static char *old = 0;
+X  char   *p1, *p2;
+X
+X  if (!(s1 || old))
+X    return (NULL);
+X  p1 = (s1 ? s1 : old);
+X  while (*p1 && (index(s2, *p1) != NULL))
+X    p1++;
+X  if (*p1)
+X  {
+X    p2 = p1;
+X    while (*p2 && (index(s2, *p2) == NULL))
+X      p2++;
+X    if (*p2)
+X    {
+X      *p2 = '\0';
+X      old = ++p2;
+X    }
+X    else
+X      old = 0;
+X    return (p1);
+X  }
+X  else
+X    return (NULL);
+X}
+X#endif
+X#ifdef VMS
+X/*        setterm.c
+X *
+X *    module in termlib
+X *
+X *    contains routines to set terminal mode
+X *
+X *    V1.0 19-jul-84  P. Schleifer  Initial draft
+X */
+X
+Xsetterm(characteristic, state)
+Xlong  *characteristic, *state;
+X{
+X  int     status;
+X  long    efn;
+X  long    new_state;
+X  short     term_chan;
+X  struct char_buff  mode;
+X  struct mode_iosb  term_iosb;
+X  $DESCRIPTOR(term_desc, "TT:");
+X
+X  /* get event flag */
+X  status = lib$get_ef(&efn);
+X  if ( status != SS$_NORMAL ) return (status);
+X
+X  /* get channel to terminal */
+X  status = sys$assign(&term_desc, &term_chan, 0, 0);
+X  if (status != SS$_NORMAL) return (status);
+X
+V  /* if characteristic is BROADCAST, ECHO, or TYPEAHEAD, state must be toggled
+X */
+V  if (*characteristic == BROADCAST || *characteristic == ECHO || *characterist
+Xic == TYPEAHEAD)
+X    new_state = !(*state);
+X  else
+X    new_state = *state;
+X
+X  /* get current mode */
+V  status = sys$qiow(efn, term_chan, IO$_SENSEMODE, &term_iosb, 0, 0, &mode, 12
+X, 0, 0, 0, 0);
+V  if (status != SS$_NORMAL || term_iosb.stat != SS$_NORMAL) { sys$dassgn(term_
+Xchan); return (status); }
+X
+X  /* change characteristics buffer */
+X  if (new_state == ON)
+X    mode.basic_char |= *characteristic;
+X  else
+X    mode.basic_char &= ~(*characteristic);
+X
+X  /* $ SET TERM/...  and then deassign channel */
+V  status = sys$qiow(efn, term_chan, IO$_SETMODE, &term_iosb, 0, 0, &mode, 12, 
+X0, 0, 0, 0);
+X
+X  sys$dassgn(term_chan);
+X  lib$free_ef(&efn);
+X
+X  if (status != SS$_NORMAL) return (status);
+X  else return (term_iosb.stat);
+X}
+X
+X/***********************************************************************
+X* get password from stdin
+X*
+X* implement for VMS, since VAXCRTL lacks getpass() function.
+X***********************************************************************/
+Xchar *getpass(prompt)
+Xchar *prompt;
+X{
+X
+Xstatic char line [12];
+Xstatic int echo = {ECHO}, off = {OFF}, on = {ON};
+X
+X  printf(prompt); (void) fflush(stdout);        /* prompt */
+X  setterm(&echo, &off);
+X  gets(line);
+X  setterm(&echo, &on);
+X  puts("");
+X  return(line);
+X}
+X#endif
+X
+X/***********************************************************************
+X* use .netrc to login to nameserver, if possible
+X***********************************************************************/
+Xvoid DoAutoLogin()
+X{
+X  FILE *netrc;    /* the .netrc file */
+X  char pathName[1024];/* pathname of .netrc file */
+X  struct stat theStat;/* permissions, etc. of .netrc file */
+X  char key[80], val[80];    /* line from the .netrc file */
+X  char *token;    /* token (word) from the line from the .netrc file */
+X  char *alias=NULL;   /* the user's alias */
+X  char *pw=NULL;    /* the user's password */
+X
+X  /*
+X   * manufacture the pathname of the user's .netrc file
+X   */
+X  sprintf(pathName,"%s/.netrc",getenv("HOME"));
+X
+X  /*
+X   * make sure its permissions are ok
+X   */
+X  if (stat(pathName,&theStat)<0)
+X    return;
+X  if (theStat.st_mode & 077)
+X    return;             /* refuse insecure files */
+X
+X  /*
+X   * try to open it
+X   */
+X  if (!(netrc=fopen(pathName,"r")))
+X    return;
+X
+X  /*
+X   * look for a ````machine'' named ````ph''
+X   */
+X  while (2==fscanf(netrc,"%s %s",key,val))
+X  {
+X    if (!strcmp(key,"machine") && !strcmp(val,CLIENT))
+X    {
+X      /*
+X       * found an entry for ph.  look now for other items
+X       */
+X      while (2==fscanf(netrc,"%s %s",key,val))
+X      {
+X`009if (!strcmp(key,"machine"))     /* new machine */
+X`009{
+X`009    if (alias) {free(alias);alias=NULL;}
+X`009    if (pw) {free(pw);pw=NULL;}
+X`009    break;
+X`009}
+X`009else if (!strcmp(key,"login"))
+X`009    alias=strcpy(malloc((unsigned)strlen(val)+1),val);
+X`009else if (!strcmp(key,"password"))
+X`009    pw=strcpy(malloc((unsigned)strlen(val)+1),val);
+X`009else if (!strcmp(key,"macdef")) SkipMacdef(netrc);
+X
+X`009if (alias && pw && TryLogin(alias,pw))
+X`009  goto done;
+X      }
+X    }
+X    else if (!strcmp(key,"macdef")) SkipMacdef(netrc);
+X  }
+X
+Xdone:
+X  if (alias) free(alias);
+X  if (pw) free(pw);
+X  return;
+X}
+X
+X/***********************************************************************
+X* skip a macdef in the .netrc file
+X***********************************************************************/
+Xvoid SkipMacdef(netrc)
+XFILE *netrc;
+X{
+X  int c, wasNl;
+X  
+X  for (wasNl=0;(c=getc(netrc))!=EOF;wasNl=(c=='\n'))
+X    if (wasNl && c=='\n') break;
+X}
+X
+X/***********************************************************************
+X* try a login alias and password
+X***********************************************************************/
+Xint TryLogin(alias,password)
+Xchar *alias;
+Xchar *password;
+X{
+X  char loginLine[80];
+X  int success;
+X
+X  /*
+X   * construct a login line
+X   */
+X  sprintf(loginLine,"login %s\n",alias);
+X
+X  /*
+X   * set our password
+X   */
+X  MyPassword=password;
+X
+X  /*
+X   * try the login
+X   */
+X  success = DoLogin(loginLine,0);
+X
+X  /*
+X   * reset our password
+X   */
+X  MyPassword = NULL;
+X  while (*password) *password++ = 'x';
+X
+X  /*
+X   * return our success (or failure)
+X   */
+X  return(success);
+X}
+X
+X
+X/***********************************************************************
+X* execute a help request
+X***********************************************************************/
+Xint DoHelp(inputLine)
+Xchar   *inputLine;
+X{
+X  char scratch[256];
+X  char *token;
+X  
+X  strcpy(scratch,inputLine);
+X  token = strtok(scratch+4,DELIM);`009/* the word after help */
+X  if (token && !strcmp(token,"native")) /* looking for native help */
+X    strcpy(scratch,inputLine);`009`009/* leave the command alone */
+X  else
+X    sprintf(scratch,"help %s %s",CLIENT,inputLine+4); /* insert identifier */
+X    
+X  qprintf(ToQI,"%s",scratch);   /* send command */
+X  qflush(ToQI);
+X  return (NoBeautify ? PrintResponse(0) : PrintQResponse(0,1));
+X}
+X
+X/************************************************************************
+X * reformat an email line to include an alias address
+X * this is kind of a hack since we're working on an already-formatted line
+X ************************************************************************/
+Xvoid EmailLine(email,alias)
+Xchar *email;
+Xchar *alias;
+X{
+X  char scratch[MAXSTR];
+X  char *emSpot;`009`009/* beginning of email account */
+X  char *alSpot;`009`009/* beginning of nameserver alias */
+X  
+X  if (*alias)
+X  {
+X    emSpot = index(GetQValue(email), ':') + 2;
+X    alSpot = index(GetQValue(alias), ':') + 2;
+X    *index(alSpot,'\n') = 0;
+X    *index(emSpot,'\n') = 0;
+X    /*
+X     * overwrite the email label
+X     */
+X    strcpy(alSpot-2-strlen("email to"),"email to");
+X    alSpot[-2] = ':';`009/* strcpy clobbered the colon; repair */
+X    sprintf(scratch,"@%s (%s)\n",MAILDOMAIN,emSpot);
+X    strcat(alias,scratch);
+X    strcpy(email,alias);`009`009/* leave it in the "email" line */
+X    *alias = 0;`009`009`009/* we're done with the alias */
+X  }
+X}
+X
+X/************************************************************************
+X * put out a ````not registered'' line with alias
+X ************************************************************************/
+Xvoid NotRegisteredLine(alias,theOutput)
+Xchar *alias;
+XFILE *theOutput;
+X{
+X  char scratch[MAXSTR];
+X  register char *cp;
+X  
+X  strcpy(scratch,alias);
+X  cp = index(GetQValue(scratch),':');
+X  strcpy(cp-7,"email");
+X  cp[-2] = ':';
+X  strcpy(cp,"no account registered\n");
+X  EmailLine(scratch,alias);
+X  /* output the line */
+X  if (NoLabels)
+X    fputs(index(GetQValue(scratch),':')+2, theOutput);
+X  else
+X    fputs(GetQValue(scratch), theOutput);
+X  *alias = 0; `009`009`009`009/* done with alias */
+X}
+X
+X/************************************************************************
+X * process a set of options
+X ************************************************************************/
+Xint ProcessOptions(argc,argv)
+Xint argc;
+Xchar **argv;
+X{
+X  int count = 0;
+X  /*
+X   * options processing
+X   */
+X  for (;argc && **argv=='-'; argc--,argv++,count++)
+X  {
+X    for ((*argv)++; **argv; (*argv)++)
+X    {
+X      switch(**argv)
+X      {
+X`009case 'r': NoReformat = 1; break;
+X`009case 'R': NoReformat = 0; break;
+X`009case 'n': NoNetrc = 1; break;
+X`009case 'N': NoNetrc = 0; break;
+X`009case 'm': NoPager = 1; break;
+X`009case 'M': NoPager = 0; break;
+X`009case 'b': NoBeautify = 1; break;
+X`009case 'B': NoBeautify = 0; break;
+X`009case 'l': NoLabels = 1; break;
+X`009case 'L': NoLabels = 0; break;
+X`009case 'C': Confirm = 1; break;
+X`009case 'c': Confirm = 0; break;
+X`009case 's':
+X`009  if (argv[0][1])
+X`009  {
+X`009    if (UseHost) free(UseHost);
+X`009    UseHost = makestr(*argv + 1);
+X`009    goto whilebottom;
+X`009  }
+X`009  else if (argc>1)
+X`009  {
+X`009    if (UseHost) free(UseHost);
+X`009    UseHost = makestr(argv[1]);
+X`009    argc--,argv++,count++;
+X`009    goto whilebottom;
+X`009  }
+X`009  else
+X`009    fprintf(stderr,"-%c option given without server hostname.\n", **argv);
+X`009  break;
+X`009case 't':
+X`009  if (argv[0][1])
+X`009  {
+X`009    if (DefType) free(DefType);
+X`009    DefType = makestr(*argv + 1);
+X`009    goto whilebottom;
+X`009  }
+X`009  else if (argc>1)
+X`009  {
+X`009    if (DefType) free(DefType);
+X`009    DefType = makestr(argv[1]);
+X`009    argc--,argv++,count++;
+X`009    goto whilebottom;
+X`009  }
+X`009  else
+X`009    fprintf(stderr,"-%t option given without entry type.\n", **argv);
+X`009  break;
+X`009case 'f':
+X`009  if (argv[0][1])
+X`009  {
+X`009    if (ReturnFields) free(ReturnFields);
+X`009    ReturnFields = makestr(*argv + 1);
+X`009    goto whilebottom;
+X`009  }
+X`009  else if (argc>1)
+X`009  {
+X`009    if (ReturnFields) free(ReturnFields);
+X`009    ReturnFields = makestr(argv[1]);
+X`009    argc--,argv++,count++;
+X`009    goto whilebottom;
+X`009  }
+X`009  else
+X`009    fprintf(stderr,"-%t option given without field list.\n", **argv);
+X`009  break;
+X`009case 'F':
+X`009  if (ReturnFields) free(ReturnFields);
+X`009  ReturnFields = 0;
+X`009  break;
+X`009case 'T':
+X`009  if (DefType) free(DefType);
+X`009  DefType = 0;
+X`009  break;
+X`009case 'p':
+X`009  if (isdigit(argv[0][1]))
+X`009  {
+X`009    UsePort = htons(atoi(*argv + 1));
+X`009    goto whilebottom;
+X`009  }
+X`009  else if (argc>1 && isdigit(*argv[1]))
+X`009  {
+X`009    UsePort = htons(atoi(argv[1]));
+X`009    argc--,argv++,count++;
+X`009    goto whilebottom;
+X`009  }
+X`009  else
+X`009    fprintf(stderr,"-%c option given without port number.\n", **argv);
+X`009  break;
+X`009default:
+X`009  fprintf(stderr,"Unknown option: -%c.\n",**argv);
+X      }
+X    }
+X    whilebottom:;
+X  }
+X  return(count);
+X}
+X
+X/************************************************************************
+X * Process a lineful of options
+X ************************************************************************/
+XOptionLine(line)
+Xchar *line;
+X{
+X  int argc;
+X  char *argv[MAXARGS];
+X  char *token;
+X  
+X  if (!line || !*line) return;
+X  
+X  for (argc=0,token=strtok(line,DELIM);token;argc++,token=strtok(0,DELIM))
+X    argv[argc] = token;
+X  argv[argc] = 0;
+X  
+X  return(ProcessOptions(argc,argv));
+X}
+X
+X/************************************************************************
+X * OpenPager - open the user's chosen pager
+X ************************************************************************/
+XFILE *OpenPager(doPaging)
+Xint doPaging;
+X{
+X  char *thePager;
+X  FILE *theOutput;
+X  
+X#ifdef VMS
+X  return(stdout);     /* simpler to skip paging for right now */
+X#else
+X  if (NoPager || doPaging!=1)
+X    return(stdout);
+X  else
+X  {
+X    if ((thePager = getenv("PAGER")) == NULL)
+X#ifdef hpux
+X      thePager = "/usr/bin/more";
+X#else
+X      thePager = "/usr/ucb/more";
+X#endif
+X    if ((theOutput = popen(thePager, "w")) == NULL)
+X      theOutput = stdout;
+X    return(theOutput);
+X  }
+X#endif
+X}
+X
+X/************************************************************************
+X * makestr - make a copy of a string in malloc-space
+X ************************************************************************/
+Xchar *makestr(str)
+Xchar *str;
+X{
+X  char *copy;
+X  int len;
+X  
+X  len = strlen(str);
+X  if (copy=malloc(len+1))
+X    strcpy(copy,str);
+X  return(copy);
+X}
+X
+X/************************************************************************
+X * issub - is one string a substring of another?
+X ************************************************************************/
+Xchar *issub(string, sub)
+Xchar   *string;
+Xchar   *sub;
+X{
+X  int   len;
+X
+X  len = strlen(sub);
+X  for (; *string; string++)
+X    if (!strncmp(string, sub, len))
+X      return (string);
+X  return (0);
+X}
+X
+X/***********************************************************************
+X * EnvOptions - grab some options from the environment
+X ***********************************************************************/
+Xvoid EnvOptions(name)
+Xchar *name;
+X{
+X  char buffer[80];
+X  register char *np,*bp;
+X
+X  for (np=name,bp=buffer; *np; np++,bp++)
+X    *bp = islower(*np) ? toupper(*np) : *np;
+X  *bp = 0;
+X  OptionLine(getenv(buffer));
+X}
+$GoSub Convert_File
+$File_is="PROTOCOL.TXT"
+$Check_Sum_is=1746407126
+$Copy SYS$Input VMS_SHAR_DUMMY.DUMMY
+X
+X
+X
+X
+X
+X
+X
+V                N`008Na`008am`008me`008es`008se`008er`008rv`008ve`008er`008r S
+V`008Se`008er`008rv`008ve`008er`008r-`008-C`008Cl`008li`008ie`008en`008nt`008t 
+XL`008La`008an`008ng`008gu`008ua`008ag`008ge`008e
+X                        by Steven Dorner
+X                    Computing Services Office
+X                     University of Illinois
+X                             6/1/89
+X
+XI`008In`008nt`008tr`008ro`008od`008du`008uc`008ct`008ti`008io`008on`008n
+X
+VThe language (or _`008p_`008r_`008o_`008t_`008o_`008c_`008o_`008l, if you pref
+Xer) used between the CSO
+XNameserver and its clients is meant to be relatively easy to gen-
+Xerate and to parse, so that it can be used by programs.  It is
+Xalso meant to be not too onerous for use by humans directly.
+X
+VG`008Ge`008en`008ne`008er`008ra`008al`008l F`008Fo`008or`008rm`008ma`008at`008
+Xt
+X
+XThe general format of the language is a request/response language
+Xlike that of FTP.  The conversation is in netascii, with a car-
+Xriage return-linefeed pair separating the lines.  The client
+Xmakes requests, and the server responds to them.  This allows a
+V_`008t_`008e_`008l_`008n_`008e_`008t client to connect to the Nameserver so th
+Xat users may use
+Xthe Nameserver without any intervening client, if they wish.
+X
+XA request begins with a keyword, and may have zero or more key-
+Xwords or values, separated by spaces, tabs, or newlines, and fol-
+Xlowed by a carriage return-linefeed pair.  Values containing
+Vspaces, tabs or newlines should be enclosed in _`008d_`008o_`008u_`008b_`008l_
+X`008e quotes
+X(````"'').  Any printable characters may be used in the string (ex-
+Xcept ````"'').  In addition, the sequences ````0' and ````'' may be
+Xused to mean newline and tab, respectively.
+X
+XLike FTP, numerical values will be used to indicate the
+XNameServer's response to requests.  Unlike FTP, data will be
+Xpassed on the same connection as commands.  The format for
+Xresponses will be as follows:
+V          _`008n_`008u_`008m_`008b_`008e_`008r:_`008r_`008e_`008s_`008p_`008o_
+X`008n_`008s_`008e
+XMultiline responses should preface the number with a minus sign
+X(````-'') on all lines of the response but the last.
+X
+XNotice that since more than one specific piece of information may
+Xbe manipulated by a particular command, it is possible for parts
+Xof a command to succeed, while other parts of the same command
+Xfail.  This will be handled as a single continued response, with
+Xthe result code changing as appropriate.  Also, if a particular
+Xfield in the request is objectionable, that field should be iden-
+Xtified after the colon following the result code.  The field name
+Xshould be separated by a colon from the text of the error mes-
+Xsage.  The text of the message is primarily for human consump-
+Xtion, and may vary from the examples given here.
+X
+XAs for FTP, numerical responses will be in the range 100-599,
+Xwhere the leading digit has the following significance:
+X     1: In progress
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X     2: Success
+X     3: More information needed
+X     4: Temporary failure
+X     5: Permanent failure
+XSpecific numbers have meanings to some commands; all commands
+Xobey the general scheme.
+X
+XIn practice, almost every command will generate more than one
+Xline of response; every client should be prepared to deal with
+Xsuch continued responses.  It is worthwhile to note that no com-
+Xmand is finished unless the result code (treated as a signed in-
+Xteger) is greater than or equal to 200.
+X
+XT`008Th`008he`008e C`008Co`008om`008mm`008ma`008an`008nd`008ds`008s
+X
+Vq`008qu`008ue`008er`008ry`008y [`008[f`008fi`008ie`008el`008ld`008d=`008=]`008
+V]v`008va`008al`008lu`008ue`008e.`008..`008..`008. [`008[r`008re`008et`008tu`00
+X8ur`008rn`008n f`008fi`008ie`008el`008ld`008d.`008..`008..`008.]`008]
+X     This is the basic client request.  It does not require (in
+X     the common case) any identification from the client.  En-
+X     tries whose fields match the given values will be found, and
+X     the requested fields printed.  If no query fields are speci-
+X     fied, the name field is assumed.  If no return fields are
+X     specified, default fields will be returned.  Fields from
+X     each entry will be prefaced with a sequence number, a colon,
+X     the field name, and another colon.
+X
+X     Note that to view some sensitive fields, it is necessary to
+X     login to the Nameserver.  Values containing newlines will be
+X     broken into lines and printed one line per response.
+X
+X     Examples:
+V          q`008qu`008ue`008er`008ry`008y n`008na`008am`008me`008e=`008=d`008do
+V`008or`008rn`008ne`008er`008r p`008ph`008ho`008on`008ne`008e=`008=3`0083-`008-
+V3`00833`00833`00839`0089 r`008re`008et`008tu`008ur`008rn`008n a`008al`008li`00
+X8ia`008as`008s
+X          200:1:alias:sdorner
+X
+V          q`008qu`008ue`008er`008ry`008y a`008al`008li`008ia`008as`008s=`008=s
+X`008sd`008do`008or`008rn`008ne`008er`008r
+X          -200:1:name:Steven Dorner
+X          -200:1:alias:sdorner
+X          -200:1:phone:333-3339
+X          200:1:address:189 DCL
+X          200:1:address:1304 W. Springfield
+X
+V          q`008qu`008ue`008er`008ry`008y d`008do`008or`008rn`008ne`008er`008r 
+Vr`008re`008et`008tu`008ur`008rn`008n a`008al`008li`008ia`008as`008s "`008"h`00
+X8ho`008om`008me`008e p`008ph`008ho`008on`008ne`008e"`008"
+X          200-:1:alias:adorner
+X          -508:1:home phone:This field is not present.
+X          -200:2:alias:anotherdorner
+X          -200:2:home phone:555-1212
+X          -200:3:alias:sdorner
+X          508:3:home phone:This field is not present.
+X
+V          q`008qu`008ue`008er`008ry`008y a`008al`008li`008ia`008as`008s=`008=s
+V`008sd`008do`008or`008rn`008ne`008er`008r r`008re`008et`008tu`008ur`008rn`008n
+X u`008un`008ni`008iv`008vi`008id`008d
+X          503:univid:You are not authorized for this information.
+X
+V          q`008qu`008ue`008er`008ry`008y n`008na`008am`008me`008e=`008=d`008do
+V`008or`008rn`008ne`008er`008r "`008"v`008vm`008ms`008s l`008lo`008ov`008ve`008
+Ve"`008"=`008=h`008hi`008ig`008gh`008h r`008re`008et`008tu`008ur`008rn`008n a`0
+X08al`008li`008ia`008as`008s
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X          501:No matches.
+X
+Vc`008ch`008ha`008an`008ng`008ge`008e [`008[f`008fi`008ie`008el`008ld`008d=`008
+V=]`008]v`008va`008al`008lu`008ue`008e.`008..`008..`008. m`008ma`008ak`008ke`00
+V8e f`008fi`008ie`008el`008ld`008d=`008=v`008va`008al`008lu`008ue`008e.`008..`0
+X08..`008.
+X     Change looks much like query.  The entries to be changed are
+X     specified as in query.  They keyword make separates the
+X     search criteria from the fields to be changed.  The user
+X     must be logged in for change to work, and must have the au-
+X     thority to change the fields in the entries selected by the
+X     query portion.  If it is desired delete a field, Adjacent
+V     double quotes (````""'') should be used.   Fields marked _`008e_`008n_`00
+X8-
+V     _`008c_`008r_`008y_`008p_`008t_`008e_`008d must be encrypted before trans
+Xmission to the
+X     Nameserver.  This encryption should be done with the pass-
+X     word of the logged in user.
+X
+X     Examples:
+V          c`008ch`008ha`008an`008ng`008ge`008e a`008al`008li`008ia`008as`008s=
+V`008=s`008sd`008do`008or`008rn`008ne`008er`008r m`008ma`008ak`008ke`008e a`008
+Val`008li`008ia`008as`008s=`008=d`008dr`008rd`008de`008ea`008at`008th`008h e`00
+X8em`008ma`008ai`008il`008l=`008=u`008ux`008xq`008q
+X          200:Ok
+X
+V          c`008ch`008ha`008an`008ng`008ge`008e a`008al`008li`008ia`008as`008s=
+V`008=s`008sd`008do`008or`008rn`008ne`008er`008r m`008ma`008ak`008ke`008e a`008
+Xal`008li`008ia`008as`008s=`008=d`008dr`008rd`008de`008ea`008at`008th`008h
+X          506:change: must be logged in.
+X
+V          c`008ch`008ha`008an`008ng`008ge`008e s`008st`008te`008ev`008ve`008en
+V`008n d`008do`008or`008rn`008ne`008er`008r m`008ma`008ak`008ke`008e h`008ho`00
+X8ou`008ur`008rs`008s=`008="`008""`008"
+X          200:Ok
+X
+V          c`008ch`008ha`008an`008ng`008ge`008e n`008na`008am`008me`008e=`008=i
+V`008ik`008ke`008en`008nb`008be`008er`008rr`008ry`008y p`008ph`008ho`008on`008n
+Xe`008e=`008=3`00833`00833`0083-`008-3`00833`00833`00839`0089
+X          510:ikenberry:You may not change this entry.
+X
+Xl`008lo`008og`008gi`008in`008n a`008al`008li`008ia`008as`008s
+Xa`008an`008ns`008sw`008we`008er`008r c`008co`008od`008de`008e
+X     This is used to identify the user of a particular connec-
+X     tion.  The NameServer will respond with a random challenge,
+X     which must be returned in encrypted form.  The encryption
+X     key will be a password known to both the NameServer and the
+X     user (or user's trusted host).  Note that this scheme pre-
+X     cludes the use of login through a direct telnet connection
+X     (unless the user is very good at encrypting text).
+X
+X     Examples:
+V          l`008lo`008og`008gi`008in`008n s`008s_`008_d`008do`008or`008rn`008ne
+X`008er`008r
+X          301:dkeiigjasdvvnmnmeigh
+V          a`008an`008ns`008sw`008we`008er`008r e`008ew`008wi`008it`008tu`008ue
+V`008eg`008gn`008nd`008dv`008vb`008bn`008ng`008gk`008kg`008gd`008df`008fk`008kg
+X`008gl`008l
+X          200:Hello s_dorner!
+X
+V          l`008lo`008og`008gi`008in`008n s`008s_`008_d`008do`008or`008rn`008ne
+X`008er`008r
+X          301:eiituerwbfncvkfdk;efdgi;
+V          a`008an`008ns`008sw`008we`008er`008r e`008ew`008wi`008it`008tu`008ue
+V`008eg`008gn`008nd`008dv`008vb`008bn`008ng`008gk`008kg`008gd`008df`008fk`008kg
+X`008gl`008l
+X          500:Die, hacker scum!
+X
+Xl`008lo`008og`008go`008ou`008ut`008t
+X      Any user identity established with a previous login will be
+X     forgotten.  The connection is not closed, however.
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X     Examples:
+X          l`008lo`008og`008go`008ou`008ut`008t
+X          200:Ok
+X
+Vf`008fi`008ie`008el`008ld`008ds`008s [`008[f`008fi`008ie`008el`008ld`008d.`008
+X..`008..`008.]`008]
+X     With no arguments, echoes the contents of the NameServer's
+X     fields.config file.  Otherwise, descriptions of the named
+X     fields are given.
+X
+X     Examples:
+X          f`008fi`008ie`008el`008ld`008ds`008s
+X          200:<too verbose to print here>
+X
+Va`008ad`008dd`008d f`008fi`008ie`008el`008ld`008d=`008=v`008va`008al`008lu`008
+Xue`008e.`008..`008..`008.
+X     Creates a nameserver entry with the given fields.  Only cer-
+X     tain users will be allowed to execute this command
+X
+X     Examples:
+V          a`008ad`008dd`008d n`008na`008am`008me`008e=`008="`008"d`008do`008or
+V`008rn`008ne`008er`008r s`008st`008te`008ev`008ve`008en`008n c`008c"`008" a`00
+X8al`008li`008ia`008as`008s=`008=s`008sd`008do`008or`008rn`008ne`008er`008r
+X          200:Ok.
+X
+V          a`008ad`008dd`008d a`008al`008li`008ia`008as`008s=`008=s`008sd`008do
+X`008or`008rn`008ne`008er`008r
+X          509:"sdorner":Alias already in use.
+X
+V          a`008ad`008dd`008d a`008al`008li`008ia`008as`008s=`008=c`008cd`008do
+X`008or`008rn`008ne`008er`008r
+X          511:You are not authorized to add entries.
+X
+Vd`008de`008el`008le`008et`008te`008e [`008[f`008fi`008ie`008el`008ld`008d=`008
+X=]`008]v`008va`008al`008lu`008ue`008e.`008..`008..`008.
+X     Deletes one or more nameserver entries.  Most people may not
+X     delete (even their own) entries.
+X
+X     Examples:
+V          d`008de`008el`008le`008et`008te`008e a`008al`008li`008ia`008as`008s=
+X`008=s`008sd`008do`008or`008rn`008ne`008er`008r
+X          200:Ok.
+X
+V          d`008de`008el`008le`008et`008te`008e a`008al`008li`008ia`008as`008s=
+X`008=s`008sd`008do`008or`008rn`008ne`008er`008r
+X          513:sdorner:You may not delete this.
+X
+Vs`008se`008et`008t o`008op`008pt`008ti`008io`008on`008n[`008[=`008=v`008va`008
+Xal`008lu`008ue`008e]`008].`008..`008..`008.
+X     Sets an option for this nameserver session.
+X
+X     Examples:
+V          s`008se`008et`008t t`008te`008er`008rs`008se`008e=`008=o`008of`008ff
+X`008f
+X          200:Ok.
+X
+X          s`008se`008et`008t m`008ma`008ax`008x=`008=2`00820`00800`00800`0080
+X          512:max:Value out of bounds.
+X
+Xq`008qu`008ui`008it`008t
+X     Ends a nameserver session.
+X
+X     Examples:
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X          q`008qu`008ui`008it`008t
+X          200:Bye!
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X                   Appendix A-Command Summary
+X
+Vq`008qu`008ue`008er`008ry`008y [`008[f`008fi`008ie`008el`008ld`008d=`008=]`008
+V]v`008va`008al`008lu`008ue`008e.`008..`008..`008. [`008[r`008re`008et`008tu`00
+X8ur`008rn`008n f`008fi`008ie`008el`008ld`008d.`008..`008..`008.]`008]
+Vc`008ch`008ha`008an`008ng`008ge`008e [`008[f`008fi`008ie`008el`008ld`008d=`008
+V=]`008]v`008va`008al`008lu`008ue`008e.`008..`008..`008. m`008ma`008ak`008ke`00
+V8e f`008fi`008ie`008el`008ld`008d=`008=v`008va`008al`008lu`008ue`008e.`008..`0
+X08..`008.
+Xl`008lo`008og`008gi`008in`008n a`008al`008li`008ia`008as`008s
+Xa`008an`008ns`008sw`008we`008er`008r c`008co`008od`008de`008e
+Xl`008lo`008og`008go`008ou`008ut`008t
+Vf`008fi`008ie`008el`008ld`008ds`008s [`008[f`008fi`008ie`008el`008ld`008d.`008
+X..`008..`008.]`008]
+Va`008ad`008dd`008d f`008fi`008ie`008el`008ld`008d=`008=v`008va`008al`008lu`008
+Xue`008e.`008..`008..`008.
+Vd`008de`008el`008le`008et`008te`008e [`008[f`008fi`008ie`008el`008ld`008d=`008
+X=]`008]v`008va`008al`008lu`008ue`008e.`008..`008..`008.
+Vs`008se`008et`008t o`008op`008pt`008ti`008io`008on`008n[`008[=`008=v`008va`008
+Xal`008lu`008ue`008e]`008].`008..`008..`008.
+Xq`008qu`008ui`008it`008t
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X                     Appendix B-Result Codes
+X
+X
+X           100 In progress (general).
+X           101 Echo of current command.
+X
+X           200 Success (general).
+X           201 Database ready, but read only.
+X
+X           300 More information (general).
+X           301 Encrypt this string.
+X
+X           400 Temporary error (general).
+X
+X           500 Permanent error (general).
+X           501 No matches to query.
+X           502 Too many matches to query.
+X           503 Not authorized for requested information.
+X           504 Not authorized for requested search criteria.
+X           505 Not authorized to change requested field.
+X           506 Request refused; must be encrypted.
+X           507 Field does not exist.
+X           508 Field is not present in requested entry.
+X           509 Alias already in use.
+X           510 Not authorized to change this entry.
+X           511 Not authorized to add entries.
+X           512 Illegal value.
+X           513 Unknown option.
+X           514 Unknown command.
+X           515 No indexed field in query.
+X           516 No authorization for request.
+X           517 Operation failed because database is read only.
+X           518 Too many entries selected by change command.
+X           599 Syntax error.
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+X
+$GoSub Convert_File
+$File_is="REPLIES.H"
+$Check_Sum_is=1864283618
+$Copy SYS$Input VMS_SHAR_DUMMY.DUMMY
+X/***********************************************************************/
+X/*********************************************************************
+X* This software is Copyright (C) 1988 by Steven Dorner and the
+X* University of Illinois Board of Trustees.  No warranties of any
+X* kind are expressed or implied.  No support will be provided.
+X* This software may not be redistributed for commercial purposes.
+X* You may direct questions to dorner@garcon.cso.uiuc.edu
+X**********************************************************************/
+X
+X#ifndef REPLIES_H
+X#define REPLIES_H
+X/***********************************************************************
+X* Reply codes
+X***********************************************************************/
+X#define LR_PROGRESS`009100`009/* in progress */
+X#define LR_ECHO`009`009101`009/* echoing cmd */
+X#define LR_NUMRET`009102`009/* how many entries are being returned */
+X
+X#define LR_OK`009`009200`009/* success */
+X#define LR_RONLY`009201`009/* database ready in read only mode */
+X
+X#define LR_MORE`009`009300`009/* need more info */
+X#define LR_LOGIN`009301`009/* encrypt this string */
+X
+X#define LR_TEMP`009`009400`009/* temporary error */
+X#define LR_INTERNAL`009401`009/* database error, possibly temporary */
+X#define LR_LOCK`009`009402`009/* lock not obtained within timeout period */
+X
+X#define LR_ERROR`009500`009/* hard error; general */
+X#define`009LR_NOMATCH`009501`009/* no matches to request */
+X#define LR_TOOMANY`009502`009/* too many matches to request */
+X#define LR_AINFO`009503`009/* may not see that field */
+X#define LR_ASEARCH`009504`009/* may not search on that field */
+X#define LR_ACHANGE`009505`009/* may not change field */
+X#define LR_NOTLOG`009506`009/* must be logged in */
+X#define LR_FIELD`009507`009/* field unknown */
+X#define LR_ABSENT`009508`009/* field not present in entry */
+X#define LR_ALIAS`009509`009/* requested alias is already in use */
+X#define LR_AENTRY`009510`009/* may not change entry */
+X#define LR_ADD`009`009511`009/* may not add entries */
+X#define LR_VALUE`009512`009/* illegal value */
+X#define LR_OPTION`009513`009/* unknown option */
+X#define LR_UNKNOWN`009514`009/* unknown command */
+X#define LR_NOKEY`009515`009/* no indexed field found in query */
+X#define LR_AUTH`009`009516`009/* no authorization for request */
+X#define LR_READONLY`009517`009/* operation failed; database is read-only */
+X#define LR_LIMIT`009518`009/* too many entries selected for change */
+X#define LR_HISTORY`009519`009/* history substitution failed (obsolete) */
+X#define LR_XCPU`009`009520`009/* too much cpu used */
+X#define LR_ADDONLY`009521`009/* addonly option set and change command
+X`009`009`009`009   applied to a field with data */
+X#define LR_ISCRYPT`009522`009/* attempt to view encrypted field */
+X#define LR_NOANSWER`009523`009/* "answer" was expected but not gotten */
+X
+X#define LR_SYNTAX`009599`009/* syntax error */
+X#endif
+$GoSub Convert_File
+$File_is="TERMDEFS.H"
+$Check_Sum_is=1296315847
+$Copy SYS$Input VMS_SHAR_DUMMY.DUMMY
+X/*`009termdefs.h
+X *
+X *`009contains definitions required for use of functions which sense or set
+X *`009terminal characteristics (contained in TERMLIB)
+X *
+X *`009V1.0 19-jul-84`009P. Schleifer`009Initial draft
+X *
+X *`009no privileges are needed to run any routine in TERMLIB
+X */
+X
+X#define OFF`0090
+X#define ON`0091
+X
+X#define BROADCAST`009TT$M_NOBRDCST
+X#define ECHO`009`009TT$M_NOECHO
+X#define EIGHTBIT`009TT$M_EIGHTBIT
+X#define FORMFEEDS`009TT$M_MECHFORM
+X#define HOSTSYNC`009TT$M_HOSTSYNC
+X#define PASSALL`009`009TT$M_PASSALL
+X#define READSYNC`009TT$M_READSYNC
+X#define TABS`009`009TT$M_MECHTAB
+X#define TYPEAHEAD`009TT$M_NOTYPEAHD
+X
+X/*`009`009termmode.h
+X *
+V *`009header file for modules in termlib - setting and sensing terminal charac
+Xteristics
+X *
+X *`009V1.0 19-jul-84`009P. Schleifer`009Initial draft
+X */
+X
+X/*`009`009iosb.h
+X *
+X *`009structs for VMS I/O status blocks
+X *
+X *`009V1.0 10-jul-84`009P. Schleifer`009Initial draft
+X */
+X
+X/* general I/O status block */
+Xtypedef struct iosb_struct {
+X`009short`009status;`009`009`009/* I/O completion status */
+X`009short`009transfer_count; `009/* # bytes actually transfered */
+X`009long`009device_dependent_data;`009/* device dependent data... */
+X`009} iosb;
+X
+X/* terminal read iosb */
+Xstruct term_read_iosb {
+X`009short`009status;`009`009`009/* I/O completion status */
+X`009short`009offset_to_terminator;
+X`009short`009terminator;
+X`009short`009terminator_size;
+X};
+X
+X/* terminal write iosb */
+Xstruct term_write_iosb {
+X`009short`009`009status;
+X`009short`009`009byte_count;
+X`009short`009`009line_count;
+X`009unsigned char`009column_position;
+X`009unsigned char`009line_position;
+X};
+X
+X/* iosb for IO$_SENSE(SET)MODE */
+Xstruct mode_iosb {
+X`009int stat:16;
+X`009unsigned xmit_speed:8;
+X`009unsigned recv_speed:8;
+X`009unsigned cr_fill:8;
+X`009unsigned lf_fill:8;
+X`009unsigned parity_flgs:8;
+X`009unsigned fill:8;
+X};
+X
+Xstruct char_buff {
+X    unsigned`009`009class:8;
+X    unsigned`009`009type:8;
+X    unsigned`009`009buffer_size:16;
+X    unsigned`009`009basic_char:24;
+X    unsigned`009`009page_len:8;
+X    unsigned long`009extended_char;
+X};
+$GoSub Convert_File
+$Exit

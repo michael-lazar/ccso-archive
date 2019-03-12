@@ -1,0 +1,42 @@
+README for Ph 1.1.1
+===================
+
+This is version 1.1.1 of my Mac Ph client. It is for use with the 
+UIUC CSO nameserver.
+
+This is a full client which supports queries, record editing, proxy
+editing, hero editing, and help.
+
+Ph is a free program. Use it in good health.
+
+The files are:
+
+ph-1.1.1.sea.hqx
+
+   The program. A BinHex'd self-extracting Compact Pro archive.
+
+doc.sea.hqx
+
+   The Mac version of our NU Ph document, "Ph - An Electronic
+   Campus Directory System," in Microsoft word format, as a BinHex'd 
+   self-extracting Compact Pro archive.
+
+source-1.1.1.sea.hqx
+
+   Source code. A BinHex'd self-extracting Compact Pro archive.
+   The source is in MPW 3.2 C.
+   
+mod_history
+
+   A history of mods to the Mac Ph client.
+
+If you are a Ph administrator interested in supporting the use of
+the Mac client at your site, you will also want to get some of the
+files in the directory pub/ph/admin. See the README file in that
+directory for details.
+
+John Norstad
+Academic Computing and Network Services
+Northwestern University
+
+j-norstad@nwu.edu

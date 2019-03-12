@@ -1,0 +1,53 @@
+/*
+PH - call the campus nameserver.
+
+PH looks up names in an online copy of the University phone book.
+Specifying a single name will look up entries with a first, last, or
+email name.  Specifying multiple names will force returned entries to
+match each name given.
+
+The metacharacter '*' can be used in a request to indicate zero or more
+unspecified characters. For example, "kl*e" will match "kline",
+"klemme", and "kluge". Be warned, however, that queries resulting in
+too many matches will be refused.
+
+EXAMPLES
+    ph charles kline
+
+This would return any entries in which the names "charles" and "kline"
+both appear.
+
+REGISTERING YOUR EMAIL ADDRESS
+If you would like to have your electronic mail address entered into the
+database, send mail to registrar@ux1.cso.uiuc.edu.  Mail should have the
+following format:
+
+      email phone name
+
+For example,
+
+      joey@uiucvmd.bitnet 3-9999 joseph kangaroo
+
+When giving your name, be sure to give it as it appears in the phone
+book.
+
+AUTHOR
+Charley Kline, University of Illinois Computing Services Office.
+*/
+parse arg x
+
+if x = '' | x = '?' then do
+    do line = 2 while sourceline(line) ^= "*/"
+        say sourceline(line)
+        end
+        exit
+    end
+
+queue 'query' x
+queue 'quit'
+'PHCLIENT'
+exit
+
+
+
+

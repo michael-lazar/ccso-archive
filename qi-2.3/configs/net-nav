@@ -1,0 +1,14 @@
+@Features = ("DO_TILDE","SORTED");
+$DefineStrings{"DATABASE"} = "/big/net-nav/db/nav";
+$DefineStrings{"HELPDIR"} = "/big/net-nav/db/help";
+$OtherDefines{"Drecsize"} = 256;
+$OtherDefines{"Dovrsize"} = 256;
+$QiExecDir = "/big/net-nav/Apps";
+$QiUtilDir = "/big/net-nav/Apps";
+@WantDirs=("include","lib","api","qi","util");
+delete $OtherDefines{"PersonLimit"};
+$Depend = "";
+$Owner = "net-nav";
+$Group = "net-nav";
+$Cflags .= " -O";
+1;

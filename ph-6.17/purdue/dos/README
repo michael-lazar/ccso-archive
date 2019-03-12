@@ -1,0 +1,41 @@
+This is the main trunk of the DOS ph client distribution tree.  There
+are clients for four TCP/IP protocol stacks: Beame and Whiteside;
+PC/TCP by FTP Software; PCNFS by Sun; and a packet driver client that
+uses the Waterloo TCP/IP protocol stack.  (The packet driver client may
+be used with Novell networks.)
+
+Look in the following subdirectories for more information:
+
+	bw		the Beame and Whiteside client
+
+	pcnfs		the PCNFS client
+
+	packet		a packet driver client
+
+	pctcp		the PC/TCP client
+
+	src		Borland C++ 3.1 sources
+
+	wattcp       	the Waterloo TCP/IP stack support files for
+			the packet driver client
+
+For a formatted copy of the Unix ph manual page, look in
+
+	ph.man
+
+Some documentation on the DOS ph client may be found in:
+
+	pcph.doc
+
+A sample \etc\services, \nfs\services, or NIS services entry may
+be found in:
+
+	services
+
+A sample \etc\hosts, \nfs\hosts, or NIS hosts entry may be found
+in:
+
+	hosts
+
+Victor A. Abell
+9 September 1993

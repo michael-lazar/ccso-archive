@@ -1,0 +1,726 @@
+
+
+
+
+
+
+
+           TThhee CCCCSSOO NNaammeesseerrvveerr SSeerrvveerr--CClliieenntt PPrroottooccooll
+
+                               by
+                Steven Dorner   s-dorner@uiuc.edu
+           Computer and Communications Services Office
+                University of Illinois at Urbana
+
+                          April 2, 1990
+
+
+                           updated by
+                Paul Pomes   paul-pomes@uiuc.edu
+           Computer and Communications Services Office
+                University of Illinois at Urbana
+
+                         August 2, 1992
+
+
+
+
+
+_I_n_t_r_o_d_u_c_t_i_o_n
+
+This document describes the protocol used by the CCSO Nameserver.
+It provides all the information necessary to write a program that
+interfaces with the Nameserver, or for a human to speak directly
+to the Nameserver.
+
+While CCSO provides a client program for our Nameserver, we also
+expect the Nameserver to be used from programs other than this
+client.  First, our client does not run on every system.
+Secondly, the Nameserver is potentially of use for more than just
+human lookup of information; other programs (such as mail
+delivery agents) may wish to use the Nameserver.
+
+This was kept in mind when designing the protocol used by the
+Nameserver.  It is fairly easy to generate and parse (if not
+totally regular), and should prove easy to incorporate in any
+program.
+
+_G_e_n_e_r_a_l _F_o_r_m_a_t
+
+The general format of the protocol is request/response, like that
+of FTP;[1] the client makes requests, and the server responds to
+them.  The conversation is in "netascii", with a carriage
+
+____________________
+   Converted to portable n/troff format using the -me macros from
+funky Next WriteNow format (icch).
+   [1]  See  RFC-959, _F_i_l_e _T_r_a_n_s_f_e_r _P_r_o_t_o_c_o_l (_F_T_P), J. Postel and
+J. Reynolds.
+
+
+
+
+
+
+
+
+
+
+
+
+22                      TThhee CCCCSSOO NNaammeesseerrvveerr SSeerrvveerr--CClliieenntt PPrroottooccooll
+
+
+return-linefeed pair[2] separating the lines, as in telnet.[3]
+This allows a user to use the Nameserver with any telnet client,
+if they wish.
+
+A request begins with a keyword, and may have zero or more key-
+words or values, separated by spaces, tabs, or newlines, and fol-
+lowed by a carriage return-linefeed pair.  Values containing
+spaces, tabs or newlines should be enclosed in _d_o_u_b_l_e quotes
+(`"').  Any printable characters may be used in a quoted string
+(except `"').  In addition, the sequences "\n", "\t", "\"", and
+"\\" may be used to mean newline, tab, double quote, and
+backslash, respectively.
+
+Like FTP, numerical values are used to indicate the Nameserver's
+response to requests.  Unlike FTP, data is passed on the same
+connection as commands.  The format for responses is as follows:
+
+     _r_e_s_u_l_t _c_o_d_e:[[_e_n_t_r_y _i_n_d_e_x:]][[_f_i_e_l_d _n_a_m_e:]]_t_e_x_t
+
+Multiline responses should preface each line of the response with
+the appropriate result code, negated (prefaced with "-"), on all
+lines of the response but the last.  If a particular command can
+apply to more than one entry, responses involving individual
+entries will have an entry index directly following the result
+code.  This index will begin with 1, and be incremented each time
+a new entry is being referred to.  Commands that can apply to
+more than one field will have the name of the field to which the
+response applies directly following the entry index.  The text of
+the response will be either an error message intended for human
+consumption, or data from the Nameserver.  Whitespace (spaces or
+tabs) may appear anywhere in the response.
+
+Since more than one specific piece of information may be manipu-
+lated by a particular command, it is possible for parts of a com-
+mand to succeed, while other parts of the same command fail.
+This situation is handled as a single multi-line response, with
+the result code changing as appropriate.
+
+As for FTP, numerical responses are in the range 100-599 (or from
+-599 to -100 for multiline responses), where the leading digit
+has the following significance:
+
+    1: In progress
+    2: Success
+    3: More information needed
+    4: Temporary failure; it may be worthwile to try again.
+    5: Permanent failure
+
+
+____________________
+   [2] The carriage return is optional.
+   [3] See RFC-854, _T_e_l_n_e_t _P_r_o_t_o_c_o_l _S_p_e_c_i_f_i_c_a_t_i_o_n, J. Postel.
+
+
+
+
+
+
+
+
+
+
+
+TThhee CCCCSSOO NNaammeesseerrvveerr SSeerrvveerr--CClliieenntt PPrroottooccooll                      33
+
+
+Specific numbers have meanings to some commands; all commands
+obey the general scheme.
+
+Many commands generate more than one line of response; every
+client should be prepared to deal with such continued responses.
+It is worthwhile to note that a command is finished when and only
+when the result code on a response line (treated as a signed
+integer) is greater than or equal to 200.
+
+Keywords must be given in lower case; case in the values of
+fields is preserved, although queries are not case-sensitive.
+
+_T_h_e _C_o_m_m_a_n_d_s
+
+query [field=]value. . .  [return field1 [field2]]
+ph [field=]value. . .  [return field1 [field2]]
+
+
+This is the basic client request.  It may be used in any of the
+Nameserver modes.[4] Entries whose fields match the given values
+will be found, and the requested fields printed.  If no field
+name is specified in the query part of the command, the "name"
+field is assumed.  If no fields are specified with a return
+clause, a default set of fields will be returned.  Fields from
+each entry will be prefaced with an entry index, a colon, the
+field name, and another colon.  If the special field name "all"
+is given in the return clause, all fields from the entry will be
+printed (subject to normal constraints with regard to Nameserver
+mode and field properties).
+
+Note that to view some sensitive fields, it is necessary to use
+Nameserver login mode.  Note also that fields whose descriptions
+include the property Encrypt cannot be printed by the server.
+Values containing newlines will be broken into lines and printed
+one line per response.
+
+The second number on each response is the entry index; it is
+incremented each time the response refers to a new entry.
+
+Some implementations of _q_i return a 102 response before the
+actual entries, giving the number of entries found; be prepared
+to see or not see this response.
+
+"Query" and "ph" are synonyms.
+
+
+
+
+____________________
+   [4] See _T_h_e _C_C_S_O _N_a_m_e_s_e_r_v_e_r - _A _D_e_s_c_r_i_p_t_i_o_n, S. Dorner and  P.
+Pomes, for a description of Nameserver modes.
+
+
+
+
+
+
+
+
+
+
+
+
+44                      TThhee CCCCSSOO NNaammeesseerrvveerr SSeerrvveerr--CClliieenntt PPrroottooccooll
+
+
+_E_x_a_m_p_l_e_s
+
+    query name=dorner phone=244-1765
+    -200:1:         alias: s-dorner
+    -200:1:          name: dorner steven c.
+    -200:1:         email: dorner@garcon.cso.uiuc.edu
+    -200:1:         phone: (w) 244-1765
+    -200:1:       address: 181 DCL, MC 256
+    -200:1:              : 1201 W. Washington, C, 61821
+    -200:1:    department: computing services office
+    -200:1:         title: res programmer
+    -200:1:      nickname: Steve
+    -200:1:         hours: 8-4 weekdays
+    200:Ok.
+    query alias=s-dorner
+    -200:1:         alias: s-dorner
+    -200:1:          name: dorner steven c.
+    -200:1:         email: dorner@garcon.cso.uiuc.edu
+    -200:1:         phone: (w) 244-1765
+    -200:1:       address: 181 DCL, MC 256
+    -200:1:              : 1201 W. Washington, C, 61821
+    -200:1:    department: computing services office
+    -200:1:         title: res programmer
+    -200:1:      nickname: Steve
+    -200:1:         hours: 8-4 weekdays
+    200:Ok.
+    query dorner return alias hours
+    -200:1:         alias: m-dorner
+    -508:1:         hours: Not present in entry.
+    -200:2:         alias: j-dorner
+    -508:2:         hours: Not present in entry.
+    -200:3:         alias: s-dorner
+    -200:3:         hours: 8-4 weekdays
+    -200:4:         alias: j-dorner1
+    -508:4:         hours: Not present in entry.
+    200:Ok.
+    query alias=s-dorner return id
+    -503:1:            id: You may not view this field.
+    200:Ok.
+    query name=dorner address=moon
+    501:No matches to your query.
+
+
+
+change [field=]value. . .  make field=value
+
+
+Change looks much like query.  The entries to be changed are
+specified as in query.  They keyword make separates the search
+criteria from the fields to be changed.  The change command works
+in hero mode, or in login mode if applied to fields whose
+
+
+
+
+
+
+
+
+
+
+
+
+TThhee CCCCSSOO NNaammeesseerrvveerr SSeerrvveerr--CClliieenntt PPrroottooccooll                      55
+
+
+description contain the Change property[5] in the entry of the
+logged-in user.  If it is desired remove a field, Adjacent double
+quotes ("") should be given as the "new value" of the field.
+Fields whose descriptions include the property Encrypted must be
+encrypted before transmission to the Nameserver, unless the _q_i
+program is being run directly from a terminal.  This encryption
+should be done with the password of the logged in user.
+
+_E_x_a_m_p_l_e_s
+
+    change alias=s-dorner make hours="when the sun shines"
+    506:You must be logged in to use this command.
+    change steven dorner make hours=""
+    200:1 entry changed.
+    change steven dorner make name="Dr. Strangelove"
+    -505:name:you may not change this field.
+    500:1 entry found, none changed.
+    change ikenberry make email=zzz@xxx
+    518:Too many entries (3) selected; limit is 2.
+    change stanley ikenberry make email=zzz@xxx
+    -510:s-ikenberry:You may not change this entry.
+    500:1 entry found, none changed.
+
+
+
+login alias
+answer code
+clear password
+
+
+This is used to enter login or hero mode.  The Nameserver will
+respond with a random challenge, which may be returned in
+encrypted form via the answer command.  The encryption key will
+be a password known to both the Nameserver and the user.  Alter-
+nately, the client may respond with the clear command, and give
+the proper password in clear text.  This is not the recommended
+method, and is only provided for the lazy protocol implementor.
+
+_E_x_a_m_p_l_e_s
+
+    login s_dorner
+    301:dkeiigjasdvvnmnmeigh
+    answer ewituegndvbngkgdfkgl
+    200:s-dorner:Hi how are you?
+    login s-dorner
+    301:?;_?DB,F9X;8O=H8Y<H[H=FY?1*;>?#(^='<!HH
+    answer ellwekkewdfasoiioiogdfkldfg
+    500:Login failed.
+____________________
+   [5] See _T_h_e _C_C_S_O _N_a_m_e_s_e_r_v_e_r - _A _D_e_s_c_r_i_p_t_i_o_n, S. Dorner and  P.
+Pomes,  for a description of Nameserver field description proper-
+ties.
+
+
+
+
+
+
+
+
+
+
+
+66                      TThhee CCCCSSOO NNaammeesseerrvveerr SSeerrvveerr--CClliieenntt PPrroottooccooll
+
+
+    login s-dorner
+    301:aksjdsflkajajeruopqwda,mcdfkklqopakdjl
+    clear mysecret
+    200:s-dorner:Hi how are you?
+
+
+
+logout
+
+
+Exits login or hero mode, entering anonymous mode.  The connec-
+tion is not closed, however.
+
+_E_x_a_m_p_l_e
+
+    logout
+    200:Ok
+
+
+
+fields [field...]
+
+
+With no arguments, lists all field descriptions.  With field
+names as arguments, descriptions of the named fields are given.
+The second number of each response is the field id number.
+
+_E_x_a_m_p_l_e
+
+    fields
+    -200:6:alias:max 32 Indexed Lookup Public Default Change Turn
+    -200:6:alias:Unique name for user, chosen by user.
+    -200:3:name:max 64 Indexed Lookup Public Default
+    -200:3:name:Full name.
+    ...
+    -200:24:def_account:Default account for printing
+    200:Ok.
+
+
+
+add field=value...
+
+
+Creates a nameserver entry with the given fields.  Note that this
+command adds an _e_n_t_r_y, not a field; to add a field to an existing
+entry, the change command should be used.  Hero mode is required.
+
+_E_x_a_m_p_l_e_s
+
+    add name="churchill winston" address="england"
+    511:You may not add Nameserver entries.
+    add name="churchill winston" address="england"
+    200:Ok.
+
+
+
+
+
+
+
+
+
+
+TThhee CCCCSSOO NNaammeesseerrvveerr SSeerrvveerr--CClliieenntt PPrroottooccooll                      77
+
+
+delete [field=]value...
+
+
+Deletes one or more nameserver entries.  Note that this command
+deletes an _e_n_t_r_y, not a field; to remove a field from an existing
+entry, the change command should be used.  Hero mode is required.
+
+_E_x_a_m_p_l_e
+
+    delete winston churchill
+    200:1 entries deleted.
+
+
+
+siteinfo
+
+
+Returns information about the server's site.  Some servers will
+provide more information than others; clients should be ready for
+specific items to be missing, or for the whole command not to be
+implemented.
+
+Defined data items are:
+
+    Maildomain - domain to use for phquery-type mail.
+    Mailfield - field to use for phquery-type mail.
+    Administrator - guru in charge of service.
+    Passwords - person in charge of ordinary password/change requests.
+
+
+_E_x_a_m_p_l_e
+
+    siteinfo
+    -200:1:maildomain:uiuc.edu
+    -200:2:mailfield:alias
+    -200:3:administrator:s-dorner@uiuc.edu
+    -200:4:passwords:nameserv@uiuc.edu
+    200:Ok.
+
+
+
+set option[=value]...
+
+
+Sets an option for this nameserver session.
+
+_E_x_a_m_p_l_e_s
+
+    set verbose=off
+    200:Done.
+    set language=french
+    -513:language:unknown option
+    513:No option recognized.
+
+
+
+
+
+
+
+
+
+
+88                      TThhee CCCCSSOO NNaammeesseerrvveerr SSeerrvveerr--CClliieenntt PPrroottooccooll
+
+
+id information
+
+
+Enters the given information in the Nameserver logs.  This com-
+mand is used by the CCSO Nameserver client to enter the user id
+of the person running it.
+
+_E_x_a_m_p_l_e
+
+    id 103
+    200:Thanks.
+
+
+
+status
+
+
+Prints the current status of the Nameserver.
+
+_E_x_a_m_p_l_e_s
+
+    status
+    200:Database ready.
+    status
+    201:Database ready, read-only.
+
+
+
+help [{native|client} [topic...]]
+
+
+Prints help files for the Nameserver.  If _c_l_i_e_n_t is specified, it
+should be a valid Nameserver client identifier, such as "ph".
+The client-specific help will first be searched for _t_o_p_i_c, and
+then the native help will be searched.  If _t_o_p_i_c is omitted, a
+list of all available help texts will be returned.  If "native"
+or _c_l_i_e_n_t are also omitted, a list of clients will be returned.
+
+The second number of each response is the help text index; this
+number is incremented each time a new topic text is being
+printed.
+
+_E_x_a_m_p_l_e_s
+
+    help
+    -200:1:The following clients have help:
+    -200:1:native   ph
+    200:Ok.
+    help native
+    -200:1:These "native" help topics are available:
+    -200:1:100              401             505
+    ...
+    200:Ok.
+
+
+
+
+
+
+
+
+
+
+TThhee CCCCSSOO NNaammeesseerrvveerr SSeerrvveerr--CClliieenntt PPrroottooccooll                      99
+
+
+    help ph
+    -200:1:These "ph" help topics are available:
+    -200:1:edit            login           password        uiuc.general
+    ...
+    -200:2:These "native" help topics are also available:
+    -200:2:site        policy
+    ...
+    200:Ok.
+    help ph add
+    -200:1:add:
+    -200:1:  SYNTAX: add name-of-field=value-of-field...
+    ...
+    200:Ok.
+
+
+
+quit
+stop
+exit
+
+
+Ends a nameserver session.  _Q_i will break the connection.  These
+commands are synonymous with one another.
+
+_E_x_a_m_p_l_e
+
+    quit
+    200:Bye!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                           AAPPPPEENNDDIIXX  AA
+
+
+                         CCoommmmaanndd SSuummmmaarryy
+
+
+
+          query [field=]value...  [return field...]
+          ph [field=]value...  [return field...]
+          change [field=]value...  make field=value...
+          login alias
+          answer code
+          clear password
+          logout
+          fields [field...]
+          add field=value...
+          delete [field=]value...
+          set option[=value]...
+          id information
+          status
+          siteinfo
+          help [{native|client} [topic...]]
+          quit
+          exit
+          stop
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1100                     TThhee CCCCSSOO NNaammeesseerrvveerr SSeerrvveerr--CClliieenntt PPrroottooccooll
+
+
+
+
+
+
+
+
+
+
+                           AAPPPPEENNDDIIXX  BB
+
+
+                          RReessuulltt CCooddeess
+
+
+
+   110000     IInn pprrooggrreessss ((ggeenneerraall))..
+   110011     EEcchhoo ooff ccuurrrreenntt ccoommmmaanndd..
+   110022     CCoouunntt ooff nnuummbbeerr ooff mmaattcchheess ttoo qquueerryy..
+   220000     SSuucccceessss ((ggeenneerraall))..
+   220011     DDaattaabbaassee rreeaaddyy,, bbuutt rreeaadd oonnllyy..
+   330000     MMoorree iinnffoorrmmaattiioonn ((ggeenneerraall))..
+   330011     EEnnccrryypptt tthhiiss ssttrriinngg..
+   440000     TTeemmppoorraarryy eerrrroorr ((ggeenneerraall))..
+   440011     IInntteerrnnaall ddaattaabbaassee eerrrroorr..
+   440022     LLoocckk nnoott oobbttaaiinneedd wwiitthhiinn ttiimmeeoouutt ppeerriioodd..
+   447755     DDaattaabbaassee uunnaavvaaiillaabbllee;; ttrryy llaatteerr..
+   550000     PPeerrmmaanneenntt eerrrroorr ((ggeenneerraall))..
+   550011     NNoo mmaattcchheess ttoo qquueerryy..
+   550022     TToooo mmaannyy mmaattcchheess ttoo qquueerryy..
+   550033     NNoott aauutthhoorriizzeedd ffoorr rreeqquueesstteedd iinnffoorrmmaattiioonn..
+   550044     NNoott aauutthhoorriizzeedd ffoorr rreeqquueesstteedd sseeaarrcchh ccrriitteerriiaa..
+   550055     NNoott aauutthhoorriizzeedd ttoo cchhaannggee rreeqquueesstteedd ffiieelldd..
+   550066     RReeqquueesstt rreeffuusseedd;; mmuusstt bbee llooggggeedd iinn ttoo eexxeeccuuttee..
+   550077     FFiieelldd ddooeess nnoott eexxiisstt..
+   550088     FFiieelldd iiss nnoott pprreesseenntt iinn rreeqquueesstteedd eennttrryy..
+   550099     AAlliiaass aallrreeaaddyy iinn uussee..
+   551100     NNoott aauutthhoorriizzeedd ttoo cchhaannggee tthhiiss eennttrryy..
+   551111     NNoott aauutthhoorriizzeedd ttoo aadddd eennttrriieess..
+   551122     IIlllleeggaall vvaalluuee..
+   551133     UUnnkknnoowwnn ooppttiioonn..
+   551144     UUnnkknnoowwnn ccoommmmaanndd..
+   551155     NNoo iinnddeexxeedd ffiieelldd iinn qquueerryy..
+   551166     NNoo aauutthhoorriizzaattiioonn ffoorr rreeqquueesstt..
+   551177     OOppeerraattiioonn ffaaiilleedd bbeeccaauussee ddaattaabbaassee iiss rreeaadd oonnllyy..
+   551188     TToooo mmaannyy eennttrriieess sseelleecctteedd bbyy cchhaannggee ccoommmmaanndd..
+   552200     CCPPUU uussaaggee lliimmiitt eexxcceeeeddeedd..
+   552211     CChhaannggee ccoommmmaanndd wwoouulldd hhaavvee oovveerrrriiddeenn eexxiissttiinngg ffiieelldd,,
+           aanndd tthhee ""aaddddoonnllyy"" ooppttiioonn iiss oonn..
+   552222     AAtttteemmpptt ttoo vviieeww ""EEnnccrryypptteedd"" ffiieelldd..
+   552233     EExxppeeccttiinngg ""aannsswweerr"" oorr ""cclleeaarr""
+   552244     NNaammeess ooff hheellpp ttooppiiccss mmaayy nnoott ccoonnttaaiinn ""//""..
+   559988     CCoommmmaanndd uunnkknnoowwnn..
+   559999     SSyynnttaaxx eerrrroorr..
+
+
+
+
+
+
+
+
+
+
+TThhee CCCCSSOO NNaammeesseerrvveerr SSeerrvveerr--CClliieenntt PPrroottooccooll                     1111
+
+
+

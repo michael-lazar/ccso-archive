@@ -1,0 +1,108 @@
+
+
+
+Ph PC client beta version 1.0b4                         April 30, 1991
+
+
+
+Introduction
+
+The CSO Nameserver runs on a Unix computer to manage a white pages 
+directory for Unix, Vax/VMS, Macintosh, and MS-DOS computers.  The server 
+was developed by Steve Dorner at the University of Illinois at Urbana-
+Champaign.  This MS-DOS client conforms fully to the "The CSO Nameserver 
+Server-Client Protocol" and is a port of the Unix client written by Steve 
+Dorner and the VMS client by Mark Sandrock.
+
+This guide explains how to install the MS-DOS client.  It assumes you have 
+the name server running and it is accessible via TCP/IP and that the MS-DOS 
+computers are running PC/TCP by FTP Software.
+
+
+How to Obtain the Client
+
+The MS-DOS client is available via anonymous ftp from uxc.cso.uiuc.edu 
+(128.174.5.50) in the net/ph/dos directory, as PCPH.COM.  It is a self-
+extracting archive created by LHARC.
+
+
+Contents of the Archive
+
+The archive contains the following:
+
+o    All of the C source necessary to create the MS-DOS client
+
+o    An executable PH.EXE
+
+o    This guide
+
+
+Support
+
+The MS-DOS client is not officially supported and is without any warranty, 
+explicit or implied.  However, we are interested in your experiences using 
+the client.  Bugs, comments and suggestions should be sent electronically 
+to Gary Jacobs at gjacobs@qualcomm.com.
+
+
+
+
+
+
+
+Compilation
+
+Compiler: Microsoft C version 6.00A
+Options : Large Memory Model
+        : MS extensions
+        : Processor 8086
+        : Default C Libraries
+
+Linker  : Microsoft Linker
+Options : No Ignore Case
+        : Stack size 23552 bytes
+        : Additional Libraries: lpc.lib, lsocket.lib, lnetlib.lib
+        : Pack exe file
+        : Translate Intra-segment Far Calls
+        : Pack Code Segments  Limit 65499 bytes
+
+
+Installation
+
+The following items need to be added to autoexec.bat:
+
+set HOST=                     name of server computer      ns.uiuc.edu
+set FALLBACKADDR=             IP address of host in hex    0x80ae053a
+set NSSERVICE=                name of name service         ns
+set FALLBACKPORT=             port number used             105
+set DOMAINMAIL=               domain for email             uiuc.edu
+set EDITOR=                   editor to use                edlin.com
+
+If these are not added to the environment, the defaults are the examples 
+above right.
+
+
+The following item needs to be added to \etc\services
+
+ns   105/tcp   ns   #CSO nameserver
+
+
+The following records need to added to the nameserver database:
+
+alias     NS-ADMIN
+name      NS-ADMIN
+text      email address of nameserver administrator
+
+alias     NS-PASS
+name      NS-PASS
+text      email address of nameserver password administrator
+
+
+Known Problems:
+
+1. Encryption of passwords does not work.  When logging into the nameserver    
+the password is sent as clear text.  In addition, passwords cannot be 
+changed from the PC client.
+
+
+

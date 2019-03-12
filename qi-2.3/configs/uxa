@@ -1,0 +1,15 @@
+# uxa - a Sequent Symmetry running Dynix v3.1.1
+$DefineStrings{"DATABASE"} = "/nameserv/net-nav/db/nav";
+$DefineStrings{"HELPDIR"} = "/nameserv/net-nav/db/help";
+$OtherDefines{"Drecsize"} = 256;
+$OtherDefines{"Dovrsize"} = 256;
+$QiExecDir = "/nameserv/net-nav/bin";
+$QiUtilDir = "/nameserv/net-nav/bin";
+$KrbIncDir = "/usr/local/include";
+$KrbLibDir = "/usr/local/lib";
+@WantDirs=("include","lib","api","qi","util");
+@Features = ("KERBEROS","EMAIL_AUTH");
+$Cflags .= " -DKRBNSREALM=\\\"UIUC.EDU\\\" -O";
+delete $OtherDefines{"PersonLimit"};
+$Owner = "net-nav";
+$Group = "net-nav";

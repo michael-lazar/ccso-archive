@@ -1,0 +1,378 @@
+%!PS-Adobe-3.0
+%%Creator: groff version 1.04
+%%DocumentNeededResources: font Times-Roman
+%%+ font Times-Bold
+%%+ font Times-Italic
+%%DocumentSuppliedResources: procset grops 1.04 0
+%%Pages: 2
+%%PageOrder: Ascend
+%%Orientation: Portrait
+%%EndComments
+%%BeginProlog
+%%BeginResource: procset grops 1.04 0
+%!PS-Adobe-3.0 Resource-ProcSet
+
+/setpacking where {
+	pop
+	currentpacking
+	true setpacking
+} if
+
+/grops 120 dict dup begin 
+
+% The ASCII code of the space character.
+/SC 32 def
+
+/A /show load def
+/B { 0 SC 3 -1 roll widthshow } bind def
+/C { 0 exch ashow } bind def
+/D { 0 exch 0 SC 5 2 roll awidthshow } bind def
+/E { 0 rmoveto show } bind def
+/F { 0 rmoveto 0 SC 3 -1 roll widthshow } bind def
+/G { 0 rmoveto 0 exch ashow } bind def
+/H { 0 rmoveto 0 exch 0 SC 5 2 roll awidthshow } bind def
+/I { 0 exch rmoveto show } bind def
+/J { 0 exch rmoveto 0 SC 3 -1 roll widthshow } bind def
+/K { 0 exch rmoveto 0 exch ashow } bind def
+/L { 0 exch rmoveto 0 exch 0 SC 5 2 roll awidthshow } bind def
+/M { rmoveto show } bind def
+/N { rmoveto 0 SC 3 -1 roll widthshow } bind def
+/O { rmoveto 0 exch ashow } bind def
+/P { rmoveto 0 exch 0 SC 5 2 roll awidthshow } bind def
+/Q { moveto show } bind def 
+/R { moveto 0 SC 3 -1 roll widthshow } bind def
+/S { moveto 0 exch ashow } bind def
+/T { moveto 0 exch 0 SC 5 2 roll awidthshow } bind def
+
+% name size font SF -
+
+/SF {
+	findfont exch
+	[ exch dup 0 exch 0 exch neg 0 0 ] makefont
+	dup setfont
+	[ exch /setfont cvx ] cvx bind def
+} bind def
+
+% name a c d font MF -
+
+/MF {
+	findfont
+	[ 5 2 roll
+	0 3 1 roll % b
+	neg 0 0 ] makefont
+	dup setfont
+	[ exch /setfont cvx ] cvx bind def
+} bind def
+
+/level0 0 def
+/RES 0 def
+/PL 0 def
+/LS 0 def
+
+% BP -
+
+/BP {
+	/level0 save def
+	1 setlinecap
+	1 setlinejoin
+	72 RES div dup scale
+	LS {
+		90 rotate
+	} {
+		0 PL translate
+	} ifelse
+	1 -1 scale
+} bind def
+
+/EP {
+	level0 restore
+	showpage
+} bind def
+
+
+% centerx centery radius startangle endangle DA -
+
+/DA {
+	newpath arcn stroke
+} bind def
+
+% x y SN - x' y'
+% round a position to nearest (pixel + (.25,.25))
+
+/SN {
+	transform 
+	.25 sub exch .25 sub exch
+	round .25 add exch round .25 add exch
+	itransform
+} bind def
+	
+% endx endy startx starty DL -
+% we round the endpoints of the line, so that parallel horizontal
+% and vertical lines will appear even
+
+/DL {
+	SN
+	moveto
+	SN
+	lineto stroke
+} bind def
+
+% centerx centery radius DC -
+
+/DC {
+	newpath 0 360 arc closepath
+} bind def
+
+
+/TM matrix def
+
+%  width height centerx centery DE -
+
+/DE {
+	TM currentmatrix pop
+	translate scale newpath 0 0 .5 0 360 arc closepath
+	TM setmatrix
+} bind def
+
+% these are for splines
+
+/RC /rcurveto load def
+/RL /rlineto load def
+/ST /stroke load def
+/MT /moveto load def
+/CL /closepath load def
+
+% fill the last path
+
+% amount FL -
+
+/FL {
+	currentgray exch setgray fill setgray
+} bind def
+
+% fill with the ``current color''
+
+/BL /fill load def
+
+/LW /setlinewidth load def
+% new_font_name encoding_vector old_font_name RE -
+
+/RE {
+	findfont
+	dup maxlength dict begin
+	{
+		1 index /FID ne { def } { pop pop } ifelse
+	} forall
+	/Encoding exch def
+	dup /FontName exch def
+	currentdict end definefont pop
+} bind def
+
+/DEFS 0 def
+
+% hpos vpos EBEGIN -
+
+/EBEGIN {
+	moveto
+	DEFS begin
+} bind def
+
+/EEND /end load def
+
+/CNT 0 def
+/level1 0 def
+
+% llx lly newwid wid newht ht newllx newlly PBEGIN -
+
+/PBEGIN {
+	/level1 save def
+	translate
+	div 3 1 roll div exch scale
+	neg exch neg exch translate
+	% set the graphics state to default values
+	0 setgray
+	0 setlinecap
+	1 setlinewidth
+	0 setlinejoin
+	10 setmiterlimit
+	[] 0 setdash
+	/setstrokeadjust where {
+		pop
+		false setstrokeadjust
+	} if
+	/setoverprint where {
+		pop
+		false setoverprint
+	} if
+	newpath
+	/CNT countdictstack def
+	userdict begin
+	/showpage {} def
+} bind def
+
+/PEND {
+	clear
+	countdictstack CNT sub { end } repeat
+	level1 restore
+} bind def
+
+end def
+
+/setpacking where {
+	pop
+	setpacking
+} if
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Times-Roman
+%%IncludeResource: font Times-Bold
+%%IncludeResource: font Times-Italic
+grops begin/DEFS 1 dict def DEFS begin/u{.001 mul}bind def end/RES 72 def/PL
+792 def/LS false def/ENC0[/asciicircum/asciitilde/Scaron/Zcaron/scaron/zcaron
+/Ydieresis/trademark/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/space/exclam
+/quotedbl/numbersign/dollar/percent/ampersand/quoteright/parenleft/parenright
+/asterisk/plus/comma/hyphen/period/slash/zero/one/two/three/four/five/six/seven
+/eight/nine/colon/semicolon/less/equal/greater/question/at/A/B/C/D/E/F/G/H/I/J
+/K/L/M/N/O/P/Q/R/S/T/U/V/W/X/Y/Z/bracketleft/backslash/bracketright/circumflex
+/underscore/quoteleft/a/b/c/d/e/f/g/h/i/j/k/l/m/n/o/p/q/r/s/t/u/v/w/x/y/z
+/braceleft/bar/braceright/tilde/.notdef/quotesinglbase/guillemotleft
+/guillemotright/bullet/florin/fraction/perthousand/dagger/daggerdbl/endash
+/emdash/ff/fi/fl/ffi/ffl/dotlessi/dotlessj/grave/hungarumlaut/dotaccent/breve
+/caron/ring/ogonek/quotedblleft/quotedblright/oe/lslash/quotedblbase/OE/Lslash
+/.notdef/exclamdown/cent/sterling/currency/yen/brokenbar/section/dieresis
+/copyright/ordfeminine/guilsinglleft/logicalnot/minus/registered/macron/degree
+/plusminus/twosuperior/threesuperior/acute/mu/paragraph/periodcentered/cedilla
+/onesuperior/ordmasculine/guilsinglright/onequarter/onehalf/threequarters
+/questiondown/Agrave/Aacute/Acircumflex/Atilde/Adieresis/Aring/AE/Ccedilla
+/Egrave/Eacute/Ecircumflex/Edieresis/Igrave/Iacute/Icircumflex/Idieresis/Eth
+/Ntilde/Ograve/Oacute/Ocircumflex/Otilde/Odieresis/multiply/Oslash/Ugrave
+/Uacute/Ucircumflex/Udieresis/Yacute/Thorn/germandbls/agrave/aacute/acircumflex
+/atilde/adieresis/aring/ae/ccedilla/egrave/eacute/ecircumflex/edieresis/igrave
+/iacute/icircumflex/idieresis/eth/ntilde/ograve/oacute/ocircumflex/otilde
+/odieresis/divide/oslash/ugrave/uacute/ucircumflex/udieresis/yacute/thorn
+/ydieresis]def/Times-Italic@0 ENC0/Times-Italic RE/Times-Bold@0 ENC0/Times-Bold
+RE/Times-Roman@0 ENC0/Times-Roman RE
+%%EndSetup
+%%Page: 1 1
+%%BeginPageSetup
+BP
+%%EndPageSetup
+/F0 10/Times-Roman@0 SF(PHQUER)72 48 Q 336.62(Y\(8L\) PHQUER)-.55 F(Y\(8L\))
+-.55 E/F1 9/Times-Bold@0 SF(NAME)72 84 Q F0
+(phquery \255 fuzzy address resolver backend for sendmail)108 96 Q F1(SYNOPSIS)
+72 112.8 Q/F2 10/Times-Bold@0 SF(phquery)108 124.8 Q F0([)2.5 E F2<ad64>2.5 E
+F0 2.5(][)2.5 G F2<ad69>A F0 2.5(][)2.5 G F2<ad6c>A F0 2.5(][)2.5 G F2<ad70>A
+F0 2.5(][)2.5 G F2<ad78>A/F3 10/Times-Italic@0 SF(service_type)2.84 E F0 2.5
+(][)2.5 G F2<ad66>A F3(fr)4.48 E(om_addr)-.37 E(ess)-.37 E F0 2.5(]a)2.5 G
+(ddress [ address2 ] ...)406.79 124.8 Q F1(DESCRIPTION)72 141.6 Q F3(Phquery)
+108 153.6 Q F0 3.06(relies on the)5.56 F F3(qi)5.56 E F0 3.06
+(\(8\) people name server to resolve fuzzy addresses, e.g., those sent to).35 F
+F3(jp-)5.56 E(mor)108 165.6 Q(gan@uiuc.edu)-.37 E F0(,).22 E F3(John-Mor)3.538
+E(gan@uiuc.edu)-.37 E F0 3.538(,o).22 G(r)297.596 165.6 Q F3(ka9wgn@uiuc.edu)
+3.538 E F0 6.038(.T).22 G 1.038(he local portion of the address \(left)393.802
+165.6 R 2.12(of the "@"\) may be either a)108 177.6 R F3(ph)4.62 E F0 2.12
+(\(1\) alias \(jp-mor).23 F 2.12(gan\), name \(John-Mor)-.18 F 2.12
+(gan\), or amateur radio callsign)-.18 F(\(ka9wgn\) \214eld.)108 189.6 Q(N.B.,)
+108 206.4 Q F3(ph)3.04 E F0 .54
+(only guarantees the uniqueness of the alias \214eld.)3.04 F .541
+(Should there be two or more John-Mor)5.541 F .541(gan s in)-.18 F 1.546
+(the ph database,)108 218.4 R F3(phquery)4.046 E F0 1.545
+(will return an error message suggesting alternatives.)4.046 F 1.545
+(Also note that while ph)6.545 F .499(names have blanks, sending a blank embed\
+ded in a mail address, no matter what quoting is done, is likely)108 230.4 R
+.13(to be zapped by some intervening mail system.)108 242.4 R .13
+(Therefore blanks in full name addresses should be replaced)5.13 F
+(with dashes \("-"\).)108 254.4 Q(Thus "John Mor)5 E(gan" becomes John-Mor)-.18
+E(gan.)-.18 E F3(Phquery)108 271.2 Q F0 1.284
+(is not meant to be invoked directly by users.)3.784 F(Instead)6.285 E F3
+(sendmail)3.785 E F0 1.285(\(8\) will invoke it as a non-\214nal).48 F 1.254
+(mailer for addresses that have a remote portion of)108 283.2 R F3(uiuc.edu)
+3.754 E F0 6.253(.S).22 G 1.253(ee the NOTES section below for a quick)369.319
+283.2 R 1.048(sendmail.cf hack that will enable)108 295.2 R F3(phquery)3.549 E
+F0 1.049(alias resolution to be done locally instead on on the machines)3.549 F
+(MX'ed for)108 307.2 Q F3(uiuc.edu)2.5 E F0(.).22 E
+(The call sequence runs as follows:)108 324 Q
+(Sendmail resolves one or more addresses in a message from, say)108 340.8 Q F3
+(joe@chicago.edu)2.5 E F0(to)2.5 E F3(someone@uiuc.edu)2.5 E F0(.).22 E
+(Sendmail invokes)108 357.6 Q F3(phquery)2.5 E F0(as)2.5 E
+(phquery -f joe@chicago.edu someone)148 381.6 Q .25
+(The text of the mail message is read by)108 405.6 R F3(phquery)2.749 E F0 .249
+(on the standard input.)2.749 F F3(Phquery)5.249 E F0 .249
+(consults the network)2.749 F F3(qi)2.749 E F0(\(8\)).35 E
+(server to locate the email address)108 417.6 Q F3(doda@ux1.cso.uiuc.edu)2.5 E
+F0(for the alias)2.5 E F3(someone)2.5 E F0(.).18 E .322(The header line "X-PH:\
+ V<version>@host.domain" is added to the mail message where)108 434.4 R F3
+(host.domain)2.822 E F0 .323(is the)2.823 F .268(host where)108 446.4 R F3
+(phquery)2.767 E F0 .267(did the translation.)2.767 F .267
+(Sendmail is then invoked again to transport the message to its des-)5.267 F
+(tination.)108 458.4 Q F2<ad64>108 475.2 Q F0 -.35(Tu)133 475.2 S 1.118
+(rn on debugging statements, disable removal of temp \214les, and don').35 F
+3.618(tv)-.18 G 1.118(fork/execve sendmail for)437.794 475.2 R .18
+(error or mail delivery)133 487.2 R 5.18(.E)-.65 G .179
+(nabling debug also disables)232.49 487.2 R F3(syslog)2.679 E F0 .179
+(\(3\) statements unless re-enabled by a sub-).21 F(sequent)133 499.2 Q F2
+<ad6c>2.5 E F0(.)A F2<ad69>108 516 Q F0(Issue a usage and copyright statement.)
+133 516 Q F2<ad6c>108 532.8 Q F0(Enable use of)133 532.8 Q F3(syslog)2.5 E F0
+(\(3\) routines to record signicant events using the LOG_MAIL facility).21 E(.)
+-.65 E F2<ad78>108 549.6 Q F3(service_name)2.84 E F0 .234
+(Look up the single alias)133 561.6 R F3(service_name)2.734 E F0 .234
+(and send the message to the email address returned.)2.734 F .235(This fea-)
+5.235 F(ture at UIUC supports outgoing email to facsimile.)133 573.6 Q F2<ad66>
+108 590.4 Q F3(Addr)3.45 E(ess)-.37 E F0(Use)133 602.4 Q F3(Addr)2.939 E(ess)
+-.37 E F0 .439(as the From: address in the forwarded mail and as the recipient\
+ for any error messages.)2.939 F .202(If not speci\214ed,)133 614.4 R F3
+(phquery)2.702 E F0 .202(will use the contents of the From: \214eld in the mes\
+sage header block instead.)2.702 F F2<ad72>108 631.2 Q F0 2.5(As)133 631.2 S
+(ynonym for)146.61 631.2 Q F2<ad66>2.5 E F0(.)A F2<ad70>108 648 Q F0
+(If set, all error returns are copied to Postmaster)133 648 Q(.)-.55 E F1
+(NOTES)72 664.8 Q F0 3.669(Av)108 676.8 S 1.168
+(anilla sendmail site can use the syntax)123.889 676.8 R F3(some-one@uiuc.edu)
+3.668 E F0 1.168(provided at least one of the following is)3.668 F(true:)108
+688.8 Q(a\) the sendmail uses MX records,)108 712.8 Q
+(b\) it has a mailhost or smarterhost relay that does use MX records,)108 724.8
+Q(13 Feb 1989)281 768 Q(1)535 768 Q EP
+%%Page: 2 2
+%%BeginPageSetup
+BP
+%%EndPageSetup
+/F0 10/Times-Roman@0 SF(PHQUER)72 48 Q 336.62(Y\(8L\) PHQUER)-.55 F(Y\(8L\))
+-.55 E(c\) the rules below have been put into their sendmail.cf \214le.)108 84
+Q(Macro M is de\214ned to be the domain for which mail is to be accepted for)
+108 100.8 Q 5(.A)-.55 G 2.5(tU)414.62 100.8 S(IUC, it is simply)427.12 100.8 Q
+(DMuiuc.edu)108 117.6 Q 1.4 -.7(To i)108 134.4 T(nvoke).7 E/F1 10
+/Times-Italic@0 SF(phquery)2.5 E F0(locally)2.5 E 2.5(,a)-.65 G
+(dd the following rule to ruleset 0 just prior to selecting the local mailer:)
+221.91 134.4 Q 65.09(R$+@$M $#PH)108 151.2 R($@$w $:$1)5 E
+(And de\214ne the PH mailer as follows:)108 168 Q 9.33
+(MPH, P=/usr/local/libdata/mail/phquery)108 184.8 R 2.5(,F)-.65 G(=DFMhnmur)
+288.44 184.8 Q 16.04(,A)-.4 G(=phquery $u)367.22 184.8 Q .468
+(If the IDA sendmail is used, then the steps are slightly more involved.)108
+201.6 R .468(Assuming again that the domain is)5.468 F
+(uiuc.edu, proceed as follows.)108 213.6 Q 25.17(1\) Add)108 230.4 R
+(phquery support to sendmail.cf:)2.5 E(cd sendmail/ida/cf)144 254.4 Q
+(Add the lines below to the m4 \214le for your machine)144 278.4 Q
+(de\214ne\(AL)144 302.4 Q(TERNA)-.92 E(TENAMES, uiuc.edu\))-1.11 E
+(de\214ne\(MAILER)144 314.4 Q -.8(TA)-.6 G(BLE, LIBDIR/mailertable\)).8 E
+(Build the sendmail.cf \214le and install it in the standard location.)144
+338.4 Q 25.17(2\) Assuming)108 355.2 R(LIBDIR was de\214ned in the Make\214le \
+as /usr/local/libdata/mail, the next steps are)2.5 E
+(cd /usr/local/libdata/mail)144 379.2 Q(cat > mailertable)144 391.2 Q(PH!your)
+144 403.2 Q 91.94(.host.domain uiuc.edu)-.55 F(^D)144 415.2 Q(cat > Make\214le)
+144 427.2 Q 8.12(mailertable.dir: mailertable)144 439.2 R
+(./dbm -L make mailertable mailertable)180 451.2 Q(^D)144 463.2 Q -.7(Ty)108
+492 S(pe 'make' and restart the sendmail daemon.).7 E/F2 9/Times-Bold@0 SF
+(SEE ALSO)72 508.8 Q F1(sendmail)108 520.8 Q F0(\(8\)).48 E F2(BUGS)72 537.6 Q
+F0(Undoubtably)108 549.6 Q 5(.P)-.65 G(lease send comments and suggestions to)
+172.63 549.6 Q/F3 10/Times-Bold@0 SF(paul-pomes@uiuc.edu)2.5 E F0(.)A .012
+(N.B., the)108 566.4 R F3<ad70>2.512 E F0 .011
+(option sends copies of failed mail to Postmaster)2.511 F 5.011(.W)-.55 G .011
+(hile usually a discreet person, it would still)368.263 566.4 R
+(not be wise to discuss sensitive topics via email.)108 578.4 Q
+(This is useful advice at any time.)5 E F2(AUTHOR)72 595.2 Q F0
+(Paul Pomes, UIUC-CSO)108 607.2 Q(13 Feb 1989)281 768 Q(2)535 768 Q EP
+%%Trailer
+end
+%%EOF

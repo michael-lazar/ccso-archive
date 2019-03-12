@@ -1,0 +1,610 @@
+
+
+
+
+
+
+
+              TThhee CCCCSSOO NNaammeesseerrvveerr -- AAnn IInnttrroodduuccttiioonn
+
+                               by
+                Steven Dorner   s-dorner@uiuc.edu
+           Computer and Communications Services Office
+                University of Illinois at Urbana
+
+                         March 29, 1990
+
+
+                           updated by
+                Paul Pomes   paul-pomes@uiuc.edu
+           Computer and Communications Services Office
+                University of Illinois at Urbana
+
+                         August 2, 1992
+
+
+
+
+
+% ph steven dorner
+----------------------------------------
+      name: dorner steven c
+     phone: 244-1765
+   address: 181 dcl
+          : CAMPUS MC 256
+department: computing services office
+     title: res programmer
+     hours: 7-5, four days per week.
+  email to: s-dorner@uiuc.edu (dorner@pequod.cso.uiuc.edu)
+----------------------------------------
+
+
+_W_h_a_t _i_s _i_t?
+
+The CCSO Nameserver could be considered a database containing
+information about people and things at the University of Illi-
+nois.  It is designed to be extremely flexible in what informa-
+tion it keeps, and also to provide fast access to that informa-
+tion.  Currently, most of the information in it comes from the
+University _S_t_u_d_e_n_t/_S_t_a_f_f _D_i_r_e_c_t_o_r_y (the phone book).
+
+The CCSO Nameserver could also be considered to be a pair of pro-
+grams; one that manages the actual data (this program is called
+_q_i, for _query _interpreter), and another one that handles user
+requests (the program CCSO provides for this is called _p_h, for
+_p_hone book).  To most people, the CCSO Nameserver will be exactly
+____________________
+   Converted to portable n/troff format using the -me macros from
+funky Next WriteNow format (icch).
+
+
+
+
+
+
+
+
+
+
+
+
+22                           TThhee CCCCSSOO NNaammeesseerrvveerr -- AAnn IInnttrroodduuccttiioonn
+
+
+this second program, _p_h, which gives them access to the Univer-
+sity _D_i_r_e_c_t_o_r_y.
+
+_W_h_e_r_e _i_s _i_t?
+
+The database for the Nameserver resides on a CCSO minicomputer (a
+VAXServer 3500) that runs the UNIX operating system; the name of
+this computer is garcon.cso.uiuc.edu.  The program that manages
+the database (_q_i) runs on this machine.  _Q_i allows programs run-
+ning on other computers to access the database by serving as an
+intermediary between them and the actual database.  It communi-
+cates with such programs using the campus network, UIUCnet.[1]
+
+_P_h (the program that is usually used to communicate with _q_i) is
+installed on all of CCSO's UNIX computers.  A simple version of
+_p_h is available on CCSO's main IBM computer, and _p_h is installed
+on hundreds of non-CCSO computers across the campus.  A full-
+featured version of _p_h is available for VAX computers running
+VMS, if they have Wollongong TCP/IP software.  Versions also
+exist for Macintosh, PC, and VM/CMS.  Later, I'll discuss how you
+can get _p_h installed on your system.
+
+_W_h_a_t _i_s _i_t _g_o_o_d _f_o_r?
+
+The Nameserver is good for looking up phone numbers and addresses
+of University faculty, students or staff members, just like the
+_S_t_u_d_e_n_t/_S_t_a_f_f _D_i_r_e_c_t_o_r_y; but the Nameserver is good for more than
+just that.  For one thing, the Nameserver knows the electronic
+mail address for thousands of faculty, students and staff; this
+information is more up to date that the _S_t_u_d_e_n_t/_S_t_a_f_f _D_i_r_e_c_t_o_r_y.
+It knows other things about some people, such as office hours or
+vacation plans.  Ph also has some other things in it not found in
+the _D_i_r_e_c_t_o_r_y; up-to-the-hour weather information (e.g., "ph
+type=weather champaign"), the current UIUC timetable (e.g., "ph
+cs101"), and an extensive listing of local restaurants (e.g., "ph
+restaurant other=italian").
+
+A key thing to know about the Nameserver is that, if you use a
+computer that has _p_h installed on it, you can change the informa-
+tion the Nameserver keeps about you.  For example, if you change
+offices in the middle of the year, you can put your correct
+address and phone number in the Nameserver immediately, so that
+people can use _p_h to find up-to-date information about you.
+
+Another very important function of the Nameserver is electronic
+mail forwarding.  If you tell the Nameserver where you read your
+electronic mail, then anyone wishing to send mail to you can send
+the mail to _a_l_i_a_s@_u_i_u_c._e_d_u, where _a_l_i_a_s is your Nameserver alias
+____________________
+   [1] UIUCnet is a multi-protocol, multi-media network.   Access
+to the Nameserver is via TCP/IP only.
+
+
+
+
+
+
+
+
+
+
+
+
+TThhee CCCCSSOO NNaammeesseerrvveerr -- AAnn IInnttrroodduuccttiioonn                           33
+
+
+(a unique name by which the Nameserver knows you; see below).  If
+someone doesn't know your Nameserver alias, s/he can send mail to
+_y_o_u_r-_n_a_m_e@_u_i_u_c._e_d_u, and the Nameserver will try to find you.  In
+either case, the Nameserver will send your mail to the address
+you have told it.  For example, you can send me mail with the
+addresses: s-dorner@uiuc.edu ("s-dorner" is my alias), or
+steven-dorner@uiuc.edu (my name).  Either way, the mail will be
+sent by the Nameserver to "dorner@pequod.cso.uiuc.edu", which is
+where I'm currently reading my mail.
+
+_W_h_a_t _i_s_n'_t _i_t _g_o_o_d _f_o_r?
+
+There are some things the Nameserver is not meant to do.  One
+thing that should be mentioned right away is that the Nameserver
+can't be used to generate mailing lists for junk mail; you don't
+have to worry about getting junk mail because you appear in the
+Nameserver's database.
+
+Another thing it isn't good for is notifying the University of
+changes of address.  Changes you make to your information in the
+Nameserver are _n_o_t automatically sent to your department, or the
+Office of Admissions and Records, or Payroll, or anywhere else;
+you must notify these places of changes in your address
+separately.
+
+_H_o_w _c_a_n _I _h_a_v_e _p_h _i_n_s_t_a_l_l_e_d _o_n _m_y _c_o_m_p_u_t_e_r?
+
+If one of the computers you use runs UNIX or VMS and is connected
+to UIUCnet, you can probably have _p_h installed on it.  Tell the
+person who manages your computer that s/he can get the source
+code for ph by anonymous ftp to uxc.cso.uiuc.edu, in the net/ph
+subdirectory or the compressed tar archive in pub/ph.tar.Z (don't
+worry s/he'll know what that means).
+
+_H_o_w _d_o _I _u_s_e _p_h?
+
+There are two different ways to use _p_h.  One way is good for
+finding information about people, and the other is good for
+changing the information the Nameserver keeps about you.  I will
+give you a brief idea of how both these ways work; for more
+detailed information, you should read the "manual page" for _p_h,
+which you can read (if your computer runs UNIX) by typing the
+command, "man ph".
+
+To use _p_h to find out information, you should type "ph" and the
+name of the person you want to know about; _p_h will respond with
+information about that person:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+44                           TThhee CCCCSSOO NNaammeesseerrvveerr -- AAnn IInnttrroodduuccttiioonn
+
+
+    % ph steven dorner
+    ----------------------------------------
+          name: dorner steven c
+         phone: 244-1765
+       address: 181 dcl
+              : CAMPUS MC 256
+    department: computing services office
+         title: res programmer
+         hours: 7-5, four days per week.
+      email to: s-dorner@uiuc.edu (dorner@pequod.cso.uiuc.edu)
+    ----------------------------------------
+
+
+If there are a lot of people who have the name you asked for, _p_h
+will let you view the list a screenful at a time; just hit the
+spacebar to move to the next screen.
+
+You don't have to know the exact spelling of a name to find
+information; you can put special symbols in the name for which
+you are searching that tell the Nameserver to find names that you
+only know a few letters of.  I won't say anything more about that
+here; look in the manual page if you are interested in the
+details.
+
+Sometimes, you will ask _p_h for a name, and it will refuse to give
+you information, because too many people have that name:
+
+    % ph steven
+    502:Too many entries to print.
+
+
+_P_h does this so that no one can use it to get mailing lists for
+junk mail or other nefarious purposes.  If you really want to
+find the person, you will have to know something else about them,
+like part of their last name (or first name, if you know their
+last name), or their phone number:[2]
+
+    % ph steven office_phone=244-1765
+    ----------------------------------------
+          name: dorner steven c
+         phone: 244-1765
+       address: 181 dcl
+              : CAMPUS MC 256
+    department: computing services office
+         title: res programmer
+         hours: 7-5, four days per week.
+      email to: s-dorner@uiuc.edu (dorner@pequod.cso.uiuc.edu)
+    ----------------------------------------
+____________________
+   [2] See the _p_h manual page for information on  how  to  search
+for people with a certain phone number or address.
+
+
+
+
+
+
+
+
+
+
+
+
+TThhee CCCCSSOO NNaammeesseerrvveerr -- AAnn IInnttrroodduuccttiioonn                           55
+
+
+If you want to change the information the Nameserver keeps about
+you, you should just type "ph".  _P_h won't look up a name, but
+will instead give you a prompt.  There are many possible commands
+you can type to _p_h; they are described in full in the _p_h manual
+page.  You will only need to know three commands to change your
+information: _l_o_g_i_n, _e_d_i_t, and _q_u_i_t.  Before actually using _p_h for
+this, you will have to make some preparations.
+
+The first thing you have to do is find your Nameserver _a_l_i_a_s.
+This is a unique name assigned to you by the Nameserver.  It is
+usually your first initial, followed by a dash, followed by your
+last name.  If there is more than one person with the same first
+initial and last name as yours, there may be number tacked onto
+the end of your alias.  The easiest way to find your alias is to
+look up your name with _p_h.
+
+Once your know your alias, you need to find out your Nameserver
+password.  To do this, come to the CCSO Resource Center in Room
+1420 DCL and present a valid University ID at the Accounting
+Desk.  We cannot give out passwords via email or phone to prevent
+disclosure to unauthorized persons.  In cases where a) _p_h is
+being used by the same user-id on the same machine that's listed
+in the email field, and b) _p_h has been installed "setuid root",
+and c) the _p_h version is 5.2 or greater, then no password is
+needed to login.
+
+Now, it's time to use _p_h to change your information.  Type "ph"
+and a return.  You will get a "ph>" _p_r_o_m_p_t.  _N_o_w, _t_y_p_e "_l_o_g_i_n
+_a_l_i_a_s" (but use your real alias, not the word "alias"!) and a
+return.  _P_h will ask for your password; type your password and a
+return.  You should get a greeting from the Nameserver, and
+another prompt.
+
+    % ph
+    $Date: 1992/08/06 22:06:56 $$Revision: 1.1 $
+    100:
+    100:Ph passwords may be obtained at CCSO Accounting, 1420 DCL.
+    100:Be sure to bring your University Id Card. You may not need
+    100:a password if you are using the login in your email field.
+    200:Database ready.
+
+
+    ph> login s-dorner
+    Enter nameserver password:
+    200:s-dorner:Hi how are you?
+    ph>
+
+
+You are now ready to change your information.  Your information
+is organized into "fields", each one containing a different piece
+of information.  There is a field for your name, your address,
+
+
+
+
+
+
+
+
+
+
+
+
+66                           TThhee CCCCSSOO NNaammeesseerrvveerr -- AAnn IInnttrroodduuccttiioonn
+
+
+your phone numbers, etc.[3] To change a particular field, type
+"edit field" and a return, substituting the name of the field you
+wish to change for "field".  For example, if you want to change
+your phone numbers, type "edit phone".  You will be placed in
+your favorite UNIX editor,[4] with the contents of the field you
+asked for as the text.  Make whatever changes you wish, and exit
+the editor.  _P_h will then change the information for you.
+
+If you aren't familiar with a UNIX text editor, you may prefer to
+use the _m_a_k_e command.  After you login to _p_h, just type, make
+name-of-field="value-of-field"
+
+    _p_h> make email="dorner@pequod.cso.uiuc.edu"
+    _2_0_0:_1 _e_n_t_r_y _c_h_a_n_g_e_d.
+    _p_h>
+
+
+Some information cannot be changed; the "name" field, for exam-
+ple.  If you need to change such a field, you should send mail to
+nameserv@uiuc.edu; arrangements can be made.
+
+Once you are done changing your information, type _q_u_i_t and a
+return.
+
+_S_u_p_p_o_s_e _I _c_a_n'_t _u_s_e _p_h _f_r_o_m _m_y _c_o_m_p_u_t_e_r?
+
+If your computer doesn't have _p_h installed on it, but you would
+like to use _p_h to look up addresses or change your information,
+you can still do so.  Connect to the CCSO's Sequent ux1, by using
+telnet (telnet ux1.cso.uiuc.edu), sytek (call 1600), or by dialup
+(333-4000, ux1).  When you are prompted for login:, type "phones"
+and a return.  You will then be prompted for your terminal type.
+If you have a vt100 terminal or terminal emulator, you can just
+type a return; if you have some other terminal, type its name.[5]
+You will receive a "ph>" _p_r_o_m_p_t, _a_n_d _c_a_n _u_s_e _p_h.
+
+_W_h_e_r_e _c_a_n _I _f_i_n_d _m_o_r_e _i_n_f_o_r_m_a_t_i_o_n?
+
+_P_h has an extensive on-line help system.  UNIX users can access
+it by entering _p_h's interactive mode, and typing, _h_e_l_p.
+
+
+
+
+
+____________________
+   [3] The _p_h  command  _f_i_e_l_d_s  will  give  a  complete  list  of
+Nameserver fields.
+   [4] Unless you take pains to change it, that  editor  will  be
+_v_i; see Appendix A if you've never used _v_i before.
+   [5] If you have trouble finding the right name to use for your
+terminal, call the CCSO Consultants at 333-6133.
+
+
+
+
+
+
+
+
+
+
+
+TThhee CCCCSSOO NNaammeesseerrvveerr -- AAnn IInnttrroodduuccttiioonn                           77
+
+
+    % ph
+    $Date: 1992/08/06 22:06:56 $$Revision: 1.1 $
+    100:
+    100:Ph passwords may be obtained at CCSO Accounting, 1420 DCL.
+    100:Be sure to bring your University Id Card. You may not need
+    100:a password if you are using the login in your email field.
+    200:Database ready.
+
+
+    ph> help
+    ----------------------------------------
+     These "ph" help topics are available:
+     511          edit         login        passwd       type
+     add          email        make         password     uiuc.general
+     alias        fields       manpage      query        vi
+     commands     help         nickname     register
+     delete       introduction paper        switch
+     To view one of these topics, type "help name-of-topic-you-want".
+    ----------------------------------------
+     These ``native'' help topics are also available:
+     100          403          508          518          policy
+     101          475          509          519          protocol
+     102          500          510          520          proxy
+     200          501          511          521          restaurant
+     201          502          512          522          site
+     300          503          513          523          type
+     301          504          514          598          update
+     400          505          515          599
+     401          506          516          forwarding
+     402          507          517          password
+     To view one of these topics, type "help native name-of-topic-you-want".
+    ----------------------------------------
+
+
+CMS users of _p_h should give the command, "ph help", _a_n_d _s_u_b_s_e_-
+_q_u_e_n_t_l_y "_p_h _h_e_l_p _n_a_m_e-_o_f-_t_o_p_i_c" (e.g., "ph help email").
+
+_W_h_a_t _i_f _I _h_a_v_e _t_r_o_u_b_l_e?
+
+If you have problems or questions that are not resolved by read-
+ing this document, the _p_h help, or _T_h_e _C_C_S_O _N_a_m_e_s_e_r_v_e_r,
+_S_e_r_v_e_r-_C_l_i_e_n_t _P_r_o_t_o_c_o_l, feel free to ask me by sending mail to
+s-dorner@uiuc.edu.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                           AAPPPPEENNDDIIXX  AA
+
+
+                  AA RRaannkk BBeeggiinnnneerr''ss GGuuiiddee ttoo VVII
+
+
+
+
+This page describes a few _v_i commands to accomplish simple edit-
+ing tasks.  Full documentation for _v_i can be found in _T_h_e _U_N_I_X
+_U_s_e_r'_s _M_a_n_u_a_l _S_u_p_p_l_e_m_e_n_t_a_r_y _D_o_c_u_m_e_n_t_s, chapter 15 (really
+advanced users should read chapter 16 as well).  Two thing to
+keep in mind:  First, the editor is pronounced "vee eye"; if you
+pronounce it, "vie", UNIX gurus will laugh at you, though not out
+loud.  Secondly, _v_i is case-sensitive; be sure to use upper or
+lower case commands as appropriate.
+
+_M_o_d_e_s
+
+_V_i is a modal editor; what you can do depends on what mode you
+are in.  The two modes of interest to us are _c_o_m_m_a_n_d mode and
+_i_n_s_e_r_t mode.  You type most commands in command mode; all you do
+in insert mode is type your text.  You get out of insert mode by
+typing _e_s_c_a_p_e, usually marked "esc" on keyboards; on some key-
+boards, you may have to hold down the control or alt key and
+press "[".  If you type escape in command mode, _v_i will beep at
+you; so if you get confused, just type escape until _v_i beeps;
+then you'll be back in command mode.
+
+
+_M_o_v_i_n_g _A_r_o_u_n_d
+
+Here are some motion commands in _v_i.  They are typed  in  command
+mode, and leave the editor in command mode.
+
+      CCoommmmaanndd                   WWhhaatt iitt ddooeess
+      ____________________________________________________
+      control-h   Moves the cursor lleefftt one character.
+      h           Moves the cursor lleefftt one character.
+      j           Moves the cursor ddoowwnn one line.
+      k           Moves the cursor uupp one line.
+      l           Moves the cursor rriigghhtt one character.
+      w
+
+                  Moves the cursor ffoorrwwaarrdd to  the  begin-
+                  ning of the next word.
+      b
+
+                  Moves the cursor bbaacckkwwaarrdd to the  begin-
+                  ning of the previous word.
+
+
+
+
+
+
+
+
+
+88                           TThhee CCCCSSOO NNaammeesseerrvveerr -- AAnn IInnttrroodduuccttiioonn
+
+
+
+
+
+
+
+TThhee CCCCSSOO NNaammeesseerrvveerr -- AAnn IInnttrroodduuccttiioonn                           99
+
+
+
+_D_e_l_e_t_i_n_g _T_e_x_t
+
+Here are some commands to get rid of stuff.  Type them in command
+mode; they will leave the editor in command mode.
+
+       CCoommmmaanndd                 WWhhaatt iitt ddooeess
+       __________________________________________________
+       dd        Deletes the current line.
+       x
+
+                 Deletes the character at the cursor, and
+                 moves  the  rest of the line to fill the
+                 hole.
+
+
+
+
+_A_d_d_i_n_g _T_e_x_t
+
+The following commands all put you into insert mode and  let  you
+type  text.   Type  escape when you are finished adding text, and
+you will be returned to command mode.
+
+       CCoommmmaanndd                 WWhhaatt iitt ddooeess
+       __________________________________________________
+       i
+
+                 Start inserting  characters  bbeeffoorree  the
+                 character the cursor is on.
+       a
+
+                 Start  inserting  characters  aafftteerr  the
+                 character the cursor is on.
+       O
+
+                 Create a new line above the cursor,  and
+                 start inserting at the beginning of that
+                 line.  Note that this command is a capi-
+                 tal "O", not zero.
+
+
+
+
+_G_e_t_t_i_n_g _O_u_t
+
+The following commands exit _v_i.  They work in command mode.
+
+       CCoommmmaanndd                 WWhhaatt iitt ddooeess
+       __________________________________________________
+       ZZ
+
+                 Exit _v_i, and save the changes  you  have
+                 made.  Those are capital Z's!
+       :q!<cr>
+
+                 Exit _v_i, but  don't  save  changes  (the
+                 "<cr>" means to type return).
+
+
+
+
+
+
+
+
+
+
+
+
+

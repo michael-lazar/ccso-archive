@@ -1,0 +1,91 @@
+cd include; make all
+cd lib; make all
+rm -f /var/src/net/qi/lib/libu.a
+ar crv /var/src/net/qi/lib/libu.a anyof.o pmatch.o str.o strbuild.o strerror.o  util.o vprintf.o
+a - anyof.o
+a - pmatch.o
+a - str.o
+a - strbuild.o
+a - strerror.o
+a - util.o
+a - vprintf.o
+ranlib /var/src/net/qi/lib/libu.a
+cd api; make all
+rm -f libqiapi.a
+ar crv libqiapi.a cryptit.o fcrypt.o CloseQi.o FreeQIR.o OpenQi.o FieldOps.o ReadQi.o LoginQi.o
+a - cryptit.o
+a - fcrypt.o
+a - CloseQi.o
+a - FreeQIR.o
+a - OpenQi.o
+a - FieldOps.o
+a - ReadQi.o
+a - LoginQi.o
+ranlib libqiapi.a
+rm -f /var/src/net/qi/lib/libqiapi.a
+cp libqiapi.a /var/src/net/qi/lib/libqiapi.a
+ranlib /var/src/net/qi/lib/libqiapi.a
+cd qi; make all
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -c lex.yy.c
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -c lock.c
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -c lookup.c
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -c phoneme.c
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -c qi.c
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -c query.c
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -c rules.c
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -c set.c
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -c version.c
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -c main.c
+cc  -o qi main.o add.o auth.o bintree.o change.o commands.o conf.o  dbd.o dbi.o dbm.o field.o help.o lex.yy.o lock.o lookup.o  phoneme.o qi.o query.o rules.o set.o version.o /var/src/net/qi/lib/libu.a /var/src/net/qi/lib/libqiapi.a -ll -lkrb -ldes
+chmod 770 qi
+rm -f /var/src/net/qi/lib/libqi.a
+ar crv /var/src/net/qi/lib/libqi.a add.o auth.o bintree.o change.o commands.o conf.o  dbd.o dbi.o dbm.o field.o help.o lex.yy.o lock.o lookup.o  phoneme.o qi.o query.o rules.o set.o version.o
+a - add.o
+a - auth.o
+a - bintree.o
+a - change.o
+a - commands.o
+a - conf.o
+a - dbd.o
+a - dbi.o
+a - dbm.o
+a - field.o
+a - help.o
+a - lex.yy.o
+a - lock.o
+a - lookup.o
+a - phoneme.o
+a - qi.o
+a - query.o
+a - rules.o
+a - set.o
+a - version.o
+ranlib /var/src/net/qi/lib/libqi.a
+cd ph; make all
+cc -DPH -DHASSTRTOK -I.  -DKERBEROS -DEMAIL_AUTH=\"1\" -DMAILDOMAIN=\"uiuc.edu\" -DFALLBACKPORT=\"105\" -DHOST=\"ns.uiuc.edu\" -DNSSERVICE=\"ns\" -DFALLBACKADDR=\"128.174.5.56\" -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -c ph.c
+cc -DPH -DHASSTRTOK -I.  -DKERBEROS -DEMAIL_AUTH=\"1\" -DMAILDOMAIN=\"uiuc.edu\" -DFALLBACKPORT=\"105\" -DHOST=\"ns.uiuc.edu\" -DNSSERVICE=\"ns\" -DFALLBACKADDR=\"128.174.5.56\" -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -o ph ph.o /var/src/net/qi/lib/libqiapi.a -ll -lkrb -ldes
+cd util; make all
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -c border.c
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -o border  border.o
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -c build.c
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -c maket.c
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -o build build.o maket.o /var/src/net/qi/lib/libqi.a /var/src/net/qi/lib/libu.a /var/src/net/qi/lib/libqiapi.a -ll -lkrb -ldes
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -c credb.c
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -o credb  credb.o /var/src/net/qi/lib/libqi.a /var/src/net/qi/lib/libu.a /var/src/net/qi/lib/libqiapi.a -ll -lkrb -ldes
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -c maked.c
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -o maked  maked.o /var/src/net/qi/lib/libqi.a /var/src/net/qi/lib/libu.a /var/src/net/qi/lib/libqiapi.a -ll -lkrb -ldes
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -c makei.c
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -o makei  makei.o /var/src/net/qi/lib/libqi.a /var/src/net/qi/lib/libu.a /var/src/net/qi/lib/libqiapi.a -ll -lkrb -ldes
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -c mdump.c
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -o mdump  mdump.o /var/src/net/qi/lib/libqi.a /var/src/net/qi/lib/libu.a /var/src/net/qi/lib/libqiapi.a -ll -lkrb -ldes
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -c nsck.c
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -o nsck  nsck.o /var/src/net/qi/lib/libqi.a /var/src/net/qi/lib/libu.a /var/src/net/qi/lib/libqiapi.a -ll -lkrb -ldes
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -c ssnid.c
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -c id.c
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -o ssnid  ssnid.o id.o 
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -c ssnload.c
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -o ssnload  ssnload.o id.o 
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -c ssndump.c
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -o ssndump  ssndump.o id.o 
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -c brute2.c
+cc -I/var/src/net/qi/include  -DWAIT_INT -I/usr/local/include -DKRBNSREALM=\"UIUC.EDU\" -g -I/usr/include/kerberosIV -o brute brute2.o

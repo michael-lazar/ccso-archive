@@ -1,0 +1,5 @@
+$Cflags .= " -DFCNTL_LOCK -DSYSV -DWAIT_INT";
+$MoreLib .= " -L/usr/local/lib -lresolv -lsocket -lnsl";
+$Install = "/usr/ucb/install -c";
+$Lex = "lex -e";
+$Ranlib = "echo";

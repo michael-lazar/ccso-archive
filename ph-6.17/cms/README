@@ -1,0 +1,72 @@
+Date:    Mon, 21 Sep 92 11:27:40 EDT
+From:    scotty@piranha.cs.uoguelph.ca (Steve Howie)
+Subject: Re: CMS client for PH
+
+WHO is a simple PH client which allows queries to be made to a
+CSO server CMS. No other functions such as login, edit, etc.
+are supported. This code is ugly in bits - if anyone feels like
+tidying it up, feel free :)
+
+Software requirements:
+======================
+
+TCP/IP for VM Version 1.2 or later
+IBM C/370 Compiler and Runtime library (Version 1.2.0)
+
+Creating the module:
+====================
+
+You should have 3 files:
+
+   1) WHO   C      - the program itself
+   2) WHO   EXEC   - a front-end EXEC which calls WHO C
+   3) XLATE H      - Translate table
+   4) WHO   README - This file
+
+Change the #define DIRECTORY line in the source to point to the
+server you use. You can easily change this to pass the server as
+an argument from the front-end exec.
+
+Make sure you have the C/370 disks accessed. You should check the
+front-end EXEC and change the code which checks for the availability
+of the TCP/IP public code as well as the C/370 library. You should
+modify this segment of code to conform to your local sites needs.
+
+CC WHO
+LOAD WHO
+GEN WHO
+
+Pretty complex, eh? :-)
+
+To run:
+=======
+
+WHO <name1> [<name2>]
+
+Where <name1> is the first or last name of the person, and <name2>
+lets you optionally refine the search further.
+
+Examples:
+
+         1) WHO Fred
+                Will retrieve all people with 'fred' as their first
+                or last name
+
+         2) WHO JO*
+                Will retrieve all people whose first or last names
+                begin with 'JO'   e.g. John Smith or Bill Jones
+
+         3) WHO SM* B*
+                Retrieves all those whose first or last names begin
+
+                with SM and the other name starts with a B
+                e.g. Bill Smith or Smiley BLOGGS
+
+Author: Steve Howie, University of Guelph   Sept. 1992
+             scotty@piranha.cs.uoguelph.ca
+
+Disclaimers: This code is totally free. Use it in any way you want,
+             but don't hold me or the University liable in any way:)
+
+             If you want to hack/modify it for the better, I'd
+             appreciate a copy of the changes. Thanx!

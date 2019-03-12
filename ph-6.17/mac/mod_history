@@ -1,0 +1,387 @@
+Mac Ph Client Modification History
+==================================
+
+Version 1.1.1. 11/5/92.
+
+- (Pete Resnick). The site list popup menu sometimes extends beyond the
+left edge of query windows. Fixed.
+- (Pete Resnick). The Cancel button does not properly cancel in the
+change default server window. Fixed.
+
+Version 1.1. 6/30/92.
+
+- Ph version 1.0.2 does not work at all with the new MacTCP 1.1.1. 
+At startup, the following bogus error message is issued:"MacTCP is 
+improperly configured. No domain name servers are defined." 
+Ph version 1.1 fixes this problem. (At the time this is being written,
+June 30, 1992, Apple has said that MacTCP 1.1.1 should be released
+to the public sometime this fall. We recommend that all Ph users
+upgrade to Ph 1.1 now so they won't have any problems when the new
+MacTCP is released.)
+- Ph no longer strips leading blanks from field lines before displaying
+them in editing windows.
+- The remaining changes are intended primarily for the convenience of 
+heros.
+- Only heros can edit fields which do not have the "change" attribute.
+Editing these fields, however, can be dangerous even for heros. To 
+remind heros that they should think twice before editing such a field, 
+they are marked with the special "section mark" character in editing
+windows in hero mode.
+- The "Open Ph Record" command now lets you open the record by alias,
+name, or id, rather than just by alias or name. Steve Dorner requested 
+this change, and he wrote the code.
+- We now permit the use of the Edit menu commands Copy, Paste, and Select
+All with password fields in the New Ph Record, Login, and Change Password
+dialogs. For example, if someone sends you a request to change their
+password to "abc123", you can now copy the new password from the mail
+message and paste it into the Ph Change Password dialog.
+
+Version 1.0.2. 10/21/91.
+
+- (Pete Resnick, Steve Dorner). With System 7 and MacTCP 1.1, version
+1.0.1 would sometimes get "unexpected error -23048" on attempts to
+contact a server. This problem should be fixed in 1.0.2. We're not
+sure what causes this error, although we suspect that the MacTCP 1.1
+domain name resolver may be the culprit. In any case, 1.0.2 contains
+a workaround which appears to fix the problem, at least in our tests.
+The fix involves closing and reopening the MacTCP resolver and trying
+again if the -23048 error occurs on any attempt to resolve a domain 
+name.
+- Version 1.0.2 always puts exactly one blank line at the end of all
+help windows. This makes the help text a bit more readable.
+
+Version 1.0.1. 10/16/91.
+
+- (Hal Bloom). Under System 7, when 1.0 is run on a new Mac (no "Ph
+Prefs" file exists in the Preferences folder), it fails to properly
+create the prefs file. This is a major error which is fixed in 1.0.1.
+The error was introduced by some code I added in version 1.0b7, but
+nobody caught it.
+- (Chris Chen). If MacTCP is not installed, Ph reports "unexpected
+error -43" on launch. This uninformative message has been changed
+to "MacTCP is not installed, or it is improperly configured."
+- (Pete Resnick). Pete wrote: "OK, I admit this was a silly thing 
+to do in the first place: I did the following query: 
+'office_phone=*1265 return name'. I was in a mood to play.
+Well, as you can imagine this took a long time. While I was waiting, I
+switched into Finder to play with some stuff. Some time later, the
+application menu was flashing the ph icon. I switched back into ph 
+at which point it gave me the alert: Unknown error -20008. That's
+connectionDoesntExist. In the query result area it said "CPU time limit
+exceeded for this session." Hmmmm... someone is misbehaving."
+This error is fixed - The bogus "unknown error" alert no longer
+appears.
+
+Version 1.0. 10/15/91.
+
+- (Audrey Rosen). If the user renamed the MacTCP control panel, Ph
+would get "unexpected error -43" on launch. This error has been
+fixed.
+- If a Help topic contains the substring "..", only the portion
+of the string following the first such ".." substring is displayed
+in the Help menu. Server administrators can use the characters before
+the ".." to determine the order in which the topics appear in the 
+menu (they are sorted alphabetically). This makes the Help menu look
+lots nicer to the user.
+- (Hal Bloom). If no Ph windows are open, Ph is in the backgound
+under System 7, Finder is in the foreground, and the user double-
+clicks on the Ph icon to bring it to the front, the cursor is a
+wristwatch instead of an arrow. This error is fixed.
+
+Version 1.0b8. 10/8/91.
+
+- Correct an error which sometimes failed to properly report read-only
+database status on logins.
+- If you popup a site popup menu and select the same site in the popup
+menu which was previously selected, version 1.0b7 did not update the
+site domain name field. This has been fixed.
+
+Version 1.0b7. 10/1/91.
+
+- Fixed a minor error in the query window scroll bar.
+- IM VI 3-15 says not to call ModalDialog when the frontmost window
+is a movable modal dialog. I found out why when implementing Balloon
+Help - it screws up the menu bar, and the Help menu in particular.
+So I don't do this anymore. In cases where I need to present an
+error message when a movable modal dialog is frontmost, I dismiss
+the movable modal dialog, then I put up the error message alert,
+and then I bring back the movable modal dialog.
+- Ph has been tested with the new MacTCP 1.1. It works fine. 
+- Implement Tech Note #304, "Pending Update Perils." This tech note
+discusses the proper handling of update events when a modal dialog
+is active. This is especially important now that we support balloon
+help. It also makes Ph behave properly when a modal dialog is active
+and a screen saver kicks in - when you deactivate the screen saver,
+Ph now properly redraws all of its windows.
+- Fixed an error which sometimes caused labels in some of the movable
+modal dialogs to be drawn in the wrong font and size.
+- Under System 7, Ph supports balloon help for all menus, dialogs, and
+windows. The Ph application icon also has a custom Finder help balloon.
+There's 96 help messages total (whew!).
+- Just for yucks, check out the help balloon for the Ph icon in the Ph 
+about box (bring up the about box, turn on balloon help, and park the
+cursor over the copy of the Ph icon in the upper right hand corner of
+the about box).
+- The Help menu has been restructured. Instead of having a list of known
+Ph servers at the end of the menu, there is now a single command "Change
+Ph Help Server" at the beginning of the menu. This new command brings
+up a server site selection dialog which is very similar to the one
+used by the "Change Default Server" command.
+- Under System 7, there is no separate Help menu. Instead, the help 
+commands are appended to the end of the standard System 7 help 
+menu at the right side of the menu bar. Apple recommends that all
+help commands be located in this menu (see IM VI pp. 2-34 and 11-61).
+- Under System 6, the positions of the Windows and Help menus have
+been interchanged so that the Help menu comes last. This makes the
+menu bars under System 6 and System 7 a bit more consistent.
+- Under System 7, the "Ph Prefs" preferences file in the Preferences 
+folder may now be an alias, with the actual prefs file stored elsewhere.
+I have no idea why someone would want to do this, but if they try it,
+it should work.
+- Ph now checks for System 6.0.5 or later.
+- (Ed Dewan) Ed reported: "I have discovered that if I click on several 
+applications in the same folder at once (with the shift key held down), 
+including Ph, then Ph opens up and all the other applications are dropped. 
+Is this caused by Ph, or is it a system problem? It only happens when Ph 
+is present in the mix." Ed said he was using System 6.0.5. I was unable
+to reproduce this problem under 6.0.5 with Ph 1.0b7, so for now I'm
+chalking this one up to cosmic rays.
+- Ph now supports the four required Apple events under System 7. 
+- The Open Application, Open Documents, and Print Documents events have 
+no meaning in the context of Ph. They are accepted but ignored (they do 
+nothing). 
+- The Quit Application event causes Ph to quit. 
+- Local clients (clients on the same computer as Ph) may specify that Ph 
+is or is not permitted to interact with the user when they send Ph a
+Quit Application event. If a local client specifies the kAECanInteract 
+or kAEAlwaysInteract option, Ph interacts with the user just as if the 
+user had selected the Quit command from the File menu: If any open edit 
+windows contain unsaved changes, the usual "Do you want to save changes" 
+alert is presented. If a local client specifies the kAENeverInteract
+option, Ph quits without presenting any save changes alerts. In this
+case, any unsaved changes in edit windows are lost.
+- If a remote client (a client on a different computer than Ph) sends
+Ph a Quit Application event, Ph never interacts with the user. That is,
+in this case, Ph always uses the kAENeverInteract option, no matter
+what interaction preference was requested by the remote client.
+- See Inside Mac VI pages 6-51 through 6-54 for more details on these
+user interaction complexities.
+- As distributed, Ph only accepts Apple events from local clients.
+If a user wishes to have Ph also accept network events, he must use
+the "Sharing" command in the Finder's File menu to enable remote
+program linking to his copy of Ph.
+- Ph can now run in the background. If Ph is in the background and
+needs to present an alert, the Notification Manager is used to inform
+the user that Ph requires attention. A diamond appears next to the
+name of the Ph applicaton in the Application menu (System 7) or the
+Apple menu (System 6), and the small Ph icon flashes in the menu bar
+by periodically alternating with the Application menu icon (System 7)
+or the Apple menu icon (System 6). When the user brings Ph to the
+foreground, the notification is removed and the alert is presented.
+- Added full color icon families for System 7. If you have been
+running any of the previous versions of Ph on your Mac, you'll have
+to rebuild your desktop file before you will see the color icons (sorry
+about that). 
+- The login dialog now has a popup menu the user can use to select
+the login server.
+- (Butch Kemper and others). Added a Logout command to the File menu.
+This command closes all open edit windows and clears the current 
+login status. Note that open edit windows are always "logged in" in
+the sense that if such a window is open, the user can make changes
+and save them. So to effectively "logout," we really do have to close
+all open edit windows.
+- The menu bar is properly unhilited when the movable modal dialogs
+are presented by the Change Password and Change Default Server commands.
+- Multiple-line server error messages are now handled properly. For
+example, "Your email field must not contain addresses ending in nwu.edu;
+Use a specific login and machine instead." In 1.0b6, only the first
+line of such an error message was displayed (in the example, only the
+text up through the semi-colon appeared in the alert).
+- (Steve Dorner). When entering a password, make the Delete key erase 
+just the last character, not the whole password.
+- (Pete Resnick). In the query and edit windows, use shift-tab for 
+backwards tabbing instead of option-tab.
+- Ph now reacts properly when the database is shut off. The message
+issued by the server on connection attempts is displayed to the user.
+E.g., "Database shut off (for maintenance)." For queries, the message
+is displayed in the query window. For all other operations (login, get
+help, etc.), the message is displayed in an alert. Note that Steve 
+Dorner's "Rebuild" doc has a mistake - it says to put a line beginning 
+with "stop" in file prod.sta. Actually, the line must begin with "off". 
+Also, the server error code (555) is undocumented.
+- On queries, CPU time limit exceeded server errors are now handled
+properly. The server error message is displayed in the query result
+field. On our NU server, the query "office_phone=*4080" is a good test
+of this error.
+- (Steve Dorner). Fixed an error involving heros changing passwords
+for other open records. After changing such an open record, any attempt 
+to make further changes to the record resulted in the error message "the 
+alias or password is incorrect." 
+- (Ed DeWan). In the query window, as you move the cursor over the
+window, it changes from an arrow to an ibeam when the cursor is
+positioned over any of the three text fields. In the query text
+field, the left coordinate of the ibeam rectangle was off by 6 pixels.
+This problem has been fixed.
+- The new MacTCP 1.1b1 appears to have fixed the problems I was 
+having with the domain name resolver. The problem was that sometimes
+(often) my resolver result proc was being called with the result code
+still set to cacheFault, and I was reporting this to the user as a
+"domain name server timeout." I had abandoned the MacTCP resolver and
+wrote my own resolver to get around this problem. Now I do the 
+following: I use the MacTCP resolver. If my result proc is called with 
+the error code still set to cacheFault, I then try my resolver. This 
+should make Ph work with both versions of MacTCP, and use the MacTCP 
+resolver when possible.
+
+Version 1.0b6. 5/1/91.
+
+(Gary Jacobs). In 1.0b5, if you tried to create a record with a
+duplicate alias, Ph reported an "unexpected error 509." This mistake
+has been corrected.
+
+In 1.0b6, the Quit command is active during movable modal dialogs.
+
+Version 1.0b5. 4/28/91.
+
+(Bruce Foster). When Bruce first ran 1.0b4, it asked him to select a
+default server, which he did (after playing with the menu for a while,
+he set it back to NU). When the initial query window came up, the site
+popup menu was all screwed up (it had width 0). I'm not quite sure why
+this happened, but I managed to reproduce it, and I fixed it. Sometimes
+the Mac toolbox is just too mysterious for words.
+
+Version 1.0b4. 4/26/91.
+
+(Steve Dorner). You will all be happy to hear that it is no longer
+necessary to use ResEdit to change the STR 128 resource to the domain
+name of your site's server.
+
+The STR 128 resource is now the "default default server" rather than
+the "default server". The "default server" is chosen by the user the
+first time he or she uses the program, and it is subsequently saved
+on the prefs file. The "default default server" is only used to fetch
+the initial site list for the popup menu which is presented in the
+initial dialog asking the user to select a default server. Does this 
+make sense to you?
+
+The first time you run 1.0b4 you will see this dialog in action. 1.0b4
+will blow away your old preferences and create new ones.
+
+The new command "Change Default Server" in the "File" menu can be used
+to change your default server.
+
+You can still use ResEdit to change the default default server in the
+STR 128 resource to your local server instead of ns.nwu.edu if you
+wish, and this is a good idea, but it is no longer required.
+
+No, I have no plans for a "default default default server". :-)
+
+(Gary Jacobs, jwn2). In 1.0b3, if no windows were open, typing 
+anything caused a crash. The errror is fixed.
+
+(Gary Jacobs, jwn2). 1.0b3 had horrible problems with really long
+query replies from a server, e.g., the >80K reply with 228 matches
+you get if you query ns.uiuc.edu for "restaurant". The dumb mistakes
+I made are way too numerous too mention. They're all fixed (I hope).
+
+By the way, I use the built-in Mac TextEdit routines to display query
+replies, and those routines cannot handle more than 32K of text. Among
+the other problems I fixed involving big query replies, I now truncate 
+any replies which exceed this limit and put the special message
+"----- The query reply was too long. It was truncated" at the end of
+the truncated reply.
+
+(Gary Jacobs, jwn2). My syntax error checking of query replies was
+a bit too strong. 1.0b4 relaxes the checks to permit legal but unusual 
+replies.
+
+(Hal Bloom, Ron Rusnack). When an error occurs on an attempt to
+change a field value, I now display the server error message as received
+from the server instead of displaying my own error message based on the
+server error number.
+
+If multiple errors occur on an attempt to save an edited record with
+several changed fields, I now display individual error alerts for
+each field which was in error. Each of the individual error alerts
+displays the error message as received from the server.
+
+(Gary Jacobs, jwn2). The Mac Ph client uses the alias field to uniquely
+identify a record which is being edited. It cannot be used to edit
+records which do not have an alias. 1.0b3 didn't deal gracefully with
+attempts to do this.
+
+If you tried to log in to a record which had no alias, 1.0b3 reported 
+"unexpected server error 508". 1.0b4 instead reports "You cannot login 
+to a record which has no alias."
+
+1.0b4 does not permit a logged in user to open a record for editing 
+if it does not have an alias. The error message is "You cannot open a 
+record which has no alias". 1.0b3 let you open such a record, but any
+attempt to save changes failed with confusing error messages.
+
+1.0b4 does not permit you to attempt to save an edited record if the
+alias field has been changed to be empty. The error message is "You
+cannot save a record with an empty alias field."
+
+Version 1.0b3. 4/21/91.
+
+- Option-tab now works in the query window - it backs up to the previous
+field. (Pete Resnick).
+- In edit windows, when the "Show field info" option is toggled, I now
+position the display in the window so that the current field is
+always visible. (Pete Resnick).
+- In 1.0b2 the Windows menu was not always properly activated, e.g., 
+after a query. This error is fixed in 1.0b3.
+- Server error numbers are no longer presented to the user when errors
+occur in queries or when fetching help text. Only the server error
+messages are presented. E.g., "No matches to your query." is now 
+displayed in the query window instead of "Server error 501:No matches
+to your query."
+- The Help menu no longer lists any help topics whose titles consist
+only of decimal digits. This eliminates all the native server error
+number help topics, which are completely irrelevant to the
+Mac Ph client, which never reports server error numbers to the user
+anyway. This makes the Help menu much shorter. In 1.0b2 the menu was
+ridiculously long and hence cumbersome when used with any site except
+for NU. You probably won't notice this change immediately, since the
+old Help menu topic list is kept on the Ph prefs file and is only 
+updated every 24 hours. To force an update so you can see the new
+menu, select your site from the site list at the bottom of the Help
+menu. (Bruce Foster).
+
+Version 1.0b2. 4/17/91.
+
+- 1.0b1 crashed horribly if you tried to open a new help window when 
+there were no open windows.
+- Fixed an error redrawing the server popup menu box in the Query 
+window when the site list changed.
+- Fixed an error saving changed fields when both the alias and some 
+other field were changed.
+- The page up, page down, home and end keys now work with all three
+kinds of windows (query, edit, and help).
+- The arrow keys now work in the query and help windows.
+- Fixed the error message that's displayed if you attempt to login 
+with a valid alias but a bad password.
+- In query replies, if any line extends beyond 80 characters, the 
+field containing the long line is reformatted as follows:
+         field_name:
+field text field text field text field text field text field text 
+field text field text field text field text field text field text 
+field text field text field text field text field text field text 
+field text field text field text field text field text field text 
+field text field text field text field text field text field text 
+For an example, query the UIUC server for "weather". This used
+to look awful with 1.0b1. It looks much better with 1.0b2.
+- Fixed a stupid mistake: Non-heros who log in and then close their
+login window are now permitted to reopen their record with the "Open
+Ph Record" command.
+- The prefs file now has a creator, type, and icon. To see the new
+icon you will have to trash the old prefs file, rebuild your desktop, 
+and then run the new version of Ph to create the new prefs file.
+(Sorry about that - don't bother if you don't care).
+- A much better error message is now displayed when a hero attempts
+to create a new record and specifies an illegal value for one of 
+the fields (e.g., alias too long or too short or contains an
+illegal character).
+
+Version 1.0b1. 4/11/91. First beta release.

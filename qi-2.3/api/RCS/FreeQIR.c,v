@@ -1,0 +1,57 @@
+head	1.1;
+access;
+symbols;
+locks
+	paul:1.1; strict;
+comment	@ * @;
+
+
+1.1
+date	93.06.14.20.37.07;	author paul;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@/*
+** FreeQIR -- Free space allocated within QI_response array
+**
+**	Parameters:
+**		QRp -- pointer to array of QI_response
+**
+**	Returns:
+**		None
+**
+**	Side Effects:
+**		none
+*/
+
+#include "qiapi.h"
+
+#ifndef lint
+static char RcsId[] = "@@(#)$Id$";
+#endif
+
+void
+FreeQIR(QRp)
+    QIR	*QRp;
+{
+    QIR	*QRsave = QRp;
+
+    if (QRp == QIR_NULL)
+	return;
+    do {
+	if (QRp->message != (char *) NULL)
+	    free (QRp->message);
+    } while ((QRp++)->code < 0);
+    free ((char *) QRsave);
+}
+@

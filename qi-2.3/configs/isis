@@ -1,0 +1,15 @@
+# isis - a Sun 4/690MP running SunOS 4.1.2
+$DefineStrings{"DATABASE"} = "/var/nameserv/db/prod";
+$DefineStrings{"HELPDIR"} = "/var/nameserv/db/help";
+$DefineStrings{"RUNDIR"} = "/var/nameserv/db";
+$OtherDefines{"Log_Qilog"} = "LOG_DAEMON";
+$QiExecDir = "/usr/local/libexec";	# Where to install the qi server.
+$QiUtilDir = "/var/nameserv/bin";
+@Features = ("KERBEROS","EMAIL_AUTH","NO_READ_LOCK");
+$Owner = "paul";
+$Group = "source";
+$CC = "gcc -fpcc-struct-return";
+$Cflags .= " -DKRBNSREALM=\\\"UIUC.EDU\\\" -O";
+$Depend = "";
+@WantDirs=("include","lib","api","ph","qi","util");
+1;
