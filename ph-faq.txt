@@ -1,0 +1,861 @@
+Posted-By: auto-faq 3.1.1.2
+Archive-name: ph-faq
+
+FAQ (Frequently-asked Questions) for ph (cso nameserver)
+
+------------------------------
+
+Subject: Recent changes
+
+Corrected wfu.edu addresses which were no longer valid.
+
+Numerous corrections from Paul Pomes, including change of software location
+for ph, qi, and phquery (Jan 17, 1996)
+
+Added HTML to FAQ (Jun 17, 1996)
+
+Moved location of FAQ (Jan 3, 1996)
+
+Gopher access to FAQ no longer available (Sep 7, 1995)
+
+Corrected listserv address again (Jul 20, 1995)
+
+Corrected listserve address (Apr 15, 1995)
+
+Added information about linux (Feb 27, 1995)
+
+Added uwho client (Feb 27, 1995)
+
+Added automatic posting with Supersedes header (Feb 6, 1995)
+
+Changed http location of archive (Jan 16, 1995)
+
+Added 1.2.1 Where should the database files be kept? (Jan 9, 1995)
+
+Added to phquery section 1.4 (Oct 13, 1994)
+
+Added new database build script 1.3 (Oct 13, 1994)
+
+Added mirror site for ph-FAQ (Oct 13, 1994)
+
+Added samples to Subject: 1.5 Can I run multiple databases on different 
+ports? (Oct 13, 1994)
+
+Removed annoying tabs and spaces (Oct 13, 1994)
+
+------------------------------
+
+Subject: Acknowledgements
+
+The FAQ is maintained by Noel Hunter <noel@camelcity.com>.  
+
+This FAQ is automatically posted on the 5th and 20th of each month. The
+latest version of the FAQ is available in the following ways:
+
+http://www.camelcity.com/~noel/usenet/ph-FAQ.htm
+
+A mirror is maintained at:
+
+http://www.tas.gov.au/ph/contents.html
+
+This FAQ is also mailed to the list info-ph@postoffice.cso.uiuc.edu. To get
+on the ph mailing list, send mail to listserv@postoffice.cso.uiuc.edu
+with "subscribe info-ph" in the BODY (not Subject: !)
+
+Many of these answers came from the info-ph list.  Some are paraphrased,
+edited, or otherwise altered, and some are not credited.  But my thanks
+goes out to all who have contributed to the list.  And if you see
+something of yours here which you want credited, let me know, and I will
+credit it. 
+
+Thanks to Sandra Louie for her list of several FAQs.
+
+------------------------------
+
+Subject: Submissions
+
+The maintainer is not an expert on ph/cso.  I am relying on experts to
+submit FAQs and answers.  I am also relying on users of the FAQ to let me
+know which answers are unclear, and where there are errors or omissions.
+At present, this is just a start.  You can help make it more complete. 
+
+To submit, send email to: noel@camelcity.com.  If you do NOT want your name
+credited in the FAQ, please say so. 
+
+------------------------------
+
+Subject: Contents
+
+Section 0: What is CSO/qi/ph?
+
+Section 1: Setting up and installing a server
+        1.1 Where do I get the ph / cso software?
+        1.2 How do I install the ph / cso software
+	1.2.1 Where should the database files be kept?
+	1.3 How do I create a ph database?
+	1.4 How do I enable phquery for fuzzy mail addressing?
+	1.5 Can I run multiple databases on different ports?
+	1.6 How can I register my server?
+	1.7 How to I give everyone passwords?
+
+Section 2: Common problems / error messages
+	2.1 How do I fix "Oops, lost connection to server"
+	2.2 How do I do searches using strings with blanks in them?
+	2.3 How do I limit the number of responses?
+	2.4 Ph is working fine for some entries, but returns "No matches to
+	    your query" for other entries (especially new entries)
+        2.5 How can you get a qi server to not only compile but actually
+        serve queries off of a Solaris 2.X machine?
+
+Section 3: Questions that have not been answered
+	3.1 To which Unix platforms has `ph' been ported?
+
+Section 4: Other questions
+	4.1 What does CSO stand for?
+
+------------------------------
+
+Subject: Section 0: What is CSO/qi/ph?
+
+The CSO nameserver provides an efficient database for the storage and
+retrieval of a variety of information over the Internet.  Its primary use
+is for telephone and email directories, but it may be used to store any
+type of information. 
+
+CSO is the informal name given to an electronic phonebook/nameserver
+database developed at the Computing and Communications Services Office at
+the University of Illinois by Steve Dorner and others, and since adopted
+by a number of other institutions. The database follows the client server
+model; the server maintains the actual data and runs a program called qi
+(query interpreter) that receives requests and sends back information. The
+client runs a program (often called ph) that sends requests to the server.
+The ph client has been ported to most major platform in use on the
+Internet, from Unix to Mac and PC.  Client functions are also built into
+many of the programs used to provide friendly interfaces to the Internet,
+such as gopher, World-Wide Web, and their associated clients (lynx,
+mosaic, etc.). 
+
+The database is loosely structured and keyed only on people's names and on
+their alias, which is a unique identifier for their entry, or on other
+"Indexed" and "Public" fields specified in the server configuration; this
+permits fast lookup by name or alias, but not lookup by other criteria,
+such as phone number.  The server can limit the number of hits returned,
+to make it difficult for people to use it to make handy mailing lists.
+Most fields of an entry can also be concealed from public view. 
+
+The database can be used to store assorted information in addition to
+people's ordinary phone book information, and can be used to store
+non-people information as well, such as weather data. An email address
+might be registered in the database for a person; in this case the
+nameserver performs the additional service of routing addresses of the
+form fullname@uiuc.edu to a registered 'real' address such as
+username@ux1.cso.uiuc.edu. It permits one to have a single email address
+at an institution, regardless of the number of host accounts they have.
+This conversion is actually done by yet another client called phquery and
+not the nameserver itself.  The nameserver in effect stores the mapping
+between (alias || callsign || name) and (physical email address).  phquery
+is designed to be called by sendmail, perform the lookup, then re-invoke
+sendmail with the new address obtained via nameserver lookup. 
+
+A CSO database can also be used for security purposes, to validate entry
+to important services such as dial-in terminal servers. The present
+implementation of the terminal server security software (qtacacsd for
+Cisco terminal servers) does indeed query the nameserver. 
+
+At the University of Illinois, UofI Direct, the registration service, will
+actually use Kerberos for authentication.  The nameserver is a very
+important part of this as it provides the initial set of principle names
+and passwords to load into Kerberos.  The qi database and the V5 Kerberos
+KDC will be maintained in lockstep.  Eventually only a valid Kerberos
+ticket will be accepted for login purposes to the UofI qi server.  The
+terminal server software will also be changed in the future to obtain
+Kerberos ticket granting tickets to verify users. 
+
+Thanks to Stan Kerr at the Computing & Communications Services Office at U
+of Illinois, for providing most of the information in this section, and to
+Paul Pomes and Steve Dorner for reviewing it. 
+
+------------------------------
+
+Subject Section 1: Setting up and installing a server
+
+------------------------------
+
+Subject: 1.1 Where do I get the ph / cso software?
+
+The ph/qi distribution directory previously on vixen.cso.uiuc.edu is
+available at
+
+        ftp://uiarchive.cso.uiuc.edu/pub/packages/ph
+
+The latest beta release of the ph/qi software is in
+
+        ftp://uiarchive.cso.uiuc.edu/pub/packages/ph/qi-3.1b7.tar.gz
+
+A general Web-based search engine is available on uiarchive to help you
+locate other software packages that have moved to this new server.  This
+search engine is accessed from the URL:
+
+        http://uiarchive.cso.uiuc.edu/elocate.html
+
+A patch for linux compilation is available from:
+
+        http://www.camelcity.com/~noel/usenet/ph-linux
+
+------------------------------
+
+Subject: 1.2 How do I install the ph / cso software?
+
+Server
+------
+
+To install the server without reading any instructions, look in the
+configs directory (in qi).  Change the file "defaults" to include your
+domain name, desired directories, and features.  Then look for a config
+file for your system.  Finally, in the main qi dir, type: 
+
+Configure systemtype
+make install
+
+Finally, build the database (see 1.3, below), and modify your inetd.conf
+file and your services files to reference the server.  Here are sample
+entries: 
+
+In services:
+ns                  105/tcp
+
+If you are using NIS, run ypmake after modifying services.
+
+In inetd.conf:
+ns                  stream tcp nowait root   /usr/local/lib/cso/qi qi -d -t30
+
+After modifying inetd.conf, make the inetd reload inetd.conf:
+
+inetd -c
+
+Client
+------
+
+Unix: The Unix client comes as part of the server package.  The easiest
+way to install it is to do it as part of the server package, above.  The
+Configure script will automatically generate a Makefile for your system,
+and will make and install the ph client.  If for some reason you cannot
+make the entire qi package, here are the minimal steps for making the
+client: 
+
+Look in the configs directory (in qi).  Change the file "defaults" to
+include your domain name, desired directories, and features.  Then look
+for a config file for your system.  Finally, in the main qi dir, type: 
+
+Configure systemtype
+
+Next, make the api library used by ph:
+cd api
+make
+
+Finally, go back to the qi dir, cd to the ph dir, and do a make:
+
+cd ..
+cd ph
+make
+
+If all goes well, finish with:
+make install
+
+Note that the client distribution (a separate from the entire qi
+distribution), includes a Makefile already generated for a system at uiuc.
+While it is possible to edit this Makefile (despite the "Do not edit"
+warning at the top of the file), it is much easier to make ph as a part of
+qi. 
+
+Other clients:
+
+The ph distribution comes with clients for the following systems:
+
+a. CMS, requires TCP/IP for VM Version 1.2 or later IBM C/370 Compiler and
+   Runtime library (Version 1.2.0)
+b. DOS, with both source and executable, requires MS-DOS, PC/TCP by FTP
+   Software
+c. MAC, requires MacTCP
+d. Next
+e. PC-NFS version (for MS-DOS and SUN's PC-NFS)
+f. VM, in Pascal
+g. VMS 5.3 with Wollongong WIN/TCP 5.1
+h. Windows (with winsock)
+i. X-Windows
+
+Some other clients not part of the distribution:
+
+uwho (pronounced "you-who") is another people-finding front end program
+that was created by Daniel Kegel (dank@alumni.caltech.edu), because whois
+seemed difficult to use- you had to know what the hostname of the whois
+server was, which is a detail that users shouldn't have to know. 
+
+uwho is a front end to several white pages services (currently, whois,
+ph, and KIS). It accepts a name and partial organization name, does a
+search for matching organizations, runs whois, ph, or KIS queries (as
+appropriate) in parallel, then shows the user the results. It is
+powerful simply because it accesses a continually updated list of white
+pages servers [i.e., it searches current information, not its "own list
+of users"], so its power will grow as more [user-information] servers
+come online.
+
+Uwho is written in C and runs under Unix, VMS, NT, and MS-DOS. For more
+information, consult uwho.doc. The latest version is uwho218b.tar.Z or
+uwho218b.zip and can be browsed as individual files. 
+
+Or, if you don't have Web access, everything can be had at
+    ftp://alumni.caltech.edu/pub/dank/uwho
+
+uwho2html, a WWW front end to uwho, is also available.
+
+
+Most gopher browsers support PH queries
+Many World-Wide-Web browsers
+Some Mail packages (notably Eudora)
+
+
+Other Vax/VMS clients available via anonymous ftp:
+  UCX:           esa.lanl.gov
+  UCX:           noc.macc.wisc.edu
+  Multinet:      icaen.llnl.gov
+  UCX & Mulinet: ftp.ceri.memst.edu
+
+------------------------------
+
+Subject: 1.2.1 Where should the database files be kept?
+
+(contributed by Gregg TeHennepe gat@jax.org)
+
+> Can someone please tell in which directory the database files (prod-*) 
+> should be kept or in which file we specify its location.
+
+I got confused by this the first time I set qi up... if the prod.* files
+are in the directory /usr/local/lib/qi, your DATABASE declaration in the
+defaults config should be "/usr/local/lib/qi/prod".  I originally thought
+this was set to a directory, and so created the directory
+/usr/local/lib/qi/prod, and had the prod.* files there (and it didn't work).
+
+------------------------------
+
+Subject: 1.3 How do I create a ph database?
+
+To create a database, you need to define the fields for the database,
+determine its size, create a text file of data to be input into the
+database, then run the database building programs. 
+
+a. Defining the database
+
+A ph database is defined by a "cnf" file.  The default file which comes
+with ph is "prod.cnf".  It's a good idea to start with a copy of this
+file, and to change as little as possible.  Some clients rely on the names
+of certain fields in the cnf file, so changing them can cause unforeseen
+problems.  The ph installation instructions specifically state that you
+should NOT change the following fields: 
+
+Used in ph source code
+----------------------
+2:email
+3:name
+4:type
+5:id
+6:alias
+7:password
+8:proxy
+23:nickname
+25:all
+30:hero
+43:suppress
+
+Used by utilities and clients
+-----------------------------
+0:address
+1:phone
+9:department
+10:title
+11:curriculum
+20:home_address
+21:permanent_address
+22:office_address
+26:callsign
+31:no_update
+32:office_phone
+33:home_phone
+35:high_school
+37:permanent_phone
+42:left_uiuc
+
+You should be able to change other fields without causing too many
+problems.  For each field in the file, you will see a field number, a
+field name, the number of bytes in the field, a descriptive name, and a
+list of properties for the field.  Each of these items is separated by a
+colon, with field entries separated by new lines.  You will probably want
+to change the descriptions of some of the fields, as well as their length
+in bytes, but you should generally leave the names and numbers alone. 
+
+There are numerous properties you can assign to a field, and most sites
+will want to customize these properties.  The most commonly changed
+properties are as follows: 
+
+1. Lookup: if present, clients can search on this field
+
+2. Public: if present, clients can see this field.  LocalPub is a
+variation which allows only clients in the local domain to see the field. 
+If neither is present, only the system administrators and owners can see
+the field. 
+
+3. Default: If this is present, the contents of the field are returned on
+normal searches.  If not present, the contents are returned only when
+specifically requested by the client. 
+
+4. Change: if present, clients who have authenticated (logged in) can
+change the contents of the field. 
+
+b. Creating an input file
+
+To create an input file, you create a tab-delimited file containing the
+information for the database.  Each line will be composed of field
+numbers, a colon, the data for the field, and a tab (if another field
+follows).  The format looks like this: 
+
+fieldnum:data-for-field (tab)	fieldnum:data-for-field... (new line)
+
+Here's a simple example:
+
+3:Hunter, Noel C	32:759-5812	 22:POBox 7408	4:p
+3:Dominick, James Lyon	32:759-5261	4:p
+
+This example has two records, one for Noel Hunter, and one for James
+Dominick.  Both records include data for fields 3,4 and 32, and the entry
+for Noel Hunter also has data for field 22. 
+
+Notice that the entries do not have to be in any order, and that some
+entries can contain more fields than others.  Field 4, the "type" field,
+must be present if you want ph to limit the number of entries returned by
+searches. 
+
+c. Building the database
+
+Assuming that the database cnf file (see a, above) is called "prod.cnf",
+and the database text input file (see b, above) is called "qi.input", we
+can create a ph database with the following shell script (note that this
+version now works on a copy rather than the production database,
+minimizing the time that the server is down): 
+
+#!/bin/sh
+# PH database build script
+# Designed from numerous contributions to the info-ph list
+# Coded by Noel Hunter (noel@camelcity.com)
+# 
+# Builds a PH Database from the input stored in the file qi.input.
+# During the build, works on a copy of the database, not the working version.
+# If disk space is a premium, modify the script to work on prod, not prod-new.
+#
+# The latest version of this script is available from:
+# http://www.camelcity.com/~noel/usenet/ph-build.sh
+#
+echo "PH database build script started..."
+#
+# cd to the cso library directory.  We assume all the cso programs  
+# are installed here:
+cd /usr/local/lib/cso
+#
+echo "Making a working copy of prod.cnf for building the new database..."
+cp prod.cnf prod-new.cnf
+#
+# Determine the size for the database using the "sizedb" program
+# that comes with the server.  You need perl to use sizedb, along
+# with the file primes.shar.  If you don't have these, you can hard-
+# code in a prime bigger than the number of indexed fields (from the
+# cnf file) times the number of records in your database (qi.input):
+echo "Calculating size..."
+size=`./sizedb prod-new.cnf qi.input`
+#
+# Build the database using the specifications in "prod-new.cnf", and the
+# data in "qi.input"
+echo "Executing credb..."
+./credb $size prod-new
+echo "Executing maked..."
+./maked prod-new <qi.input
+echo "Executing makei..."
+./makei prod-new
+echo "Executing build..."
+./build -s prod-new
+#
+# Move the new database into place:
+echo "Moving database into place..."
+mv prod-new.bdx prod.bdx
+mv prod-new.bnr prod.bnr
+mv prod-new.dir prod.dir
+mv prod-new.dov prod.dov
+mv prod-new.idx prod.idx
+mv prod-new.iov prod.iov
+mv prod-new.lck prod.lck
+mv prod-new.seq prod.seq
+#
+# Set permissions so that users cannot access the database directly.
+# We assume that the qi server is running under a login that can
+# access the files, if not, change "whois" below to the appropriate
+# user name:
+chown whois *
+chmod -R o-rwx,g-rwx *
+#
+echo "PH database build script complete."
+
+------------------------------
+
+Subject: 1.4 How do I enable phquery for fuzzy mail addressing?
+
+(contributed by Sverre Froyen, modified by Noel Hunter)
+
+Fuzzy addressing is done by the program "phquery", part of the ph client
+distribution.  Fuzzy addressing allows users to send mail based on a
+person's real name, rather than their login ID.  Phquery performs the
+conversion from the real name to an email address, using the ph database. 
+Adding phquery is complicated, and you must be very careful or you will
+disrupt incoming mail.  If possible, try it out on a non-production system
+first. 
+
+For phquery to work, alias must be at least "Indexed:Lookup:Public" in
+prod.cnf.  Default is also good to add.  Ditto for the callsign and name
+fields (Paul Pomes). 
+
+To make it work, first compile phquery on your machine.  It's part of the
+ph client distribution available from the main ftp archive (see 1.3,
+below). 
+
+After compiling it, you want to make sure that it works correctly by
+running it in debug mode. Type, e.g.,
+
+phquery -d -f your-address test-name < /dev/null
+
+If it works, you are ready to install it by changing you sendmail
+configuration file to route incoming messages through phquery.  How you do
+this will vary with each version of Unix, but here is a sample. 
+
+On most Unix systems, the file to alter is sendmail.cf.  Here are diffs of
+how it was done on one system: 
+
+Adding the phquery mailer:
+
+*** 235,240 ****
+--- 239,248 ----
+  Mlocal,       P=/bin/mail, F=flsSDFMmnP, S=10, R=20, A=mail -d $u
+  Mprog,        P=/bin/sh,   F=lsDFMeuP,  S=10, R=20, A=sh -c $u
+
++ # Phquery specification
++
++ MPH,  P=/etc/phquery, F=DFMhnmur, A=phquery $u
++
+  S10
+  # None needed.
+
+***************
+
+Adding the rule to invoke phquery:
+
+*** 353,364 ****
+--- 361,376 ----
+  # Handle special cases.....
+  R@                    $#local $:$n                    handle <> form
+
++ # Invoke phquery to resolve names addressed to domain (sverre)
++ R$+<@LOCAL>           $#PH $@$w $:$1
++
+  # resolve the local hostname to "LOCAL".
+  R$*<$*$=w.LOCAL>$*    $1<$2LOCAL>$4                   thishost.LOCAL
+  R$*<$*$=w.uucp>$*     $1<$2LOCAL>$4                   thishost.uucp
+  R$*<$*$=w>$*          $1<$2LOCAL>$4                   thishost
+
+***************
+
+Note that I had to add the phquery rule before the local hostname gets
+resolved to LOCAL.  After this point there is no way to distinguish mail
+to the domain from mail to the local host and a mail loop will result.
+Also make sure that From: line contains the hostname and not just the
+domain name.  Our mailer used just the domainname and I had a wonderful
+mail loop bouncing mail with another site because phquery could not
+resolve MAILER_DAEMON.  You can check your sendmail.cf file by running
+sendmail (by hand) with the -bt option, i.e.,
+
+/usr/lib/sendmail -bt -C new-configuration file
+
+and asking it to invoke the various rules, type for instance
+
+4,0 some-address
+
+and it will show how rules 4 and 0 treats the address.
+
+***************
+
+AN ARCHIVE of sendmail.cf diff files is maintained at:
+
+http://www.camelcity.com/~noel/usenet/phquery-diffs/
+
+You can use these diffs to make changes to your sendmail.cf file. 
+Currently, only two diffs are available: 
+
+sendmailV8 (UCB Sendmail Version 8)
+sunos52    (SUN OS Version 5.2)
+
+For IDA sendmail, the phquery program is now part of the qi distribution on 
+uiarchive (see Subject: 1.1 Where do I get the ph / cso software?)
+
+If you have phquery working, PLEASE send us a diff by executing the command:
+
+diff -c sendmail.cf.clean sendmail.cf
+
+(provided your original file is sendmail.cf.clean).  Then mail the output
+of the command, along with the output of "uname -a" to noel@camelcity.com. 
+
+------------------------------
+
+Subject: 1.5 Can I run multiple databases on different ports?
+
+Yes.  You can use one binary (copy of the software).  On a Unix system,
+make multiple entries in /etc/services and /etc/inetd.conf, and use the
+-DATABASE option with each entry in /etc/inetd.conf to specify the desired
+database for that port. 
+
+Here are some sample entries from /etc/services and /etc/inetd.conf
+
+/etc/services:
+ns              105/tcp         # CCSO nameserver
+ns-clio         106/tcp
+ns-eha          107/tcp
+
+/etc/inetd.conf:
+ns              stream  tcp     nowait  root    /usr/local/etc/qi qi
+ns-clio         stream  tcp     nowait  root    /usr/local/etc/qi qi \
+ -DATABASE=/usr/users/nameserv/db/clio
+ns-eha          stream  tcp     nowait  root    /usr/local/etc/qi qi \
+ -DATABASE=/usr/users/nameserv/db/eha
+
+        (ns-clio and ns-eha are each one line, no breaks.)
+
+(Samples contributed by Steve Madsen  <smadsen@cs.muohio.edu>)
+
+------------------------------
+
+Subject: 1.6 How can I register my CSO server?
+
+You can send a note to Joel Cooper (cooper@utopia.cc.nd.edu) or (John
+Norstad, j-norstad@nwu.edu) . They need to know the name of your
+institution as you wish it to appear in the directory, plus the domain
+name of your new CSO server.  Joel maintains the list used by Gopher. They
+try to keep their lists synchronized, so you only need to tell one of
+them. John had announced that he would soon stop maintaining the list for
+the Mac client, but has since been persuaded to continue maintaining the
+list. 
+
+------------------------------
+
+Subject: 1.7 How to I give everyone passwords?
+
+(contributed by Brian T. Shelden)
+
+Password is just a field in the database, like any other. So, in your
+tab-separated input file (see question 1.3) just add values for the
+Password field in your .cnf file.  (Usually 7.)
+
+Here's how I give everyone randomly generated passwords for the Directory
+of Legal Academia <gopher://gopher.law.cornell.edu/11/csodir/>. 
+
+% mdump all > output.qi
+% qi2readable output.qi | givepw | readable2qi > input.qi
+
+Now remake the database with input.qi.  Below are the scripts qi2readable,
+givepw, and readable2qi.  (Yes, it could be done in one script, but
+qi2readable and and readable2qi are useful for other things, too.)
+
+
+==================== qi2readable ==================== (cut here)
+#! /usr/local/bin/perl
+
+while (<>) {
+        chop;
+        @a = split(/\t/);
+        foreach $a (@a) {
+                print "$a\n" if $a !~ /^\s*$/;
+        }
+        print "--------------------\n";
+}
+
+==================== readable2qi ==================== (cut here)
+#! /usr/local/bin/perl
+
+while (<>) {
+        if (/^[-]+$/) {
+                print "\t\n";
+        }
+        elsif (/\S+/) {
+                chop;
+                print $_, "\t";
+        }
+}
+
+==================== givepw ==================== (cut here)
+#! /usr/local/bin/perl -w
+
+$pwnum = 7;
+
+srand($$|time);
+
+$hadapw = 0;
+while (<>) {
+        if (/^[\-]+$/) {
+                if (! $hadapw) {
+                        $ascii_passwd = &pw_generate;
+                        print "${pwnum}:$ascii_passwd\n";
+                }
+                $hadapw = 0;
+        }
+        elsif (/^${pwnum}:/) {
+                $hadapw = 1;
+        }
+        print;
+}
+
+#------------------------------------------------------------------------------
+# Generate funky random password:
+#------------------------------------------------------------------------------
+sub pw_generate {
+        local(@passset, $rnd_passwd, $randum_num);
+        local($randum_num);
+        
+        @passset = ('a'..'k', 'm'..'z', 'A'..'N', 'P'..'Z', '2'..'9');
+        $rnd_passwd = "";
+        for ($i = 0; $i < 8; $i++) {
+                $randum_num = int(rand($#passset + 1));
+                $rnd_passwd .= @passset[$randum_num];
+        }
+
+        return $rnd_passwd;
+}
+
+
+------------------------------
+
+Subject: Section 2: Common problems / error messages
+
+------------------------------
+
+Subject: 2.1 How do I fix "Oops, lost connection to server"
+
+There are many possible causes for this problem.  Here is a list of things
+to check: 
+
+1. Are the permissions set so that the login running qi (look in your
+"inetd.conf" file to determine the login) can read all of the files?  The
+permissions should look something like this (assuming the user is root): 
+
+-rw-------   1 root     sys      3153408 Dec  6 05:03 prod.*
+-rwx------   1 root     sys       180224 Nov 30 11:22 qi
+
+If qi is not running as root, you need to chown the files so that the qi
+user can read them, and can execute qi. 
+
+2. Are the ph binaries installed in the right place (specified during the
+make and in "inetd.conf"?  Is the ph directory accessible?  Did you move
+the sources after you installed (this can cause problems). 
+
+3. Did you build the database, and did it work (see 1.3)?
+
+4. Are the service names in /etc/services and /etc/inted.conf the same,
+and are they the same as the one specified in the makefiles? 
+
+5. Did you restart inetd (with inetd -c), and rebuild the NIS database (if
+using NIS, run ypmake), after you installed ph? 
+
+6. Is the prod.cnf (or other cnf) file for your database in the same
+directory as the database (it has to be). 
+
+7. If the client does not have a registered domain name, qi may be denying
+access.  Try compiling with the the -DNOCHECKNET option (add that to your
+"$Cflags" variable in the config file used to build qi and then rebuild
+qi.)
+
+------------------------------
+
+Subject: 2.2 How do I do searches using strings with blanks in them?
+
+(contributed by guthery@austin.slcs.slb.com)
+
+Suppose the field you are searching is called Address and you want all the
+Smiths who live in "New York".  You would enter the following in the Ph
+command box: 
+
+name=Smith address=New address=York
+
+------------------------------
+
+Subject: 2.3 How do I limit the number of responses?
+
+To limit the number of responses returned, you need to do two things:
+
+1. When compiling the server, set the "person limit", in the file
+qi/configs/defaults.  Look for the line: 
+
+"PersonLimit","100",                  # max # of people to return
+
+and set the value (100 in this example) to the desired number of entries.
+
+2. For all records you want to limit, you must set the "type" field to
+"person", or "p".  When you are building the database, just include data
+for the type field (field 4) with each person's entry (see the example in
+section 1.3). 
+
+------------------------------
+
+Subject: 2.4 Ph is working fine for some entries, but returns "No matches
+to your query" for other entries (especially new entries)
+
+After building a small test database then adding and modifying entries, a
+query to the database returns "No matches to your query".  Since the entry
+has just been added (and qi acknowledged that it has been added), the user
+knows the entry is there.  If the user queries one of the original entries
+in the database that has not been modified, that entry will usually be
+found. This problem is due to the fact that the original database is small
+so the SIZE returned from sizedb is small.  If SIZE is used when building
+the database, there is not much room for the database to grow. Use a
+larger value for size to avoid this problem (see Subject 1.3). 
+
+------------------------------
+
+Subject: 2.5 How can you get a qi server to not only compile but actually
+serve queries off of a Solaris 2.X machine? 
+
+The latest version comes with a solaris2 configuration file already.  It
+compiled nicely with gcc on both Solaris 2.3 and Solaris 2.2.  It works,
+too. :-)
+
+Submitted by: Aleks Margan <margan@triglav.cis.yale.edu>
+
+------------------------------
+
+Subject: Section 3: Questions that have not been answered.
+
+------------------------------
+
+Subject: 3.1 To which Unix platforms has `ph' been ported?
+
+------------------------------
+
+Subject: Section 4: Other questions
+
+------------------------------
+
+Subject: 4.1 What does CSO stand for?
+
+CSO was the acronym for the University of Illinois Computing Services
+Office, which is now the Computing and Communications Services Office
+(CCSO). 
+
+------------------------------
+
+End of ph-FAQ
+*************
+-- 
+* Noel Hunter                            noel@camelcity.com *
+* The power behind the pages...    http://www.camelcity.com *
+* Free database, shopping software -   CGI, PHP, Javascript *
